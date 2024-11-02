@@ -15,7 +15,8 @@ use App\Http\Controllers\DeletedCommentController;
 use App\Http\Controllers\DeletedPostController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FetchActivityRegistration;
-use App\Http\Controllers\GenerateReportController;
+use App\Http\Controllers\GenerateReportAdminSportController;
+use App\Http\Controllers\GenerateReportAdminOrgController;
 use App\Http\Controllers\JoinedActivityController;
 use App\Http\Controllers\LikedCommentController;
 use App\Http\Controllers\NewsfeedController;
@@ -29,10 +30,13 @@ use App\Http\Controllers\ReportCoachController;
 use App\Http\Controllers\ReportedCommentController;
 use App\Http\Controllers\ReportedPostController;
 use App\Http\Controllers\ReportGenerationViewController;
+use App\Http\Controllers\OrgReportController;
+use App\Http\Controllers\SportReportController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\StatusActivityController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ViewStudentController;
+use App\Http\Controllers\AdviserReportController;
 use App\Http\Middleware\EnsureEmailIsVerified;
 use App\Http\Requests\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -73,8 +77,6 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::get('registered-participant', RegisteredParticipantController::class)->name('registered.participant');
     Route::get('joined-activities', JoinedActivityController::class)->name('joined.activities');
     Route::get('activate-post/{newsfeedId}', DeactivatePostController::class)->name('deactivate-post');
-    Route::get('report-view', ReportGenerationViewController::class)->name('report.view');
-    Route::post('report-generate', GenerateReportController::class)->name('reports.generate');
     Route::put('comments/{commentId}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('comments/{commentId}', [CommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('newsfeed-like', NewsfeedLikeController::class)->name('newsfeed.like');
@@ -85,9 +87,13 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::get('report-coach', [ReportCoachController::class, 'index'])->name('report.coach');
     Route::post('report-coach', [ReportCoachController::class, 'generateReport'])->name('report.generate');
     Route::get('profile-completion', ProfileCompletionController::class)->name('profile.completion');
-
     Route::put('approve-activity/{activity}', ApproveController::class)->name('approve');
     Route::put('decline-activity/{activity}', DeclineController::class)->name('decline');
+    Route::get('report-view-sport', SportReportController::class)->name('report.view-sport');
+    Route::get('report-view-org', OrgReportController::class)->name('report.view-org');
+    Route::get('report-view-adviser', AdviserReportController::class)->name('report.view-adviser');
+    Route::post('report-generate-sport', GenerateReportAdminSportController::class)->name('reports.generateAdminSport');
+    Route::post('report-generate-org', GenerateReportAdminOrgController::class)->name('reports.generateAdminOrg');
 
     Route::resource('users', UserController::class);
     Route::resource('campus', CampusController::class);

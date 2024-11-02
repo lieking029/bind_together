@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
+
+namespace App\Http\Controllers;
+
 use App\Models\Activity;
 use App\Models\ActivityRegistration;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
+use Illuminate\Support\Facades\View;
 
-class GenerateReportController extends Controller
+class GenerateReportAdminOrgController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -63,9 +69,9 @@ class GenerateReportController extends Controller
 
             // Check for file type
             if ($fileType === 'pdf') {
-                return $this->generatePDF($results, $startDate, $endDate);
+                return $this->generatePDF($results, $startDate, $endDate, $reportType);
             } elseif ($fileType === 'docx') {
-                return $this->generateDocx($results, $startDate, $endDate);
+                return $this->generateActivityDocx($results, $startDate, $endDate);
             }
         } elseif ($reportType == 3) {
             $query = Activity::query();
@@ -94,7 +100,10 @@ class GenerateReportController extends Controller
             $results->load('user');
 
             if ($fileType == 'pdf') {
-                return $this->generatePDF($results, $startDate, $endDate, $reportType); // Pass reportType to the generatePDF method
+                return $this->generatePDF($results, $startDate, $endDate, $reportType);
+            }
+            if ($fileType === 'docx') {
+                return $this->generateActivityDocx($results, $startDate, $endDate);
             }
         }
     }
@@ -111,9 +120,9 @@ class GenerateReportController extends Controller
             case 3:
                 $view = 'coach.reports.activity-report';
                 break;
-            // default:
-            //     $view = 'coach.reports.default-report'; // Add a default case if necessary
-            //     break;
+                // default:
+                //     $view = 'coach.reports.default-report'; // Add a default case if necessary
+                //     break;
         }
 
         // Load the selected view with the data
@@ -204,4 +213,59 @@ class GenerateReportController extends Controller
 
         return response()->download($tempFile)->deleteFileAfterSend(true);
     }
+
+    protected function generateActivityDocx($results, $startDate, $endDate)
+    {
+        $query = Activity::query();
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $results = $query->with('user')->get();
+
+
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+
+        $section->addText("Bataan Peninsula State University", ['bold' => true, 'size' => 16, 'color' => '800000']);
+        $section->addText("Bind Together", ['bold' => true, 'size' => 14, 'color' => '800000']);
+        $section->addText("Activities Report for $startDate - $endDate", ['bold' => true, 'size' => 12]);
+        $section->addTextBreak(1);
+
+        $table = $section->addTable();
+        $table->addRow();
+        $table->addCell(2000)->addText("Title", ['bold' => true]);
+        $table->addCell(2000)->addText("Type", ['bold' => true]);
+        $table->addCell(2000)->addText("Venue", ['bold' => true]);
+        $table->addCell(2000)->addText("Target Audience", ['bold' => true]);
+        $table->addCell(2000)->addText("Activity Duration", ['bold' => true]);
+
+        foreach ($results as $activity) {
+            $table->addRow();
+            $table->addCell(2000)->addText($activity->title);
+            $table->addCell(2000)->addText($activity->type);
+            $table->addCell(2000)->addText($activity->venue);
+            $table->addCell(2000)->addText($activity->target_player);
+            $table->addCell(2000)->addText("{$activity->start_date} to {$activity->end_date}");
+        }
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'activity_report_') . '.docx';
+        $phpWord->save($tempFile, 'Word2007');
+
+        return response()->download($tempFile)->deleteFileAfterSend(true);
+    }
+
+    /*    protected function generateCoachesPDF($fileType)
+    {
+        $coaches = Coach::all(); // Fetch all coaches, or you can apply filters based on request parameters.
+
+        // Load the selected view with the data
+        $pdf = Pdf::loadView('coach.reports.list-report', [
+            'coaches' => $coaches,
+        ])->setPaper('a4', 'landscape');
+
+        // Stream the PDF file with the current date in the filename
+        return $pdf->stream('coaches_report_' . now()->format('Y_m_d') . '.pdf');
+    } */
 }

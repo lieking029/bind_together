@@ -23,89 +23,87 @@ class ReportCoachController extends Controller
         $endDate = $request->input('end_date');
         $yearLevel = $request->input('year_level');
         $fileType = $request->input('file_type');
-    
+
         if ($reportType == 1 || $reportType == 2) {
             $query = ActivityRegistration::query();
-    
+
             if ($reportType == 1) {
                 $query->where('status', 0);
             } elseif ($reportType == 2) {
                 $query->where('status', 1);
             }
-    
+
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }
-    
+
             if ($status) {
                 $query->where('status', $status);
             }
-    
+
             if ($yearLevel) {
                 // Ensure that $yearLevel is always treated as an array
                 if (!is_array($yearLevel)) {
                     $yearLevel = [$yearLevel];
                 }
-            
+
                 if (count($yearLevel) > 0) {
                     $query->whereHas('user', function ($q) use ($yearLevel) {
                         $q->whereIn('year_level', $yearLevel);
                     });
                 }
             }
-    
+
             $results = $query->get();
             // $results->load('user', 'sport');
-    
+
             if ($fileType == 'pdf') {
                 return $this->generatePDF($results, $startDate, $endDate, $reportType); // Pass reportType to the generatePDF method
             }
-    
         } elseif ($reportType == 3) {
             $query = Practice::query();
-    
+
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }
-    
+
             if ($status) {
                 $query->where('status', $status);
             }
-    
+
             if ($yearLevel) {
                 if (!is_array($yearLevel)) {
                     $yearLevel = [$yearLevel];
                 }
-            
+
                 if (count($yearLevel) > 0) {
                     $query->whereHas('user', function ($q) use ($yearLevel) {
                         $q->whereIn('year_level', $yearLevel);
                     });
                 }
             }
-    
+
             $results = $query->get();
             $results->load('user', 'activity.sport');
 
             if ($fileType == 'pdf') {
                 return $this->generatePDF($results, $startDate, $endDate, $reportType); // Pass reportType to the generatePDF method
             }
-    
         } else {
             $query = Activity::query();
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }
-    
+
             if ($status) {
                 $query->where('status', $status);
             }
-    
+
             if ($yearLevel) {
                 if (!is_array($yearLevel)) {
                     $yearLevel = [$yearLevel];
                 }
-            
+
                 if (count($yearLevel) > 0) {
                     $query->whereHas('user', function ($q) use ($yearLevel) {
                         $q->whereIn('year_level', $yearLevel);
@@ -137,21 +135,19 @@ class ReportCoachController extends Controller
             case 4:
                 $view = 'coach.reports.activity-report';
                 break;
-            // default:
-            //     $view = 'coach.reports.default-report'; // Add a default case if necessary
-            //     break;
+                // default:
+                //     $view = 'coach.reports.default-report'; // Add a default case if necessary
+                //     break;
         }
-    
+
         // Load the selected view with the data
         $pdf = Pdf::loadView($view, [
             'registrations' => $results,
             'startDate' => $startDate,
             'endDate' => $endDate
         ])->setPaper('a4', 'landscape');
-    
+
         // Stream the PDF file with the current date in the filename
         return $pdf->stream('activities_report_' . now()->format('Y_m_d') . '.pdf');
     }
-    
-
 }

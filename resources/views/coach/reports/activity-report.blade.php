@@ -14,14 +14,17 @@
             text-align: center;
             margin-bottom: 20px;
             display: flex;
-            align-items: center; /* Align vertically in the center */
-            justify-content: center; /* Center horizontally */
+            align-items: center;
+            /* Align vertically in the center */
+            justify-content: center;
+            /* Center horizontally */
         }
 
         .header img {
             width: 100px;
             height: auto;
-            margin-right: 20px; /* Adds space between the image and the text */
+            margin-right: 20px;
+            /* Adds space between the image and the text */
         }
 
         h1 {
@@ -109,7 +112,11 @@
     </div>
 
     <div class="report-info">
-        <h3>Activities Report for {{ $startDate }} - {{ $endDate }}</h3>
+        <h3 style="color: black;">Activities Report for {{ $startDate }} - {{ $endDate }}</h3>
+        <p style="font-weight: bold;">
+            Type of Report <span style="font-weight: normal;">(Activity)</span>
+        </p>
+
     </div>
 
     <table>
@@ -119,52 +126,54 @@
                 <th>Activity Type</th>
                 <th>Target Audience</th>
                 <th>Venue</th>
+                <th>Address</th>
                 <th>Activity Duration</th>
             </tr>
         </thead>
         <tbody>
             @php
-                use Carbon\Carbon;
-    
-                // Helper function to get activity type
-                function getActivityType($type) {
-                    switch ($type) {
-                        case \App\Enums\ActivityType::Audition:
-                            return 'Audition';
-                        case \App\Enums\ActivityType::Tryout:
-                            return 'Tryout';
-                        case \App\Enums\ActivityType::Practice:
-                            return 'Practice';
-                        case \App\Enums\ActivityType::Competition:
-                            return 'Competition';
-                        default:
-                            return 'Unknown';
-                    }
-                }
-    
-                // Helper function to get target player
-                function getTargetPlayer($target) {
-                    return $target == 1 ? 'Official Player' : 'All Student';
-                }
+            use Carbon\Carbon;
+
+            // Helper function to get activity type
+            function getActivityType($type) {
+            switch ($type) {
+            case \App\Enums\ActivityType::Audition:
+            return 'Audition';
+            case \App\Enums\ActivityType::Tryout:
+            return 'Tryout';
+            case \App\Enums\ActivityType::Practice:
+            return 'Practice';
+            case \App\Enums\ActivityType::Competition:
+            return 'Competition';
+            default:
+            return 'Unknown';
+            }
+            }
+
+            // Helper function to get target player
+            function getTargetPlayer($target) {
+            return $target == 1 ? 'Official Player' : 'All Student';
+            }
             @endphp
             @foreach ($registrations as $registration)
-                <tr>
-                    <td>{{ $registration->title }}</td>
-                    
-                    <!-- Display human-readable activity type -->
-                    <td>{{ getActivityType($registration->activity_type) }}</td>
-                    
-                    <!-- Display human-readable target audience -->
-                    <td>{{ getTargetPlayer($registration->target_player) }}</td>
-                    
-                    <td>{{ $registration->venue }}</td>
-                    
-                    <!-- Format start and end dates using Carbon -->
-                    <td>
-                        {{ Carbon::parse($registration->start_date)->format('F j, Y g:i A') }} - 
-                        {{ Carbon::parse($registration->end_date)->format('F j, Y g:i A') }}
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ $registration->title }}</td>
+
+                <!-- Display human-readable activity type -->
+                <td>{{ getActivityType($registration->activity_type) }}</td>
+
+                <!-- Display human-readable target audience -->
+                <td>{{ getTargetPlayer($registration->target_player) }}</td>
+
+                <td>{{ $registration->venue }}</td>
+                <td>{{ $registration->address }}</td>
+
+                <!-- Format start and end dates using Carbon -->
+                <td>
+                    {{ Carbon::parse($registration->start_date)->format('F j, Y g:i A') }} -
+                    {{ Carbon::parse($registration->end_date)->format('F j, Y g:i A') }}
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>

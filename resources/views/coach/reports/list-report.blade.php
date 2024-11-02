@@ -13,11 +13,20 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .header img {
             width: 100px;
             height: auto;
+            margin-right: 20px;
+        }
+
+        h1,
+        h3 {
+            color: #800000;
         }
 
         h1 {
@@ -45,17 +54,10 @@
             text-align: center;
         }
 
-        .report-info p {
-            font-size: 14px;
-            margin: 0;
-            padding: 0;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
-            margin-top: 10px;
+            margin: 10px 0 30px;
         }
 
         th,
@@ -91,55 +93,52 @@
 
 <body>
     <div class="header">
-        <img src="{{ public_path('images/bindtogether-logo.png') }}" alt="University Logo" style="float: left;">
-        <div class="">
-            <h1 style="color: #800000">Bataan Peninsula State University</h1>
-            <h3 style="margin-left: 10px; color: #800000">Bind Together</h3>
-            <div class="contact-info" style="margin-left: 10px; text-align: center">
+        <img src="{{ public_path('images/bindtogether-logo.png') }}" alt="Bind Together Logo">
+        <div>
+            <h1>Bataan Peninsula State University</h1>
+            <h3>Bind Together</h3>
+            <div class="contact-info">
                 <p>City of Balanga, 2100 Bataan</p>
-                <p style="margin-left: 70px">Tel: (047) 237-3309 | Email: bpsu.bindtogether@gmail.com</p>
+                <p>Tel: (047) 237-3309 | www.bpsu.edu.ph | Email: bpsu.bindtogether@gmail.com</p>
             </div>
         </div>
     </div>
 
     <div class="report-info">
-        <h3>Activities Report for {{ $startDate }} - {{ $endDate }}</h3>
+        <h3>List of Coaches Report for {{ $startDate }} - {{ $endDate }}</h3>
+        <p><strong>Type of Report:</strong> (List of Coaches)</p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Venue</th>
-                <th>Target Audience</th>
-                <th>Activity Duration</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Sports</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($results as $activity)
+            @foreach ($registrations as $registration)
             <tr>
-                <td>{{ $activity->title }}</td>
-                <td>{{ $activity->type }}</td>
-                <td>{{ $activity->venue }}</td>
-                <td>{{ $activity->target_player }}</td>
-                <td>{{ $activity->start_date }} {{ $activity->end_date }}</td>
+                <td>{{ $registration->title }}</td>
+                <td>{{ $registration->gender }}</td>
+                <td>{{ $registration->email }}</td>
+                <td>{{ $registration->sports }}</td>
+                <td>{{ Carbon::parse($registration->date)->format('F j, Y') }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <div class="signature" style="float: right">
-        {{-- <p>Reported by:</p> --}}
-        <div class="signature-line" style="font-size: 12px">
-            (Space for Signature)
-        </div>
-        {{-- <p>(name of the report generator)</p> --}}
+    <div class="signature">
+        <div class="signature-line">(Space for Signature)</div>
     </div>
 
-    {{-- <div class="footer">
+    <div class="footer">
         <p>Generated on {{ now()->format('Y-m-d') }}</p>
-    </div> --}}
+    </div>
 </body>
 
 </html>

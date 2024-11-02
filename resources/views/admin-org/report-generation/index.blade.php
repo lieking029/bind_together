@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h4>Report Generation Admin Sport</h4>
+            <h4>Report Generation admin org</h4>
         </div>
         <div class="card-body" style="min-height: 70vh">
-            <form action="{{ route('reports.generateAdminSport') }}" method="POST">
+            <form action="{{ route('reports.generateAdminOrg') }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="form-group col-4">
@@ -17,7 +17,7 @@
                             <option value="3">Activity</option>
                             <option value="1">List of Registered Participants</option>
                             <option value="2">List of Official Players</option>
-                            <option value="4">List of Coaches</option>
+                            <option value="4">List of Advisers</option>
                         </select>
 
                         <div id="activitiesDropdown" style="display: none;" class="mt-3">
@@ -25,7 +25,7 @@
                             <select name="activity_type" id="activity_type" class="form-select">
                                 <option value="" selected disabled>Select Activity Type</option>
                                 <option value="3">Competition</option>
-                                <option value="1">Tryouts</option>
+                                <option value="1">Audition</option>
                             </select>
                         </div>
                         <div class="form-group col-4 mt-5" id="approvalCheckboxes" style="display: none;">
@@ -81,32 +81,31 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-4" id="sportsCheckbox">
-                        <label for="sports">Sports</label><br>
+                    <div class="form-group col-4" id="orgCheckbox">
+                        <label for="org-header">ORGANIZATION</label><br>
 
                         <!-- "All" checkbox -->
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" name="sports_all" id="all_sports">
-                            <label for="all_sports" class="form-check-label">All</label>
+                            <input type="checkbox" class="form-check-input" name="all_org" id="all_org">
+                            <label for="all_org" class="form-check-label">All</label>
                         </div>
 
                         <!-- Sports checkboxes -->
-                        @foreach ($sports as $sport)
+                        @foreach ($organization as $org)
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input sport-checkbox" name="sports[]" value="{{ $sport->id }}" id="sport_{{ $sport->id }}">
-                            <label for="sport_{{ $sport->id }}" class="form-check-label">{{ $sport->name }}</label>
+                            <input type="checkbox" class="form-check-input org-checkbox" name="org[]" value="{{ $org->id }}" id="org_{{ $org->id }}">
+                            <label for="org_{{ $org->id }}" class="form-check-label">{{ $org->name }}</label>
                         </div>
                         @endforeach
 
                         <!-- "Others" checkbox -->
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" name="sports[]" value="others" id="sports_others">
-                            <label for="sports_others" class="form-check-label">Others</label>
+                            <input type="checkbox" class="form-check-input" name="org[]" value="others" id="org_others">
+                            <label for="org_others" class="form-check-label">Others</label>
                         </div>
                     </div>
 
                 </div>
-
 
                 <div class="mt-5 d-flex">
                     <button type="submit" class="btn btn-primary">Download</button>
@@ -116,6 +115,10 @@
                         <option value="pdf">Pdf</option>
                         <option value="excel">Excel</option>
                     </select>
+                </div>
+                <div id="file_preview" class="mt-4">
+                    <textarea id="preview_content" class="form-control" rows="4" placeholder="Preview" style="max-width: 600px; width: 100%; text-align: center;"></textarea>
+
                 </div>
             </form>
         </div>
@@ -161,6 +164,29 @@
                 $('#all_sports').prop('checked', false);
             }
         });
+
+
+        /*   $('#file_type').on('change', function() {
+              const fileType = $(this).val();
+              let previewText = '';
+
+              switch (fileType) {
+                  case 'docx':
+                      previewText = 'This is a preview for a DOCX file. The report will contain formatted text and tables, similar to a Word document.';
+                      break;
+                  case 'pdf':
+                      previewText = 'This is a preview for a PDF file. The report will be in a fixed layout, suitable for printing.';
+                      break;
+                  case 'excel':
+                      previewText = 'This is a preview for an Excel file. The report will include data in a spreadsheet format, suitable for analysis.';
+                      break;
+                  default:
+                      previewText = 'Select a file type to see a preview.';
+              }
+
+              $('#preview_content').text(previewText);
+              $('#file_preview').show();
+          }); */
     });
 </script>
 @endsection

@@ -125,22 +125,22 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Organization::class);
     }
 
-    public function sport() : BelongsTo
+    public function sport(): BelongsTo
     {
         return $this->belongsTo(Sport::class);
     }
 
-    public function campus() : BelongsTo
+    public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class);
     }
 
-    public function program() : BelongsTo
+    public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
     }
 
-    public function course() : BelongsTo
+    public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
     }
@@ -150,14 +150,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Activity::class, 'activity_registrations', 'user_id', 'activity_id');
     }
 
-    public function activities() : HasMany
+    public function activities(): HasMany
     {
         return $this->hasMany(Activity::class);
     }
 
-    public function practices() : HasMany
+    public function practices(): HasMany
     {
         return $this->hasMany(Practice::class);
     }
-
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
