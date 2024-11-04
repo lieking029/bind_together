@@ -45,7 +45,6 @@ class UserController extends Controller
         }
 
         $user = User::create($payload);
-
         $user->assignRole($payload['role']);
 
         $verificationUrl = $this->generateVerificationUrl($user);
@@ -72,9 +71,9 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        // Load necessary relationships
         $user->load('sport', 'organization', 'campus', 'program', 'course', 'roles');
 
-        return response()->json(['user' => $user, 'roles' => $user->getRoleNames(), 'organizations' => $user->organization()]);
     }
 
     public function update(Request $request, User $user)
@@ -109,7 +108,7 @@ class UserController extends Controller
     {
         $user->update(['is_active' => 0]);
 
-        alert()->success('User deactived successfully');
+        alert()->success('User deactivated successfully');
         return redirect()->route('users.index', ['role' => $user->getRoleNames()->first()]);
     }
 }

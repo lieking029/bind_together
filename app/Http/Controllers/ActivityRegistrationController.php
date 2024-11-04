@@ -1,14 +1,16 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreActivityRegistrationRequest;
 use App\Models\Activity;
 use App\Models\ActivityRegistration;
+use App\Mail\ApproveTryout; // Ensure this is imported
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Log;
 
 class ActivityRegistrationController extends Controller
 {
@@ -23,14 +25,6 @@ class ActivityRegistrationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreActivityRegistrationRequest $request)
@@ -39,7 +33,7 @@ class ActivityRegistrationController extends Controller
             'activity_id' => $request->activity_id,
             'height' => $request->height,
             'weight' => $request->weight,
-            'person_to_contact' => $request->person_to_contact,
+            'contact_person' => $request->contact_person,
             'emergency_contact' => $request->emergency_contact,
             'relationship' => $request->relationship,
             'user_id' => Auth::id(),
@@ -63,68 +57,49 @@ class ActivityRegistrationController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(ActivityRegistration $activityRegistration)
-    {
-        $activityRegistration->load('sport');
-
-        return response()->json($activityRegistration);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ActivityRegistration $activityRegistration)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, int $activityRegistrationId)
     {
-        $act = ActivityRegistration::with(['user', 'activity'])->find($activityRegistrationId);
+        $request->validate([
+            'status' => 'required|in:1,2',
+        ]);
+
+        $act = ActivityRegistration::with(['user', 'activity'])->findOrFail($activityRegistrationId);
         $act->update(['status' => $request->status]);
 
-        if ((int)$request->status === 1) {
-            $user = Auth::user();
-            Mail::send([], [], function ($message) use ($act, $user) {
-                $htmlContent = '
-                <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
-                <p>We are pleased to inform you that your registration for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
-                <p>Please stay tuned for further updates and information.</p>
-                <p>Best regards,<br>
-                ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                Admin</p>';
+        $user = Auth::user();
+        $data = [
+            'user' => $act->user,
+            'activity' => $act->activity,
+            'admin' => $user,
+        ];
 
-                $message->to($act["user"]["email"])
-                    ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
-                    ->html($htmlContent);
-            });
-            alert()->success('Approved');
-        } else if ((int)$request->status === 2) {
-            $user = Auth::user();
-            Mail::send([], [], function ($message) use ($act, $user) {
-                $htmlContent = '
-                <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
-                <p>Thank you for registering for ' . $act["activity"]["title"] . '. After reviewing all applications, we regret to inform you that your registration has not been approved for this event.</p>
-                <p>Please note that each activity/event has specific requirements, and some criteria were not fully met in this instance.</p>
-                <p>We encourage you to stay involved and consider applying for future activities.</p>
-                <p>If you have any questions or need more information, please don’t hesitate to reach out.</p>
-                <p>Best regards,<br>
-                ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                Admin</p>';
+        // Use your test email here
+        $testEmail = 'willbarrios153@gmail.com'; // Replace with your actual email address
 
-                $message->to($act["user"]["email"])
-                    ->subject('Registration Status - ' . $act["activity"]["title"])
-                    ->html($htmlContent);
-            });
-            alert()->success('Declined');
-        } else {
-            alert()->success('Updated successfully');
+        // Check if the email sending was successful
+        try {
+            if ($request->status === 1) {
+                Mail::to($testEmail)->send(new ApproveTryout(
+                    'Registration Approved - Welcome to ' . $act->activity->title . '!',
+                    'emails.approve',
+                    $data
+                ));
+                alert()->success('Approved');
+            } else if ($request->status === 2) {
+                Mail::to($testEmail)->send(new ApproveTryout(
+                    'Registration Status - ' . $act->activity->title,
+                    'emails.decline',
+                    $data
+                ));
+                alert()->success('Declined');
+            }
+        } catch (\Exception $e) {
+            Log::error('Email sending failed: ' . $e->getMessage());
+            alert()->error('Email sending failed: ' . $e->getMessage());
         }
+
         return redirect()->back();
     }
 

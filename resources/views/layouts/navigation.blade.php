@@ -891,7 +891,7 @@
     @endstudent
 
     <li class="nav-item">
-        <a href="{{ url('chatify/1') }}" class="nav-link">
+        <a href="{{ url('chatify') }}" class="nav-link">
             <span class="sidebar-icon">
                 <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">

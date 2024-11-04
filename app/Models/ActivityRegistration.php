@@ -17,6 +17,7 @@ class ActivityRegistration extends Model
         'sport_id', // Add sport_id if it's a foreign key in your table
         'height',
         'weight',
+        'contact_person',
         'person_to_contact',
         'emergency_contact',
         'relationship',

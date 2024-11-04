@@ -69,7 +69,7 @@
             <tr data-action="0">
                 {{-- Avatar side --}}
                 <td>
-                    <div class="avatar av-m">
+                    <div class="avatar av-m" style="background-image: url('{{ asset('storage/' . $user->avatar) }}')">
                         {{-- <img src="{{ $avatar }}" alt="User Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"> --}}
                     </div>
                 </td>

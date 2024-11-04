@@ -48,7 +48,7 @@ class MessagesController extends Controller
     
         // Check if user exists, then format the full name
         $fullName = $user ? "{$user->firstname} {$user->lastname}" : 'User';
-        $avatar = $user && $user->avatar ? asset('storage/' . $user->avatar) : 'default-avatar-url.jpg';
+        $avatar = $user && $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar/image_place.jpg');
 
         return view('Chatify::pages.app', [
             'id' => $id ?? 0,
@@ -318,7 +318,7 @@ class MessagesController extends Controller
         foreach ($favorites->get() as $favorite) {
             // get user data
             $user = User::where('id', $favorite->favorite_id)->first();
-            $avatar = $user && $user->avatar ? asset('storage/' . $user->avatar) : 'default-avatar-url.jpg';
+            $avatar = $user && $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar/image_place.jpg');
 
             $favoritesList .= view('Chatify::layouts.favorite', [
                 'user' => $user,
@@ -361,7 +361,7 @@ class MessagesController extends Controller
                     $record->lastname
             );
 
-            $avatar = $record && $record->avatar ? asset('storage/' . $record->avatar) : 'default-avatar-url.jpg';
+            $avatar = $record && $record->avatar ? asset('storage/' . $record->avatar) : asset('images/avatar/image_place.jpg');
 
             $getRecords .= view('Chatify::layouts.listItem', [
                 'get' => 'search_item',

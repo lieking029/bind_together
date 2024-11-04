@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ActivityType;
 use App\Models\ActivityRegistration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuditionListController extends Controller
 {
@@ -13,6 +14,8 @@ class AuditionListController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $user = Auth::user()->load('organization');
+
         // Get status from the request, defaulting to '0' if not provided
         $status = $request->query('status', '0');
 
@@ -22,10 +25,19 @@ class AuditionListController extends Controller
         if ($request->has('type')) {
             $type = $request->query('type');
         }
+
         $auditions = ActivityRegistration::query()
-            ->with(['activity', 'user'])
+            ->with([
+                'activity.user.roles',
+                'activity.user.organization',
+                'user.roles'
+            ])
             ->whereIn('status', [$status, 1, 2])
-            ->where('is_deleted', 0);
+            ->where('is_deleted', 0)
+            ->whereHas('activity', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            });
+
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type) {
             if ($type == '3') {
