@@ -2,6 +2,8 @@
 
 @section('content')
 
+    <link rel="stylesheet" href=" @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,7 +21,7 @@
         </div>
     @endif
 
-    <div class="container mb-5">
+    <div class="container mb-5" style="font-family: 'Poppins', sans-serif;">
         <div class="card shadow">
             <div class="card-header bg-white">
                 <h3 class="text-center">Registration</h3>
@@ -129,7 +131,7 @@
                         <label>
                             <input type="checkbox" required> I agree to the
                             <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
-                                data-bs-target="#termsModal">Terms and Conditions</button>
+                                data-bs-target="#termsModal" style="color:blue;">Terms and Conditions</button>
                         </label>
                     </div>
 

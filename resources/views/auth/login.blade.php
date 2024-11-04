@@ -1,14 +1,18 @@
 @extends('layouts.guest')
 @section('content')
-    <div class="container">
+
+
+    <div class="container" style="font-family: 'Poppins', sans-serif;">
         <div class="row justify-content-center">
             <div class="col-12 d-flex align-items-center justify-content-center">
-                <div class="bg-white rounded p-5 w-100 fmxw-500">
+                <div class="bg-white rounded p-4 w-100 fmxw-500">
                     <div class="text-center mb-4">
                     </div>
 
                     <form class="mt-4" action="{{ route('login') }}" method="POST">
                         @csrf
+                        <h2 style="text-align:center; font-weight:600;">WELCOME!</h2>
+                        <p style="text-align:center;">Login to start your session</p>
                         <!-- Email Input -->
                         <div class="form-group mb-4">
                             <label for="email" class="form-label">{{ __('Your Email') }}</label>
