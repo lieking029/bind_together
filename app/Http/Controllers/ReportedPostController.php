@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeletedPost;
+use App\Models\Newsfeed;
 use App\Models\ReportedPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +15,25 @@ class ReportedPostController extends Controller
      */
     public function index()
     {
-        return view('super-admin.reported-post.index', [
-            'reportedNewsfeeds' => ReportedPost::with('newsfeed.user', 'user')
-                ->where('status', '!=', 2)
-                ->get()
-        ]);
+
+        $reportedNewsfeeds = Newsfeed::where('status', 1)
+            ->withWhereHas('reportedPosts', function ($query) {
+                $query->whereIn('status', [1, 2]);
+            })
+            ->with([
+                'user',
+                'reportedPosts' => function ($query) {
+                    $query->whereIn('status', [1, 2]);
+                }
+            ])
+            ->withCount([
+                'reportedPosts as report_count' => function ($query) {
+                    $query->whereIn('status', [1, 2]);
+                }
+            ])
+            ->get();
+
+        return view('super-admin.reported-post.index', compact('reportedNewsfeeds'));
     }
 
     /**

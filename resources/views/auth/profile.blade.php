@@ -34,10 +34,10 @@
         }
     </style>
 
-    <div class="main py-4">
+    <div class="main py-4" >
         <div class="row">
-            <div class="col-12 col-xl-12">
-                <div class="border-0  mb-4" style="margin-left:20px;">
+            <div class="col-12 col-xl-12" >
+                <div class="border-0  mb-4" style="margin-left:20px; font-family:'Poppins', sans serif;">
                     <h2 class="h5 mb-4">{{ __('My profile') }}</h2>
 
                     <div class="row">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-8" style="margin-left: 40px">
                             <div class="card">
-                                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" style="margin-bottom:20px;">
                                     @csrf
                                     @method('PUT')
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -175,6 +175,8 @@
                                                                     3<sup>rd</sup> Year
                                                                 @elseif (auth()->user()->year_level == 4)
                                                                     4<sup>th</sup> Year
+                                                                @elseif (auth()->user()->year_level == 5)
+                                                                    5<sup>th</sup> Year    
                                                                 @else
                                                                     {{ auth()->user()->year_level ?? '' }} Year
                                                                 @endif
@@ -238,6 +240,10 @@
                                                     <div class="col-md-6 mt-2">
                                                         <label for="gender" class="form-label">Gender</label>
                                                         <select class="form-select" id="gender" name="gender">
+                                                        <option value="Others"
+                                                                {{ auth()->user()->gender == 'Others' ? 'selected' : '' }}>
+                                                                Prefer not to say</option>
+                                                        </select>
                                                             <option value="Female"
                                                                 {{ auth()->user()->gender == 'Female' ? 'selected' : '' }}>
                                                                 Female</option>
@@ -311,6 +317,9 @@
                                                         <div class="col mt-2">
                                                             <label for="year_level" class="form-label">Year level</label>
                                                             <select class="form-select" id="year_level" name="year_level">
+                                                            <option value="5"
+                                                                    {{ auth()->user()->year_level == '5' ? 'selected' : '' }}>
+                                                                    5th Year</option>
                                                                 <option value="4"
                                                                     {{ auth()->user()->year_level == '4' ? 'selected' : '' }}>
                                                                     4th Year</option>
@@ -430,7 +439,7 @@
 
                                                 <!-- Submit Button -->
                                                 <div class="text-end">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-danger">Submit</button>
                                                 </div>
                                             </div>
 

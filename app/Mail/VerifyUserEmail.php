@@ -43,7 +43,7 @@ class VerifyUserEmail extends Mailable
                 'user' => $this->user,
                 'verificationUrl' => $this->verificationUrl,
                 'password' => $this->password,
-                'role' => $this->role
+            'role' => $this->role
             ],
         );
     }
