@@ -37,7 +37,7 @@
     <div class="main py-4">
         <div class="row">
             <div class="col-12 col-xl-12">
-                <div class="border-0  mb-4">
+                <div class="border-0  mb-4" style="margin-left:20px;">
                     <h2 class="h5 mb-4">{{ __('My profile') }}</h2>
 
                     <div class="row">
