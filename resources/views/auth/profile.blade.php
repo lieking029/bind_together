@@ -141,10 +141,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Organization Name:</th>
-                                                        <td></td>
-                                                        <!-- <pre>
-                                                            {{auth()->user() }}
-                                                        </pre> -->
+                                                        <td>{{ isset(auth()->user()->load('organization')["organization"]["name"] ) ? auth()->user()->load('organization')["organization"]["name"] : 'N/A'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
