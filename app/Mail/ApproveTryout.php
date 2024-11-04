@@ -10,9 +10,9 @@ class ApproveTryout extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $subject;
-    protected $view;
-    protected $data;
+    public $subject; // Change to public
+    public $view;    // This can also be public if you're going to access it
+    public $data;    // Change to public
 
     public function __construct($subject, $view, $data)
     {
@@ -28,5 +28,3 @@ class ApproveTryout extends Mailable
                     ->with('data', $this->data);
     }
 }
-
-
