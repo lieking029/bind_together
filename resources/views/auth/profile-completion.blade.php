@@ -23,10 +23,11 @@
         </div>
     @endif
 
-    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="margin:20px;">
         @csrf
         @method('PUT')
-        <div class="container mt-4">
+        <div class="container mt-4" style="font-family: 'Poppins', sans-serif;">
+            <h2 style="text-align:center;">Complete Your Profile</h2>
             <h5 class="text-primary">Basic Information</h5>
             <div class="row mb-3">
                 @student
