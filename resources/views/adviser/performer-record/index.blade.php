@@ -14,7 +14,7 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
-                        @if(request()->query('status') == 1)
+                        @if(auth()->user()->roles[0]["id"] == 4 && request()->query('status') == 1)
                         <th>STUDENT NUMBER</th>
                         <th>STUDENT NAME</th>
                         <th>YEAR LEVEL</th>
@@ -81,13 +81,7 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
-                                @if(auth()->user()->roles[0]["id"] == 4)
-                                <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                    data-id="{{ $audition->id }}">Delete</button>
-
-                                @endif
-
+                              
                             </td>
                         </tr>
                         @else
