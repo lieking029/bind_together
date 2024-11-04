@@ -106,9 +106,15 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
+                                @if($audition->status == 1 || $audition->status == 2)
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal"
                                     data-id="{{ $audition->id }}">Delete</button>
+                                @else
+                                <button class="btn btn-secondary " type="button">Delete</button>
+                                @endif
+
+
                             </td>
                             @endif
                         </tr>
