@@ -75,8 +75,8 @@ class ActivityRegistrationController extends Controller
             'admin' => $user,
         ];
 
-        // Use your test email here
-        $testEmail = 'willbarrios153@gmail.com'; // Replace with your actual email address
+        
+        $testEmail = 'dcramos@bpsu.edu.ph'; 
 
         // Check if the email sending was successful
         try {

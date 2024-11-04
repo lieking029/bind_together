@@ -298,7 +298,7 @@
                             <div class="col-md-6">
                                 <label for="editMiddlename" class="form-label">Middle Name</label>
                                 <input type="text" class="form-control" id="editMiddlename" name="middlename"
-                                    placeholder="Enter Middle Name" required>
+                                    placeholder="Enter Middle Name">
                                 @error('middlename')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
