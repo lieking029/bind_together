@@ -77,7 +77,7 @@
                             <td>{{ $audition["activity"]["user"]["firstname"] . ' '. $audition["activity"]["user"]["lastname"] }}</td>
                             <td>{{ $audition->created_at }}</td>
                             <td>
-                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal" onclick="viewHandler({{ $audition->id }});"
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
