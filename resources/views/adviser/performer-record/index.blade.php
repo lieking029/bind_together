@@ -81,9 +81,9 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
-                                <!-- <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                    data-id="{{ $audition->id }}">Delete</button> -->
+                                <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
+                                    data-id="{{ $audition->id }}">Delete</button>
                             </td>
                         </tr>
                         @else
