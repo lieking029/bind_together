@@ -14,7 +14,7 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
-                        @if(auth()->user()->roles[0]["id"] == 2)
+                        @if(request()->query('status') == 1)
                         <th>STUDENT NUMBER</th>
                         <th>STUDENT NAME</th>
                         <th>YEAR LEVEL</th>
@@ -51,12 +51,12 @@
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
-                        @if(auth()->user()->roles[0]["id"] == 2)
+                        @if(request()->query('status') == 1)
                         <tr>
                             <td>{{ $audition["user"]["student_number"]}}</td>
                             <td>{{ $audition["user"]["firstname"]. ' ' . $audition["user"]["lastname"]}}</td>
                             @php
-                            $yearLevel = $audition->user->year_level; // Assuming year_level is an integer
+                            $yearLevel = $audition->user->year_level;
                             $suffix = '';
 
                             if ($yearLevel == 1) {
@@ -73,24 +73,28 @@
                             @endphp
                             <td>{{ $formattedYearLevel }} Year</td>
                             <td>{{ $audition->user->campus->name }}</td>
-                            <td>{{ $audition["activity"]["user"]["organization"]["name"]}}</td>
+                            <td>{{ isset($audition["activity"]["user"]["organization"]["name"]) ? $audition["activity"]["user"]["organization"]["name"] : ''}}</td>
                             <td>{{ $audition["activity"]["user"]["firstname"] . ' '. $audition["activity"]["user"]["lastname"] }}</td>
                             <td>{{ $audition->created_at }}</td>
                             <td>
-                            <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
+                                @if(auth()->user()->roles[0]["id"] == 4)
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal"
                                     data-id="{{ $audition->id }}">Delete</button>
+
+                                @endif
+
                             </td>
                         </tr>
                         @else
                         <tr>
                             <td>{{ $audition->user->firstname }} {{ $audition->user->lastname }}</td>
                             @php
-                            $yearLevel = $audition->user->year_level; // Assuming year_level is an integer
+                            $yearLevel = $audition->user->year_level;
                             $suffix = '';
 
                             if ($yearLevel == 1) {
