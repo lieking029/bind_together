@@ -49,6 +49,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ApproveTryout;
+
+
+
+Route::get('/test-email', function () {
+    
+    $data = [
+        'user' => (object) ['firstname' => 'John', 'lastname' => 'Doe'], // Sample user
+        'activity' => (object) ['title' => 'Soccer'], // Sample activity
+        'admin' => (object) ['firstname' => 'Admin', 'lastname' => 'User'], // Sample admin
+    ];
+
+    // Send the email
+    Mail::to('dcramos@bpsu.edu.ph')->send(new ApproveTryout('Test Approval', 'emails.approve', $data));
+
+    return 'Email sent!';
+});
 
 Route::get('/', function () {
     return view('welcome');
