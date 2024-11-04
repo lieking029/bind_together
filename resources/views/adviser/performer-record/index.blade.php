@@ -113,8 +113,6 @@
                                 @else
                                 <button class="btn btn-secondary " type="button">Delete</button>
                                 @endif
-
-
                             </td>
                             @endif
                         </tr>

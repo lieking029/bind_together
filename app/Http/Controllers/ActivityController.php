@@ -22,15 +22,28 @@ class ActivityController extends Controller
                 ->whereIn('status', [0, 1])
                 ->where('is_deleted', 0)
                 ->whereIn('type', [
-                    ActivityType::Tryout, 
+                    ActivityType::Tryout,
                     ActivityType::Competition
                 ])
                 ->get();
         } else {
-            $activities = Activity::where('user_id', $user->id)
-                ->whereIn('status', [0, 1])
-                ->where('is_deleted', 0)
-                ->get();
+            if ($user->hasRole('admin_org')) {
+                $activities = Activity::with(['user.roles' => function ($query) {
+                    $query->select('roles.id as role_id'); 
+                }])
+                    ->where('user_id', $user->id)
+                    ->whereIn('status', [0, 1])
+                    ->where('is_deleted', 0)
+                    ->orWhereHas('user.roles', function ($query) {
+                        $query->where('roles.id', 4);
+                    })
+                    ->get();
+            } else {
+                $activities = Activity::where('user_id', $user->id)
+                    ->whereIn('status', [0, 1])
+                    ->where('is_deleted', 0)
+                    ->get();
+            }
         }
 
         return view('admin-sport.activity.index', [

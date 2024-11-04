@@ -122,6 +122,15 @@
                                                 @endif
                                             @endif
                                         @else
+                                            @if(auth()->user()->roles[0]["id"] == 2 && $activity["user"]["roles"][0]["role_id"] == 4)
+                                            <button type="button" class="btn btn-primary" >
+                                                Edit
+                                            </button>
+                        
+                                            <button type="button" class="btn btn-danger " >
+                                                Delete
+                                            </button>
+                                            @else
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                     data-bs-target="#editCompetitionModal"
                                                     onclick="loadActivityData({{ $activity->id }})">
@@ -132,6 +141,7 @@
                                                     data-bs-target="#deleteModal" data-id="{{ $activity->id }}">
                                                 Delete
                                             </button>
+                                            @endif
                                         @endif
                         
                                         <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
