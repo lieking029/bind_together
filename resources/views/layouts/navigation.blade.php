@@ -4,9 +4,9 @@
             <!-- Logo (Image) -->
             <img src="{{ asset('images/bindtogether-logo.png') }}" height="40" width="40" alt="Logo" class="me-3">
             <!-- Text -->
-            <div>
-                <span class="sidebar-text" style="font-size: 18px; font-weight: bold;">Bind Together</span> <br>
-                <small class="text-muted" style="font-size: 10px">Bataan Peninsula State University</small>
+            <div style="font-family: 'Poppins', sans-serif;>
+                <span class="sidebar-text" style="font-size: 20px; font-weight: bold;">Bind Together</span> <br>
+                <small class="text-muted" style="font-size: 10px;">Bataan Peninsula State University</small>
             </div>
         </a>
     </li>

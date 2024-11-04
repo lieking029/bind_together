@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="margin:20px;">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="margin:20px; font-family: 'Poppins', sans-serif;">
         @csrf
         @method('PUT')
         <div class="container mt-4" style="font-family: 'Poppins', sans-serif;">
