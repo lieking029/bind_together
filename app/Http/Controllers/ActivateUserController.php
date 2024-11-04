@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class ActivateUserController extends Controller
-{
+{ 
     /**
      * Handle the incoming request.
      */

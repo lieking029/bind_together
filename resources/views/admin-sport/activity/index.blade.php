@@ -23,6 +23,7 @@
                         New</button>
                 </div>
             </div>
+            
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="datatable" class="table table-bordered">
@@ -53,11 +54,7 @@
                                     <td>{{ $activityTypes[$activity->type] ?? 'Unknown Type' }}</td>
                                     <td>{{ $activity->venue }}</td>
                                     <td>{{ $activity->address }}</td>
-                                    @if ($activity->target_player == 0)
-                                        <td>All Students</td>
-                                    @else
-                                        <td>Official Players</td>
-                                    @endif
+                                    <td>{{ $activity->target_player == 0 ? 'All Students' : 'Official Players' }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($activity->start_date)->format('F d, Y h:i A') }} -
                                         {{ \Carbon\Carbon::parse($activity->end_date)->format('F d, Y h:i A') }}
@@ -71,25 +68,37 @@
                                             <span class="badge bg-danger">Declined</span>
                                         @endif
                                     </td>
-
+                        
                                     <td>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#editCompetitionModal"
-                                            onclick="loadActivityData({{ $activity->id }})"
-                                            {{ $activity->status == 1 ? '' : '' }}>
-                                            Edit
-                                        </button>
-
+                                        @if((auth()->user()->roles[0]->id ==  2) && $activity->type != 3)
+                                            <button type="button" class="btn btn-primary" 
+                                                    {{ $activity->status == 1 ? '' : '' }}>
+                                                    Edit
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#editCompetitionModal"
+                                                    onclick="loadActivityData({{ $activity->id }})">
+                                                Edit
+                                            </button>
+                                        @endif
+                        
                                         <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                            data-bs-target="#viewActivityModal" data-id="{{ $activity->id }}">
+                                                data-bs-target="#viewActivityModal" data-id="{{ $activity->id }}">
                                             View
                                         </button>
-
-                                        <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-id="{{ $activity->id }}"
-                                            {{ $activity->status == 1 ? '' : '' }}>
-                                            Delete
-                                        </button>
+                                        @if((auth()->user()->roles[0]->id ==  2) && $activity->type != 3)
+                                             <button type="button" class="btn btn-danger deleteBtn"
+                                                {{ $activity->status == 1 ? '' : '' }}>
+                                                Delete
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{ $activity->id }}"
+                                                {{ $activity->status == 1 ? '' : '' }}>
+                                                Delete
+                                            </button>
+                                        @endif
 
                                         @if (auth()->user()->hasRole('admin_sport'))
                                             <form action="{{ route('approve', $activity->id) }}" method="POST"
@@ -114,6 +123,7 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        
                     </table>
                 </div>
             </div>
@@ -183,7 +193,7 @@
                             @adviser
                                 <div class="form-group col">
                                     <label for="organization">Organization</label>
-                                    <input type="text" value="{{ isset($user->organization->name) ? $user->organization->name : '' }}" class="form-control"
+                                    <input type="text" value="{{ $user->organization->name }}" class="form-control"
                                         placeholder="Organization" readonly>
                                 </div>
                             @endadviser

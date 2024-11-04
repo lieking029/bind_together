@@ -194,12 +194,13 @@
                 </div>
                 <form action="" id="deleteForm" method="POST">
                     @csrf
-                    @method('DELETE')
+                    @method('POST')
                     <div class="modal-body">
                         Are you sure you want to delete this?
                         {{-- <input type="hidden" name="status" value="3"> --}}
                     </div>
                     <div class="modal-footer">
+                        <input type="hidden" name="delete_flag" value="permanent">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Delete</button>
                     </div>
@@ -254,7 +255,7 @@
             })
 
             $('.deleteBtn').click(function() {
-                $('#deleteForm').attr('action', 'activity/' + $(this).data('id'));
+                $('#deleteForm').attr('action', 'delete-activity/' + $(this).data('id'));
             })
 
             $('.restoreBtn').click(function() {

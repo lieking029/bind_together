@@ -14,8 +14,10 @@ class ActivityRegistration extends Model
     protected $fillable = [
         'activity_id',
         'user_id',
+        'sport_id', // Add sport_id if it's a foreign key in your table
         'height',
         'weight',
+        'contact_person',
         'emergency_contact',
         'relationship',
         'certificate_of_registration',
@@ -23,7 +25,6 @@ class ActivityRegistration extends Model
         'other_file',
         'parent_consent',
         'status',
-        'person_to_contact'
     ];
 
     public function activity(): BelongsTo
@@ -34,5 +35,10 @@ class ActivityRegistration extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function sport(): BelongsTo
+    {
+        return $this->belongsTo(Sport::class); // Adjust the foreign key if necessary
     }
 }

@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h4>Official Players</h4>
+            <h4>Registered Participants</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,16 +17,16 @@
                             <th>Email</th>
                             <th>Height</th>
                             <th>Weight</th>
-                            <th>Person in Contact</th>
+                            <th>Person to Contact</th>
                             <th>Emergency Contact</th>
                             <th>Relationship</th>
                             <th>COR</th>
-                            <th>Photocopy</th>
-                            @if ($status == 1)
+                            <th>ID</th>
+                            
                                 <th>Other File</th>
-                            @else
+                            
 
-                            @endif
+                            
                             <th>Status</th>
                             <th>Date Registered</th>
                             <th>Action</th>
@@ -47,46 +47,45 @@
                                                     }
                                                 @endphp
                                                 <tr>
-                                                    <td>{{ $audition->user->firstname }} {{ $audition->user->lastname }}</td>
-                                                    <td>{{ ordinal($audition->user->year_level) }} Year</td>
-                                                    <td>{{ $audition->user->campus->name }} Year</td>
-                                                    <td>{{ $audition->user->email }}</td>
+                                                    <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
+                                                    <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
+                                                    <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
+                                                    <td>{{ $audition->user->email ?? 'N/A' }}</td>
                                                     <td>{{ $audition->height }}</td>
                                                     <td>{{ $audition->weight }}</td>
+                                                    <td>{{ $audition->contact_person ?? 'N/A' }}</td>
                                                     <td>{{ $audition->emergency_contact }}</td>
                                                     <td>{{ $audition->relationship }}</td>
                                                     <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt=""></td>
                                                     <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
-                                                    @if ($status == 1)
-                                                        <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt="">
-                                                        </td>
-                                                    @else
-                                                        <td><img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="">
-                                                        </td>
-                                                    @endif
-                                                    {{-- <td>{{ $audition->type ?? '' }}</td> --}}
+                                    
+                                                        <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt=""></td>
+                                                    
+                                                        
+                                                    
                                                     <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
                                                     <td>{{ $audition->created_at }}</td>
-                                                    @if ($status == 0)
-                                                        <td>
-                                                            <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
-                                                                data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
-                                                            <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
-                                                                data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
-
-                                                            {{-- <button class="btn btn-danger">Delete</button> --}}
-                                                        </td>
+                                                    <td>
+                                                        @if ($audition->status == 0)
+                                                        <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
+                                                        <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
                                                     @endif
-                                                    @if ($status == 1)
-                                                        <td>
-                                                            <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                                                data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
-                                                                View
-                                                            </button>
-                                                        </td>
-                                                    @endif
-                                                </tr>
-                        @endforeach
+                                                    
+                                                    <!-- Additional View and Delete Buttons -->
+                                                    <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                                            data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                                        View
+                                                    </button>
+                                    
+                                                    <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal" data-id="{{ $audition->id }}">
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                     </tbody>
                 </table>
             </div>

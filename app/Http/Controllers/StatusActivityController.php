@@ -12,7 +12,13 @@ class StatusActivityController extends Controller
      */
     public function __invoke(Request $request, int $activityId)
     {
-        Activity::find($activityId)->update(['is_deleted' => 0]);
+        $permanent = false;
+
+        if((isset($request->delete_flag) && $request->delete_flag == 'permanent')){
+            $permanent = true;
+        }
+        
+        Activity::find($activityId)->update(['is_deleted' => $permanent ? 3 : 0]);
 
         alert()->success('Activity has been updated');
         return redirect()->back();
