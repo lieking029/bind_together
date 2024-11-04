@@ -14,7 +14,7 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
-                        @if(auth()->user()->roles[0]["id"] == 4 && request()->query('status') == 1)
+                        @if(auth()->user()->roles[0]["id"] == 2 && request()->query('status') == 1)
                         <th>STUDENT NUMBER</th>
                         <th>STUDENT NAME</th>
                         <th>YEAR LEVEL</th>
@@ -36,14 +36,14 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>Photocopy</th>
-                            @if ($status == 0)
+                            @if ($status != 0)
                             <th>Other File</th>
                             @else
                             <th>Parent Consent</th>
                             @endif
                             <th>Date Registered</th>
                             <th>Status</th>
-                            @if ($status == 0)
+                            @if ($status == 0 || request()->query('status') == 1)
                             <th>Action</th>
                             @endif
                         </tr>
@@ -51,7 +51,7 @@
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
-                        @if(request()->query('status') == 1)
+                        @if(auth()->user()->roles[0]["id"] == 2 && request()->query('status') == 1)
                         <tr>
                             <td>{{ $audition["user"]["student_number"]}}</td>
                             <td>{{ $audition["user"]["firstname"]. ' ' . $audition["user"]["lastname"]}}</td>
@@ -81,7 +81,9 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
-                              
+                                <!-- <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{ $audition->id }}">Delete</button> -->
                             </td>
                         </tr>
                         @else
@@ -115,7 +117,7 @@
                             <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}"
                                     alt=""></td>
                             <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
-                            @if ($status == 0)
+                            @if ($status != 0)
                             <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt="">
                             </td>
                             @else
@@ -160,6 +162,18 @@
                                 @endif
                             </td>
                             @endif
+
+                            <td>
+                                @if($status != 0 && request()->query('status') == 1)
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                    View
+                                </button>
+                                <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{ $audition->id }}">Delete</button>
+                                @endif
+                            </td>
                         </tr>
 
                         @endif
