@@ -222,7 +222,7 @@
                             @adviser
                                 <div class="form-group col">
                                     <label for="organization">Organization</label>
-                                    <input type="text" value="{{ $user->organization->name }}" class="form-control"
+                                    <input type="text" value="{{ isset($user->organization->name) ? $user->organization->name : '' }}" class="form-control"
                                         placeholder="Organization" readonly>
                                 </div>
                             @endadviser
