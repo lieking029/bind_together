@@ -21,6 +21,7 @@ class RegisteredParticipantController extends Controller
             ->whereHas('activity', function ($query) {
                 $query->whereIn('type', [ActivityType::Tryout, ActivityType::Practice]);
             })
+            ->where('is_deleted', 0)
             ->get();
 
         return view('coach.athlete-record.index', ['auditions' => $athletes, 'status' => $status]);
