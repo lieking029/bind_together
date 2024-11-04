@@ -41,11 +41,14 @@ use App\Http\Controllers\ViewStudentController;
 use App\Http\Controllers\AdviserReportController;
 use App\Http\Middleware\EnsureEmailIsVerified;
 use App\Http\Requests\EmailVerificationRequest;
+use App\Mail\UserMailer;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,6 +79,20 @@ Route::post('/email/verification-notification', function (Request $request) {
     alert()->success('Email verification sent successfully');
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+Route::get('/test-mail-config', function () {
+    try {
+        Mail::raw('This is a test message', function ($message) {
+            $message->to('kikomataks@gmail.com')
+                    ->subject('Test Email Configuration');
+        });
+        return 'Test email sent successfully!';
+    } catch (Exception $e) {
+        return 'Failed to send test email: ' . $e->getMessage(); 
+    }
+});
+
 
 Auth::routes();
 
