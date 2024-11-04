@@ -25,7 +25,7 @@ class StoreActivityRegistrationRequest extends FormRequest
             'activity_id' => ['required', 'exists:activities,id'],
             'height' => ['required', 'numeric', 'max:300'],
             'weight' => ['required', 'numeric', 'max:500'],
-            'contact_person' => ['required', 'string', 'max:255'],
+            'person_to_contact' => ['required', 'string', 'max:255'],
             'emergency_contact' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
             'certificate_of_registration' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],

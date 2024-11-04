@@ -111,7 +111,7 @@
                             <td>{{ $audition->user->email }}</td>
                             <td>{{ $audition->height }}</td>
                             <td>{{ $audition->weight }}</td>
-                            <td>{{ $audition->contact_person ? $audition->contact_person : 'N/A' }}</td>
+                            <td>{{ $audition->person_to_contact ? $audition->person_to_contact : 'N/A' }}</td>
                             <td>{{ $audition->emergency_contact }}</td>
                             <td>{{ $audition->relationship }}</td>
                             <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}"

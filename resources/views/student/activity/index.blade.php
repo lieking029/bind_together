@@ -120,8 +120,8 @@
                                 placeholder="Enter Your Weight" required>
                         </div>
                         <div class="mb-3">
-                            <label for="contact_person" class="form-label">Person to Contact</label>
-                            <input type="text" class="form-control" id="contact_person" name="contact_person"
+                            <label for="person_to_contact" class="form-label">Person to Contact</label>
+                            <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
                                 placeholder="Enter Name Of Person To Contact" required>
                         </div>
                         <div class="mb-3">
@@ -220,8 +220,8 @@
                                 placeholder="Enter Your Weight" required>
                         </div>
                         <div class="mb-3">
-                            <label for="contact_person" class="form-label">Person to Contact</label>
-                            <input type="text" class="form-control" id="contact_person" name="contact_person"
+                            <label for="person_to_contact" class="form-label">Person to Contact</label>
+                            <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
                                 placeholder="Enter Name Of Person To Contact" required>
                         </div>
                         <div class="mb-3">

@@ -33,7 +33,7 @@ class ActivityRegistrationController extends Controller
             'activity_id' => $request->activity_id,
             'height' => $request->height,
             'weight' => $request->weight,
-            'contact_person' => $request->contact_person,
+            'person_to_contact' => $request->person_to_contact,
             'emergency_contact' => $request->emergency_contact,
             'relationship' => $request->relationship,
             'user_id' => Auth::id(),

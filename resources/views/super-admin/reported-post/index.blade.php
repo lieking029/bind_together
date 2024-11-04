@@ -45,20 +45,20 @@
                                 <th>Owner</th>
                                 <th>Reported By</th>
                                 <th>Report Reason</th>
+                                <th>Report Counts</th>
                                 <th>Status</th>
                                 <th>Date Reported</th>
-                                {{-- <th>Report Counts</th> --}}
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($reportedNewsfeeds as $reportedNewsfeed)
                                 <tr>
-                                    <td>{{ $reportedNewsfeed->newsfeed->description }}</td>
-                                    <td>{{ $reportedNewsfeed->newsfeed->user->firstname }}
-                                        {{ $reportedNewsfeed->newsfeed->user->lastname }}</td>
-                                    <td>{{ $reportedNewsfeed->user->firstname }} {{ $reportedNewsfeed->user->lastname }} </td>
-                                    <td>{{ $reportedNewsfeed->reason }}</td>
+                                    <td>{{ $reportedNewsfeed->description }}</td>
+                                    <td>{{ $reportedNewsfeed->user->firstname }} {{ $reportedNewsfeed->user->lastname }}</td>
+                                    <td>{{ $reportedNewsfeed->reportedPosts->first()->user->firstname }} {{ $reportedNewsfeed->reportedPosts->first()->user->lastname }} </td>
+                                    <td>{{ $reportedNewsfeed->reportedPosts->first()->reason }}</td>
+                                    <td>{{ $reportedNewsfeed->report_count }}</td>
                                     <td>
                                         @if ($reportedNewsfeed->status == 1)
                                             <span class="badge text-black" style="background: yellow">Pending</span>

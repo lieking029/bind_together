@@ -20,24 +20,29 @@ class Newsfeed extends Model
         'target_player',
     ];
 
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function newsfeedFiles() : HasMany
+    public function newsfeedFiles(): HasMany
     {
         return $this->hasMany(NewsfeedFile::class);
-    } 
+    }
 
-    public function comments() : HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comments::class);
     }
 
-    public function newsfeedLikes() : HasMany
+    public function newsfeedLikes(): HasMany
     {
         return $this->hasMany(NewsfeedLike::class);
+    }
+
+    public function reportedPosts(): HasMany
+    {
+        return $this->hasMany(ReportedPost::class);
     }
 
 }
