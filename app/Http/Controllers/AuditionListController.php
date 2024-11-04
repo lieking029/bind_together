@@ -24,7 +24,8 @@ class AuditionListController extends Controller
         }
         $auditions = ActivityRegistration::query()
             ->with(['activity', 'user'])
-            ->whereIn('status', [$status, 1, 2]);
+            ->whereIn('status', [$status, 1, 2])
+            ->where('is_deleted', 0);
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type) {
             if ($type == '3') {

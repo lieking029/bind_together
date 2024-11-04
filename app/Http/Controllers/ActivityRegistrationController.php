@@ -116,7 +116,7 @@ class ActivityRegistrationController extends Controller
                 <p>Best regards,<br>
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
                 Admin</p>';
-            
+
                 $message->to($act["user"]["email"])
                     ->subject('Registration Status - ' . $act["activity"]["title"])
                     ->html($htmlContent);
@@ -139,7 +139,16 @@ class ActivityRegistrationController extends Controller
     public function deletion($id)
     {
         $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 1]);
+
         alert()->success('Deleted successfully');
+
         return redirect()->back();
     }
 }

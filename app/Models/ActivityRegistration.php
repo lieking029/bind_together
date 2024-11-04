@@ -25,6 +25,7 @@ class ActivityRegistration extends Model
         'other_file',
         'parent_consent',
         'status',
+        'is_deleted'
     ];
 
     public function activity(): BelongsTo
