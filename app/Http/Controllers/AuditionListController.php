@@ -22,8 +22,13 @@ class AuditionListController extends Controller
         if ($request->has('type')) {
             $type = $request->query('type');
         }
+        
         $auditions = ActivityRegistration::query()
-            ->with(['activity', 'user'])
+            ->with([
+                'activity.user.roles',
+                'activity.user.organization',
+                'user.roles'
+            ])
             ->whereIn('status', [$status, 1, 2])
             ->where('is_deleted', 0);
 

@@ -14,6 +14,16 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
+                        @if(auth()->user()->roles[0]["id"] == 2)
+                        <th>STUDENT NUMBER</th>
+                        <th>STUDENT NAME</th>
+                        <th>YEAR LEVEL</th>
+                        <th>CAMPUS</th>
+                        <th>ORGANIZATION NAME</th>
+                        <th>ADVISER</th>
+                        <th>DATE REGISTERED</th>
+                        <th>Action</th>
+                        @else
                         <tr>
                             <th>Name</th>
                             <th>Year Level</th>
@@ -37,9 +47,46 @@
                             <th>Action</th>
                             @endif
                         </tr>
+                        @endif
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
+                        @if(auth()->user()->roles[0]["id"] == 2)
+                        <tr>
+                            <td>{{ $audition["user"]["student_number"]}}</td>
+                            <td>{{ $audition["user"]["firstname"]. ' ' . $audition["user"]["lastname"]}}</td>
+                            @php
+                            $yearLevel = $audition->user->year_level; // Assuming year_level is an integer
+                            $suffix = '';
+
+                            if ($yearLevel == 1) {
+                            $suffix = 'st';
+                            } elseif ($yearLevel == 2) {
+                            $suffix = 'nd';
+                            } elseif ($yearLevel == 3) {
+                            $suffix = 'rd';
+                            } else {
+                            $suffix = 'th';
+                            }
+
+                            $formattedYearLevel = $yearLevel . $suffix;
+                            @endphp
+                            <td>{{ $formattedYearLevel }} Year</td>
+                            <td>{{ $audition->user->campus->name }}</td>
+                            <td>{{ $audition["activity"]["user"]["organization"]["name"]}}</td>
+                            <td>{{ $audition["activity"]["user"]["firstname"] . ' '. $audition["activity"]["user"]["lastname"] }}</td>
+                            <td>{{ $audition->created_at }}</td>
+                            <td>
+                            <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                    View
+                                </button>
+                                <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-id="{{ $audition->id }}">Delete</button>
+                            </td>
+                        </tr>
+                        @else
                         <tr>
                             <td>{{ $audition->user->firstname }} {{ $audition->user->lastname }}</td>
                             @php
@@ -116,6 +163,8 @@
                             </td>
                             @endif
                         </tr>
+
+                        @endif
                         @endforeach
                     </tbody>
                 </table>
