@@ -73,7 +73,7 @@ class UserController extends Controller
     {
         // Load necessary relationships
         $user->load('sport', 'organization', 'campus', 'program', 'course', 'roles');
-
+        return response()->json(['user' => $user, 'roles' => $user->getRoleNames(), 'organizations' => $user->organization()]);
     }
 
     public function update(Request $request, User $user)
