@@ -138,11 +138,11 @@
                             @if ($status == 0)
                             <td>
                                 @if($audition->status == 0)
-                                <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
+                                <button class="btn btn-primary approveBtn" onclick="approveHandler({{ $audition->id }});" type="button" data-bs-toggle="modal"
                                     data-bs-target="#approveModal"
                                     data-id="{{ $audition->id }}">Approve</button>
                                 <button class="btn btn-secondary declineBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#declineModal"
+                                    data-bs-toggle="modal" data-bs-target="#declineModal" onclick="declineHandler({{ $audition->id }});"
                                     data-id="{{ $audition->id }}">Decline</button>
                                 @endif
                                 @if($audition->status != 0)
@@ -150,12 +150,12 @@
                                 <button class="btn btn-secondary " type="button">Decline</button>
                                 @endif
                                 <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}" onclick="viewHandler({{ $audition->id }});">
                                     View
                                 </button>
                                 @if($audition->status == 1 || $audition->status == 2)
                                 <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
                                     data-id="{{ $audition->id }}">Delete</button>
                                 @else
                                 <button class="btn btn-secondary " type="button">Delete</button>
@@ -232,6 +232,31 @@
     </div>
 </div>
 
+<!-- Decline -->
+<div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="declineModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="declineModalLabel">Decline</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" id="declineForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    Are you sure you want to decline this user?
+                    <input type="hidden" name="status" value="2">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- View --}}
 <div class="modal fade" id="viewAuditionModal" tabindex="-1" aria-labelledby="viewAuditionModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -278,6 +303,11 @@
                         <div class="col-md-6 mb-3">
                             <label for="audition-weight" class="form-label">Weight</label>
                             <input type="text" id="audition-weight" class="form-control" readonly>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="audition-contact-person" class="form-label">Contact Person</label>
+                            <input type="text" id="audition-contact-person" class="form-control" readonly>
                         </div>
 
                         <!-- Emergency Contact -->
@@ -338,84 +368,55 @@
     </div>
 </div>
 
-<!-- Decline -->
-<div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="declineModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="declineModalLabel">Decline</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" id="declineForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    Are you sure you want to decline this user?
-                    <input type="hidden" name="status" value="2">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @push('scripts')
 <script>
-    $(() => {
-        $('.deleteBtn').click(function() {
-            $('#deleteForm').attr('action', '/activity-registration-delete/' + $(this).data('id'))
-        })
+    function approveHandler(id) {
+        $('#approveForm').attr('action', '/activity-registration/' + id);
+    }
 
-        $('#datatable').DataTable();
+    function declineHandler(id) {
+        $('#declineForm').attr('action', '/activity-registration/' + id)
+    }
 
-        $('.approveBtn').click(function() {
-            $('#approveForm').attr('action', '/activity-registration/' + $(this).data('id'))
-        })
+    function deleteHandler(id) {
+        $('#deleteForm').attr('action', '/activity-registration-delete/' + id);
+    }
 
-        $('.declineBtn').click(function() {
-            $('#declineForm').attr('action', '/activity-registration/' + $(this).data('id'))
-        })
+    function viewHandler(id) {
+        fetch('fetch-activity/' + id)
+            .then(response => response.json())
+            .then(audition => {
+                console.log(audition);
+                $('#user-fullname').val(audition.user.firstname + ' ' + audition.user.lastname);
+                $('#user-year-level').val(audition.user.year_level + ' Year');
+                $('#user-campus').val(audition.user.campus.name);
+                $('#user-email').val(audition.user.email);
+                $('#audition-height').val(audition.height);
+                $('#audition-weight').val(audition.weight);
+                $('#audition-emergency-contact').val(audition.emergency_contact);
+                $('#audition-relationship').val(audition.relationship);
+                $('#audition-contact-person').val(audition.person_to_contact); // Set contact person
 
-        $('.viewBtn').click(function() {
-            fetch('fetch-activity/' + $(this).data('id'))
-                .then(response => response.json())
-                .then(audition => {
-                    console.log(audition);
-                    $('#user-fullname').val(audition.user.firstname + ' ' + audition.user
-                        .lastname);
-                    $('#user-year-level').val(audition.user.year_level + ' Year');
-                    $('#user-campus').val(audition.user.campus.name);
-                    $('#user-email').val(audition.user.email);
-                    $('#audition-height').val(audition.height);
-                    $('#audition-weight').val(audition.weight);
-                    $('#audition-emergency-contact').val(audition.emergency_contact);
-                    $('#audition-relationship').val(audition.relationship);
+                // Image sources
+                $('#certificate-of-registration').attr('src', '/storage/' + audition.certificate_of_registration);
+                $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
-                    // Image sources
-                    $('#certificate-of-registration').attr('src', '/storage/' + audition
-                        .certificate_of_registration);
-                    $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
+                // Conditional rendering based on status
+                if (audition.status == 0) {
+                    $('#other-file-row').show();
+                    $('#parent-consent-row').hide();
+                    $('#other-file').attr('src', '/storage/' + audition.other_file);
+                } else {
+                    $('#other-file-row').hide();
+                    $('#parent-consent-row').show();
+                    $('#parent-consent').attr('src', '/storage/' + audition.parent_consent);
+                }
 
-                    // Conditional rendering based on status
-                    if (audition.status == 0) {
-                        $('#other-file-row').show();
-                        $('#parent-consent-row').hide();
-                        $('#other-file').attr('src', '/storage/' + audition.other_file);
-                    } else {
-                        $('#other-file-row').hide();
-                        $('#parent-consent-row').show();
-                        $('#parent-consent').attr('src', '/storage/' + audition.parent_consent);
-                    }
-
-                    $('#audition-type').text(audition.type ? audition.type : '');
-                    $('#audition-status').text(audition.status == 0 ? 'Pending' : 'Declined');
-                })
-        })
-    })
+                $('#audition-type').text(audition.type ? audition.type : '');
+                $('#audition-status').text(audition.status == 0 ? 'Pending' : 'Declined');
+            });
+    }
 </script>
 @endpush
