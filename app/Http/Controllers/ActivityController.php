@@ -19,12 +19,16 @@ class ActivityController extends Controller
 
         if ($user->hasRole('super_admin') || $user->hasRole('admin_sport')) {
             $activities = Activity::whereIn('status', [0, 1])
-                ->whereIn('status', [0, 1])
                 ->where('is_deleted', 0)
                 ->whereIn('type', [
                     ActivityType::Tryout,
-                    ActivityType::Competition
+                    ActivityType::Competition,
                 ])
+                ->whereHas('user', function ($query) {
+                    $query->whereDoesntHave('roles', function ($roleQuery) {
+                        $roleQuery->where('id', 2);
+                    });
+                })
                 ->get();
         } else {
             if ($user->hasRole('admin_org')) {
