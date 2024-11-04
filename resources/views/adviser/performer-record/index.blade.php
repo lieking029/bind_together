@@ -77,13 +77,13 @@
                             <td>{{ $audition["activity"]["user"]["firstname"] . ' '. $audition["activity"]["user"]["lastname"] }}</td>
                             <td>{{ $audition->created_at }}</td>
                             <td>
-                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal" onclick="viewHandler({{ $audition->id }});"
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
-                                <!-- <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                    data-id="{{ $audition->id }}">Delete</button> -->
+                                <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
+                                    data-id="{{ $audition->id }}">Delete</button>
                             </td>
                         </tr>
                         @else

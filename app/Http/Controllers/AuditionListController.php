@@ -33,10 +33,14 @@ class AuditionListController extends Controller
                 'user.roles'
             ])
             ->whereIn('status', [$status, 1, 2])
-            ->where('is_deleted', 0)
-            ->whereHas('activity', function ($query) use ($user) {
+            ->where('is_deleted', 0);
+
+        if (!$user->hasRole('admin_org')) {
+            $auditions->whereHas('activity', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             });
+        }
+
 
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type) {
