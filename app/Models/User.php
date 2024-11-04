@@ -129,8 +129,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Sport::class);
     }
-
-
+    
     public function campus(): BelongsTo
     {
         return $this->belongsTo(Campus::class);
@@ -160,6 +159,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Practice::class);
     }
+
+   
+
     /*  public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
