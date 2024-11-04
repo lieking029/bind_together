@@ -240,16 +240,16 @@
                                                     <div class="col-md-6 mt-2">
                                                         <label for="gender" class="form-label">Gender</label>
                                                         <select class="form-select" id="gender" name="gender">
-                                                        <option value="Others"
-                                                                {{ auth()->user()->gender == 'Others' ? 'selected' : '' }}>
-                                                                Prefer not to say</option>
-                                                        </select>
+                                                            
                                                             <option value="Female"
                                                                 {{ auth()->user()->gender == 'Female' ? 'selected' : '' }}>
                                                                 Female</option>
                                                             <option value="Male"
                                                                 {{ auth()->user()->gender == 'Male' ? 'selected' : '' }}>
                                                                 Male</option>
+                                                            <option value="Prefer Not to Say"
+                                                                {{ auth()->user()->gender == 'Prefer Not to say' ? 'selected' : '' }}>
+                                                                Prefer not to say</option>
                                                         </select>
                                                     </div>
                                                     <div class="col mt-2">
