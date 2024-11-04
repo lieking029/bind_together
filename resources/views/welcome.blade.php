@@ -21,6 +21,7 @@
 </head>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
     #hero {
         position: relative;
         background: url('{{ asset('images/background 5.jpg') }}') no-repeat center center;
@@ -101,7 +102,7 @@
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50">
     @include('layouts.guest-topbar')
-    <section id="hero" class="hero section">
+    <section id="hero" class="hero section" style="font-family: 'Poppins', sans-serif;">
         <div class="container position-relative">
 
             <div class="welcome text-start mb-5" data-aos="fade-down" data-aos-delay="100">
