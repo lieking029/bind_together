@@ -34,8 +34,11 @@ class ActivityController extends Controller
                     ->where('user_id', $user->id)
                     ->whereIn('status', [0, 1])
                     ->where('is_deleted', 0)
-                    ->orWhereHas('user.roles', function ($query) {
-                        $query->where('roles.id', 4);
+                    ->orWhere(function ($query) {
+                        $query->whereHas('user.roles', function ($query) {
+                            $query->where('roles.id', 4);
+                        })
+                            ->where('is_deleted', 0); 
                     })
                     ->whereIn('type', [
                         ActivityType::Audition,
