@@ -117,7 +117,7 @@
                             <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}"
                                     alt=""></td>
                             <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
-                            @if ($status != 0)
+                            @if ($status == 0)
                             <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt="">
                             </td>
                             @else
@@ -404,7 +404,7 @@
                 $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
                 // Conditional rendering based on status
-                if (audition.status != 0) {
+                if (audition.status == 0) {
                     $('#other-file-row').show();
                     $('#parent-consent-row').hide();
                     $('#other-file').attr('src', '/storage/' + audition.other_file);
