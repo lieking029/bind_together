@@ -29,7 +29,7 @@ class ActivityController extends Controller
         } else {
             if ($user->hasRole('admin_org')) {
                 $activities = Activity::with(['user.roles' => function ($query) {
-                    $query->select('roles.id as role_id'); 
+                    $query->select('roles.id as role_id');
                 }])
                     ->where('user_id', $user->id)
                     ->whereIn('status', [0, 1])
@@ -37,6 +37,10 @@ class ActivityController extends Controller
                     ->orWhereHas('user.roles', function ($query) {
                         $query->where('roles.id', 4);
                     })
+                    ->whereIn('type', [
+                        ActivityType::Audition,
+                        ActivityType::Competition
+                    ])
                     ->get();
             } else {
                 $activities = Activity::where('user_id', $user->id)
