@@ -77,13 +77,13 @@
                             <td>{{ $audition["activity"]["user"]["firstname"] . ' '. $audition["activity"]["user"]["lastname"] }}</td>
                             <td>{{ $audition->created_at }}</td>
                             <td>
-                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal" onclick="viewHandler({{ $audition->id }});"
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
-                                <!-- <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                    data-id="{{ $audition->id }}">Delete</button> -->
+                                <button class="btn btn-secondary deleteBtn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
+                                    data-id="{{ $audition->id }}">Delete</button>
                             </td>
                         </tr>
                         @else
@@ -111,7 +111,7 @@
                             <td>{{ $audition->user->email }}</td>
                             <td>{{ $audition->height }}</td>
                             <td>{{ $audition->weight }}</td>
-                            <td>{{ $audition->contact_person ? $audition->contact_person : 'N/A' }}</td>
+                            <td>{{ $audition->person_to_contact ? $audition->person_to_contact : 'N/A' }}</td>
                             <td>{{ $audition->emergency_contact }}</td>
                             <td>{{ $audition->relationship }}</td>
                             <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}"

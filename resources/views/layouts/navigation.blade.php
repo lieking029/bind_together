@@ -392,7 +392,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Calendar of Act') }}</span>
+            <span class="sidebar-text">{{ __('Calendar') }}</span>
         </a>
     </li>
     <li class="nav-item {{ request()->routeIs('report.view-sport') ? 'active' : '' }}">
@@ -513,7 +513,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Calendar of Act') }}</span>
+            <span class="sidebar-text">{{ __('Calendar') }}</span>
         </a>
     </li>
     <li class="nav-item">
@@ -677,7 +677,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Calendar of Act') }}</span>
+            <span class="sidebar-text">{{ __('Calendar') }}</span>
         </a>
     </li>
     <li class="nav-item {{ request()->routeIs('report.coach') ? 'active' : '' }}">
@@ -738,7 +738,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Calendar of Act') }}</span>
+            <span class="sidebar-text">{{ __('Calendar') }}</span>
         </a>
     </li>
 
@@ -873,7 +873,7 @@
                                 <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                             </svg>
                         </span>
-                        <span class="sidebar-text">{{ __('Calendar of Act') }}</span>
+                        <span class="sidebar-text">{{ __('Calendar') }}</span>
                     </a>
                 </li>
             </ul>
