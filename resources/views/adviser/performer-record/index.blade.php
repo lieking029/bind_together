@@ -36,7 +36,7 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>Photocopy</th>
-                            @if ($status != 0)
+                            @if ($status == 0)
                             <th>Other File</th>
                             @else
                             <th>Parent Consent</th>
