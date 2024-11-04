@@ -166,11 +166,11 @@
                             <td>
                                 @if($status != 0 && request()->query('status') == 1)
                                 <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}" onclick="viewHandler({{ $audition->id }});">
                                     View
                                 </button>
                                 <button class="btn btn-secondary deleteBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
                                     data-id="{{ $audition->id }}">Delete</button>
                                 @endif
                             </td>
@@ -404,7 +404,7 @@
                 $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
                 // Conditional rendering based on status
-                if (audition.status == 0) {
+                if (audition.status != 0) {
                     $('#other-file-row').show();
                     $('#parent-consent-row').hide();
                     $('#other-file').attr('src', '/storage/' + audition.other_file);
