@@ -59,8 +59,8 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         @if ($newsfeed->user_id == auth()->id())
                             <li>
-                                <button type="button" class="dropdown-item editBtn" data-bs-toggle="modal"
-                                    data-bs-target="#editPostModal" data-id="{{ $newsfeed->id }}">
+                                <button type="button" class="dropdown-item editBtn" data-bs-toggle="modal" 
+                                    data-bs-target="#editPostModal" data-id="{{ $newsfeed->id }}" onclick="showText('{{$newsfeed->description}}');">
                                     Edit
                                 </button>
                             </li>
@@ -521,7 +521,7 @@
                     @csrf
                     @method('PUT')
                     <div class="form-group mb-3">
-                        <textarea class="form-control" name="description" id="description" rows="3"
+                        <textarea class="form-control show-description" name="description" id="description" rows="3"
                             style="background-color: #3E4348; color: white; border: none;"></textarea>
                     </div>
 
@@ -550,6 +550,16 @@
 
 @push('scripts')
     <script>
+
+        function showText(text) {
+            const elements = document.getElementsByClassName('show-description');
+            
+            if (elements.length > 0) {
+                elements[0].textContent = text; 
+            }
+        }
+
+
         function setCommentId(commentId) {
             $('#commentId').val(commentId);
         }
