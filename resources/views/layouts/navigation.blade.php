@@ -4,7 +4,7 @@
             <!-- Logo (Image) -->
             <img src="{{ asset('images/bindtogether-logo.png') }}" height="40" width="40" alt="Logo" class="me-3">
             <!-- Text -->
-            <div style="font-family: 'Poppins', sans-serif;>
+            <div style="font-family: 'Poppins', sans-serif;">
                 <span class="sidebar-text" style="font-size: 20px; font-weight: bold;">Bind Together</span> <br>
                 <small class="text-muted" style="font-size: 10px;">Bataan Peninsula State University</small>
             </div>
@@ -243,7 +243,7 @@
             <span class="sidebar-icon me-3">
                 <i class="fas fa-user-alt fa-fw"></i>
             </span>
-            <span class="sidebar-text">{{ __('Feedback') }}</span>
+            <span class="sidebar-text">{{ __('Contact Us') }}</span>
         </a>
     </li>
     @endsuper_admin
@@ -282,7 +282,7 @@
                 <span class="sidebar-icon me-3">
                     <i class="fas fa-circle fa-fw"></i>
                 </span>
-                <span class="sidebar-text">Manage Users</span>
+                <span class="sidebar-text">Manage User</span>
             </span>
             <span class="link-arrow">
                 <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -379,7 +379,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Deleted Activity') }}</span>
+            <span class="sidebar-text">{{ __('Archive Activity') }}</span>
         </a>
     </li>
 
@@ -439,7 +439,7 @@
                 <span class="sidebar-icon me-3">
                     <i class="fas fa-circle fa-fw"></i>
                 </span>
-                <span class="sidebar-text">Manage Users</span>
+                <span class="sidebar-text">Manage User</span>
             </span>
             <span class="link-arrow">
                 <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -500,7 +500,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Deleted Activity') }}</span>
+            <span class="sidebar-text">{{ __('Archive Activity') }}</span>
         </a>
     </li>
 
@@ -614,7 +614,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Deleted Activity') }}</span>
+            <span class="sidebar-text">{{ __('Archive Activity') }}</span>
         </a>
     </li>
 
@@ -809,7 +809,7 @@
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                 </svg>
             </span>
-            <span class="sidebar-text">{{ __('Deleted Activity') }}</span>
+            <span class="sidebar-text">{{ __('Archive Activity') }}</span>
         </a>
     </li>
     @endadviser
@@ -885,7 +885,7 @@
             <span class="sidebar-icon me-3">
                 <i class="fas fa-user-alt fa-fw"></i>
             </span>
-            <span class="sidebar-text">{{ __('Feedback') }}</span>
+            <span class="sidebar-text">{{ __('Contact Us') }}</span>
         </a>
     </li>
     @endstudent
