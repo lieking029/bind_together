@@ -125,7 +125,6 @@
                     </div> --}}
 
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                         <label>
                             <input type="checkbox" required> I agree to the
                             <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
