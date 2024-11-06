@@ -47,7 +47,7 @@ class ProfileController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        $user->update([
+        $payload = [
             'address' => $request->address,
             'birthdate' => $request->birthdate,
             'contact' => $request->contact,
@@ -55,14 +55,17 @@ class ProfileController extends Controller
             'program_id' => $request->program_id,
             'gender' => $request->gender,
             'year_level' => $request->year_level,
-            'sport_id' => $request->sport_id,
             'organization_id' => $request->organization_id,
             'is_completed' => 1,
-        ]);
+        ];
+
+        if(isset($request->sport_id)){
+            $payload["sport_id"] = $request->sport_id;
+        }
+
+        $user->update($payload);
 
         alert()->success('Profile updated successfully!');
         return redirect()->route('profile.show');
     }
-
-
 }

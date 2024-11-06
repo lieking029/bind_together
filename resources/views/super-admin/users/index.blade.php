@@ -177,7 +177,7 @@
                         @if ($role == 'coach')
                             <div class="form-group mt-3">
                                 <label for="">Sport</label>
-                                <select name="sport_id" id="" class="form-select">
+                                <select name="sport_id" id="" name="txtSportId" class="form-select">
                                     <option value="" selected disabled>Select Sport</option>
                                     @foreach ($sports as $sport)
                                         <option value="{{ $sport->id }}">{{ $sport->name }}</option>

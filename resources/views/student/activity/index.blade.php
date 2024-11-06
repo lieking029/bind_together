@@ -48,12 +48,14 @@
                                 $notGoing = $practice && $practice->status == 0;
                             @endphp
 
-                            <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}">
+                            <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : ''?>">
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $activity->title }}</h5>
                                         <p class="card-text">
-                                            <strong>Sport name:</strong> {{ $activity->sport->name ?? '' }} <br>
+                                            @if($activity->type == 1 || $activity->type == 2) 
+                                                <strong>Sport name:</strong> {{ $activity->user->sport->name ?? 'N/A' }} <br>
+                                            @endif
                                             <strong>Type:</strong> {{ $activityTypes[$activity->type] ?? '' }} <br>
                                             <strong>Venue:</strong> {{ $activity->venue }} <br>
                                             <strong>Duration:</strong> {{ $activity->start_date }} -
@@ -357,7 +359,7 @@
                         $('#activity-target-players').text(data.target_player === 1 ?
                             'Official Players' : 'All Student');
                         $('#activity-content').text(data.content);
-                        $('#activity-type').text(data.type);
+                        $('#activity-type').text(getTypeName(data.type));
                         $('#activity-duration').text(data.start_date + ' - ' + data.end_date);
                         $('#activity-venue').text(data.venue);
                         $('#activity-address').text(data.address);
@@ -383,5 +385,27 @@
             })
 
         });
+
+        function getTypeName(id) {
+            let type_name = null;
+
+            if(id == 0){
+                type_name = "Audition";
+            }
+
+            if(id == 1){
+                type_name = "Tryout";
+            }
+
+            if(id == 2){
+                type_name = "Practice";
+            }
+
+            if(id == 3){
+                type_name = "Competition";
+            }
+
+            return type_name;
+        }
     </script>
 @endpush

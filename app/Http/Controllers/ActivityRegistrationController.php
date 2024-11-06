@@ -7,6 +7,8 @@ use App\Http\Requests\StoreActivityRegistrationRequest;
 use App\Models\Activity;
 use App\Models\ActivityRegistration;
 use App\Mail\ApproveTryout; // Ensure this is imported
+use App\Models\Sport;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,10 +21,27 @@ class ActivityRegistrationController extends Controller
      */
     public function index()
     {
-        return view('student.activity.index', [
-            'activities' => Activity::with('sport')->where('status', 1)->where('is_deleted', 0)->get(),
-        ]);
+        $activities = Activity::where('status', 1)
+            ->where('is_deleted', 0)
+            ->where('end_date', '>=', now())
+            ->get();
+
+        $userIds = $activities->pluck('user_id')->unique();
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        $sportIds = $users->pluck('sport_id')->unique();
+        $sports = Sport::whereIn('id', $sportIds)->get()->keyBy('id');
+
+        $activities->each(function ($activity) use ($users, $sports) {
+            $activity->user = $users->get($activity->user_id);
+            if ($activity->user) {
+                $activity->user->sport = $sports->get($activity->user->sport_id);
+            }
+        });
+
+        return view('student.activity.index', compact('activities'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -75,8 +94,8 @@ class ActivityRegistrationController extends Controller
             'admin' => $user,
         ];
 
-        
-        $testEmail = 'dcramos@bpsu.edu.ph'; 
+
+        $testEmail = 'dcramos@bpsu.edu.ph';
 
         // Check if the email sending was successful
         try {
