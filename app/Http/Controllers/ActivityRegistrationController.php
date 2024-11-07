@@ -26,29 +26,29 @@ class ActivityRegistrationController extends Controller
             ->where('is_deleted', 0)
             ->where('end_date', '>=', now())
             ->get();
-    
+
         $userIds = $activities->pluck('user_id')->unique();
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-    
+
         $sportIds = $users->pluck('sport_id')->unique();
         $sports = Sport::whereIn('id', $sportIds)->get()->keyBy('id');
-    
+
         $organizationIds = $users->pluck('organization_id')->unique();
         $organizations = Organization::whereIn('id', $organizationIds)->get()->keyBy('id');
-    
+
         $activities->each(function ($activity) use ($users, $sports, $organizations) {
             $activity->user = $users->get($activity->user_id);
-    
+
             if ($activity->user) {
                 $activity->user->sport = $sports->get($activity->user->sport_id);
-                
+
                 $activity->user->organization = $organizations->get($activity->user->organization_id);
             }
         });
-    
+
         return view('student.activity.index', compact('activities'));
     }
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -92,14 +92,16 @@ class ActivityRegistrationController extends Controller
 
         if ((int)$request->status === 1) {
             $user = Auth::user();
+
             Mail::send([], [], function ($message) use ($act, $user) {
+                $getRole = $user->getRoleNames();
                 $htmlContent = '
                 <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
                 <p>We are pleased to inform you that your registration for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
                 <p>Please stay tuned for further updates and information.</p>
                 <p>Best regards,<br>
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                Admin</p>';
+                ' . ucfirst($getRole[0]) . '</p>';
 
                 $message->to($act["user"]["email"])
                     ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
@@ -109,6 +111,7 @@ class ActivityRegistrationController extends Controller
         } else if ((int)$request->status === 2) {
             $user = Auth::user();
             Mail::send([], [], function ($message) use ($act, $user) {
+                $getRole = $user->getRoleNames();
                 $htmlContent = '
                 <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
                 <p>Thank you for registering for ' . $act["activity"]["title"] . '. After reviewing all applications, we regret to inform you that your registration has not been approved for this event.</p>
@@ -117,7 +120,7 @@ class ActivityRegistrationController extends Controller
                 <p>If you have any questions or need more information, please don’t hesitate to reach out.</p>
                 <p>Best regards,<br>
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                Admin</p>';
+                ' . ucfirst($getRole[0]) . '</p>';
 
                 $message->to($act["user"]["email"])
                     ->subject('Registration Status - ' . $act["activity"]["title"])
