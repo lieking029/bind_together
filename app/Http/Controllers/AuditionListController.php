@@ -32,7 +32,7 @@ class AuditionListController extends Controller
                 'activity.user.organization',
                 'user.roles'
             ])
-            ->whereIn('status', [$status, 1, 2])
+            ->whereIn('status', [$status])
             ->where('is_deleted', 0);
 
         if (!$user->hasRole('admin_org')) {

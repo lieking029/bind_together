@@ -80,45 +80,46 @@ class ActivityRegistrationController extends Controller
      */
     public function update(Request $request, int $activityRegistrationId)
     {
-        $request->validate([
-            'status' => 'required|in:1,2',
-        ]);
-
-        $act = ActivityRegistration::with(['user', 'activity'])->findOrFail($activityRegistrationId);
+        $act = ActivityRegistration::with(['user', 'activity'])->find($activityRegistrationId);
         $act->update(['status' => $request->status]);
 
-        $user = Auth::user();
-        $data = [
-            'user' => $act->user,
-            'activity' => $act->activity,
-            'admin' => $user,
-        ];
+        if ((int)$request->status === 1) {
+            $user = Auth::user();
+            Mail::send([], [], function ($message) use ($act, $user) {
+                $htmlContent = '
+                <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
+                <p>We are pleased to inform you that your registration for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
+                <p>Please stay tuned for further updates and information.</p>
+                <p>Best regards,<br>
+                ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
+                Admin</p>';
 
+                $message->to('kikomataks@gmail.com')
+                    ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
+                    ->html($htmlContent);
+            });
+            alert()->success('Approved');
+        } else if ((int)$request->status === 2) {
+            $user = Auth::user();
+            Mail::send([], [], function ($message) use ($act, $user) {
+                $htmlContent = '
+                <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
+                <p>Thank you for registering for ' . $act["activity"]["title"] . '. After reviewing all applications, we regret to inform you that your registration has not been approved for this event.</p>
+                <p>Please note that each activity/event has specific requirements, and some criteria were not fully met in this instance.</p>
+                <p>We encourage you to stay involved and consider applying for future activities.</p>
+                <p>If you have any questions or need more information, please don’t hesitate to reach out.</p>
+                <p>Best regards,<br>
+                ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
+                Admin</p>';
 
-        $testEmail = 'dcramos@bpsu.edu.ph';
-
-        // Check if the email sending was successful
-        try {
-            if ($request->status === 1) {
-                Mail::to($testEmail)->send(new ApproveTryout(
-                    'Registration Approved - Welcome to ' . $act->activity->title . '!',
-                    'emails.approve',
-                    $data
-                ));
-                alert()->success('Approved');
-            } else if ($request->status === 2) {
-                Mail::to($testEmail)->send(new ApproveTryout(
-                    'Registration Status - ' . $act->activity->title,
-                    'emails.decline',
-                    $data
-                ));
-                alert()->success('Declined');
-            }
-        } catch (\Exception $e) {
-            Log::error('Email sending failed: ' . $e->getMessage());
-            alert()->error('Email sending failed: ' . $e->getMessage());
+                $message->to($act["user"]["email"])
+                    ->subject('Registration Status - ' . $act["activity"]["title"])
+                    ->html($htmlContent);
+            });
+            alert()->success('Declined');
+        } else {
+            alert()->success('Updated successfully');
         }
-
         return redirect()->back();
     }
 
