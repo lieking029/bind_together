@@ -7,6 +7,7 @@ use App\Http\Requests\StoreActivityRegistrationRequest;
 use App\Models\Activity;
 use App\Models\ActivityRegistration;
 use App\Mail\ApproveTryout; // Ensure this is imported
+use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,23 +26,29 @@ class ActivityRegistrationController extends Controller
             ->where('is_deleted', 0)
             ->where('end_date', '>=', now())
             ->get();
-
+    
         $userIds = $activities->pluck('user_id')->unique();
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-
+    
         $sportIds = $users->pluck('sport_id')->unique();
         $sports = Sport::whereIn('id', $sportIds)->get()->keyBy('id');
-
-        $activities->each(function ($activity) use ($users, $sports) {
+    
+        $organizationIds = $users->pluck('organization_id')->unique();
+        $organizations = Organization::whereIn('id', $organizationIds)->get()->keyBy('id');
+    
+        $activities->each(function ($activity) use ($users, $sports, $organizations) {
             $activity->user = $users->get($activity->user_id);
+    
             if ($activity->user) {
                 $activity->user->sport = $sports->get($activity->user->sport_id);
+                
+                $activity->user->organization = $organizations->get($activity->user->organization_id);
             }
         });
-
+    
         return view('student.activity.index', compact('activities'));
     }
-
+    
 
     /**
      * Store a newly created resource in storage.

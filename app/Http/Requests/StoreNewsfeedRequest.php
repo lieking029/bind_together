@@ -23,7 +23,7 @@ class StoreNewsfeedRequest extends FormRequest
     {
         return [
             'description' => ['nullable', 'string', 'max:255'],
-            'attachments.*' => ['file', 'max:1024000'],
+            // 'attachments.*' => ['file', 'max:1024000'],
             'target_player' => ['nullable'],
             'campus_id' => ['nullable', 'exists:campuses,id'],
         ];
