@@ -52,11 +52,6 @@
         color: #333;
     }
 
-    @media (min-width: 1200px) {
-  .navmenu {
-    padding: 0;
-  }
-
   .navmenu ul {
     margin: 0;
     padding: 0;
@@ -126,8 +121,7 @@
   .navmenu .active:focus {
     color: #800000;
   }
-
-}   
+  
 </style>
  <?php
 $current_page = basename($_SERVER['PHP_SELF']);

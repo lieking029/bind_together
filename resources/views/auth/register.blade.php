@@ -126,7 +126,7 @@
 
                     <div class="mb-3 form-check">
                         <label>
-                            <input type="checkbox" required> I agree to the
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required> I agree to the
                             <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
                                 data-bs-target="#termsModal" style="color: blue;">Terms and Conditions</button>
                         </label>
