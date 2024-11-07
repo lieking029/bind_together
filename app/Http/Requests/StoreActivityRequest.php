@@ -31,7 +31,7 @@ class StoreActivityRequest extends FormRequest
             'end_date' => ['required'],
             'venue' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-            'attachment' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            // 'attachment' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'target_player' => ['required', 'integer'],
         ];
     }

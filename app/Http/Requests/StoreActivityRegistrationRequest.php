@@ -28,10 +28,10 @@ class StoreActivityRegistrationRequest extends FormRequest
             'person_to_contact' => ['required', 'string', 'max:255'],
             'emergency_contact' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
-            'certificate_of_registration' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
-            'parent_consent' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
-            'other_file' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
-            'photo_copy_id' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
+            // 'certificate_of_registration' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
+            // 'parent_consent' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
+            // 'other_file' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
+            // 'photo_copy_id' => ['required', 'file', 'mimes:jpeg,png,pdf', 'max:2048'],
         ];
     }
 }

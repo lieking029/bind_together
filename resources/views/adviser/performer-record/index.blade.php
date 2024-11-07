@@ -145,7 +145,7 @@
                                     data-bs-toggle="modal" data-bs-target="#declineModal" onclick="declineHandler({{ $audition->id }});"
                                     data-id="{{ $audition->id }}">Decline</button>
                                 @endif
-                                @if($audition->status != 0)
+                                @if($audition->status != 0 && auth()->user()->roles[0]["id"] != 2)
                                 <button class="btn btn-primary " type="button">Approve</button>
                                 <button class="btn btn-secondary " type="button">Decline</button>
                                 @endif
