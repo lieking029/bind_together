@@ -101,7 +101,7 @@ class ActivityRegistrationController extends Controller
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
                 Admin</p>';
 
-                $message->to('kikomataks@gmail.com')
+                $message->to($act["user"]["email"])
                     ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
                     ->html($htmlContent);
             });
