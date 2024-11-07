@@ -22,10 +22,20 @@ class ActivityRegistrationController extends Controller
      */
     public function index()
     {
+        $studentUserId = Auth::user()->id;
+
         $activities = Activity::where('status', 1)
             ->where('is_deleted', 0)
             ->where('end_date', '>=', now())
             ->get();
+
+        $activityIdsWithRegistrations = ActivityRegistration::whereIn('activity_id', $activities->pluck('id'))->pluck('activity_id')->unique();
+
+        $activityRegistrations = ActivityRegistration::whereIn('activity_id', $activityIdsWithRegistrations)
+            ->where('user_id', $studentUserId)
+            ->where('status', 1)
+            ->get()
+            ->groupBy('activity_id');
 
         $userIds = $activities->pluck('user_id')->unique();
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
@@ -36,20 +46,19 @@ class ActivityRegistrationController extends Controller
         $organizationIds = $users->pluck('organization_id')->unique();
         $organizations = Organization::whereIn('id', $organizationIds)->get()->keyBy('id');
 
-        $activities->each(function ($activity) use ($users, $sports, $organizations) {
+        $activities->each(function ($activity) use ($users, $sports, $organizations, $activityRegistrations) {
             $activity->user = $users->get($activity->user_id);
 
             if ($activity->user) {
                 $activity->user->sport = $sports->get($activity->user->sport_id);
-
                 $activity->user->organization = $organizations->get($activity->user->organization_id);
             }
+
+            $activity->registrations = $activityRegistrations->get($activity->id) ?? collect();
         });
 
         return view('student.activity.index', compact('activities'));
     }
-
-
     /**
      * Store a newly created resource in storage.
      */
