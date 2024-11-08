@@ -5,7 +5,7 @@
         <div class="card">
             <div class="card-header row">
                 <div class="col">
-                    <h4>Deleted Activity</h4>
+                    <h4>Archive Activity</h4>
                 </div>
                 {{-- <div class="col text-end">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCompetitionModal">Add
@@ -68,7 +68,7 @@
                                             View
                                         </button>
                                         <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-id="{{ $activity->id }}">Delete</button>
+                                            data-bs-target="#deleteModal" data-id="{{ $activity->id }}">Delete Permanently</button>
                                     </td>
                                 </tr>
                             @endforeach
