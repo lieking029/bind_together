@@ -56,9 +56,7 @@ class RegisterController extends Controller
             'student'
         ));
 
-        alert()->success('Email verification has been sent')
-            ->buttonsStyling(false)
-            ->customCssClass(['confirmButton' => 'centered-button']);
+        alert()->success('Email verification has been sent');
 
         return redirect()->route('register');
     }
