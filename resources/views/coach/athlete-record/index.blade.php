@@ -43,7 +43,7 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>ID</th>
-                            <th>Parent Cosent</th>
+                            <th>Parent Consent</th>
                             <th>Status</th>
                             <th>Date Registered</th>
                             <th>Action</th>

@@ -17,7 +17,7 @@ class ActivityController extends Controller
     {
         $user = Auth::user()->load('organization');
 
-        if ($user->hasRole('super_admin')) {
+        if ($user->hasRole('super_admin') || $user->hasRole('admin_sport')) {
             $activities = Activity::whereIn('status', [0, 1])
                 ->where('is_deleted', 0)
                 ->whereIn('type', [
