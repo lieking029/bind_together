@@ -62,7 +62,7 @@
                                     <td>
                                         <button type="button" class="btn btn-primary restoreBtn" data-bs-toggle="modal"
                                             data-bs-target="#restoreModal"
-                                            data-id="{{ $activity->id }}">Restore</button>
+                                            data-id="{{ $activity->id }}">Unarchive</button>
                                         <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
                                             data-bs-target="#viewActivityModal" data-id="{{ $activity->id }}">
                                             View
@@ -215,18 +215,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="restoreModalLabel">Restore Modal</h5>
+                    <h5 class="modal-title" id="restoreModalLabel">Unarchive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="" id="restoreForm" method="POST">
                     @csrf
                     <div class="modal-body">
-                        Are you sure you want to restore this?
+                        Are you sure you want to unarchive this?
                         <input type="hidden" name="status" value="0">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Unarchive</button>
                     </div>
                 </form>
             </div>

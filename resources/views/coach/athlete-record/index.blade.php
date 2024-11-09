@@ -117,8 +117,9 @@
                                     @if ($audition->status == 0 && !request()->query('isArchived'))
                                     <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
                                         data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
-                                    <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
+                                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" onclick="declineHandler({{$audition->id}})" data-bs-target="#declineReasonModal">
+                                        Decline
+                                    </button>
                                     @endif
 
                                     @if(request()->query('isArchived') && request()->query('isArchived') == 1)
@@ -137,7 +138,8 @@
                                         data-bs-target="#deletePerModal" data-id="{{ $audition->id }}" onclick="deletePerHandler({{$audition->id}})">
                                         Delete Permanently
                                     </button>
-                                    @else
+                                    @endif
+                                    @if($audition->status != 0)
                                     <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
                                         Archive
@@ -252,24 +254,31 @@
 </div>
 
 <!-- Decline -->
-<div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="declineModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="declineReasonModal" tabindex="-1" aria-labelledby="declineReasonModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="declineModalLabel">Decline</h5>
+                <h5 class="modal-title" id="declineReasonModalLabel">Decline Reason</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="" id="declineForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    Are you sure you want to decline this user?
-                    <input type="hidden" name="status" value="2">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
+            <div class="modal-body">
+                <!-- Form inside modal -->
+                <form action="" id="declineForm" method="POST" style="display: inline;">
+                    @csrf
+                    @method('PUT')
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <label for="title" class="form-label">Reason</label>
+                            <input type="hidden" name="status" value="2">
+                            <input type="text" class="form-control" placeholder="Type here" name="reason" required>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
             </form>
         </div>
     </div>
@@ -498,6 +507,10 @@
         $('#deletePerForm').attr('action', '/participants-delete/' + id);
     }
 
+    function declineHandler(id) {
+        $('#declineForm').attr('action', '/activity-registration/' + id)
+    }
+
 
     $(() => {
         $('#datatable').DataTable();
@@ -508,10 +521,6 @@
 
         $('.unarchiveBtn').click(function() {
             $('#unarchiveForm').attr('action', '/participants-unarchive/' + $(this).data('id'))
-        });
-
-        $('.declineBtn').click(function() {
-            $('#declineForm').attr('action', '/activity-registration/' + $(this).data('id'))
         });
 
         $('.viewBtn').click(function() {

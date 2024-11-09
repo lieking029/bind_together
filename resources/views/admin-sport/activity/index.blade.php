@@ -106,7 +106,7 @@
                                 <button class="btn btn-success approveBtn" type="button" data-bs-toggle="modal"
                                     data-bs-target="#approveModal" data-id="{{ $activity->id }}">Approve</button>
 
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#declineReasonModal">
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" onclick="declineHandler({{$activity->id}});" data-bs-target="#declineReasonModal">
                                     Decline
                                 </button>
                                 @endif
@@ -297,12 +297,13 @@
             </div>
             <div class="modal-body">
                 <!-- Form inside modal -->
-                <form action="" method="POST" style="display: inline;">
+                <form action="" id="declineForm" method="POST" style="display: inline;">
                     @csrf
                     @method('PUT')
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <label for="title" class="form-label">Reason</label>
+                            <input type="hidden" name="status" value="2">
                             <input type="text" class="form-control" placeholder="Type here" name="reason" required>
                         </div>
                     </div>
@@ -501,6 +502,10 @@
         $('.approveBtn').click(function() {
             $('#approveForm').attr('action', '/approve-activity/' + $(this).data('id'))
         });
+
+        function declineHandler(id) {
+            $('#declineForm').attr('action', '/decline-activity/' + id)
+        }
 
         function loadActivityData(activityId) {
             // Call the show route using AJAX
