@@ -165,4 +165,20 @@ class ActivityRegistrationController extends Controller
 
         return redirect()->back();
     }
+
+    public function unarchive($id)
+    {
+        $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 0]);
+
+        alert()->success('Unarchived');
+
+        return redirect()->back();
+    }
 }
