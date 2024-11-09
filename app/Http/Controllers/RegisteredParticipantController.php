@@ -13,7 +13,7 @@ class RegisteredParticipantController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $status = $request->query('status', '0') ?? '0';
+        $status = $request->query('status') ?? '0';
         $deleted = $request->query('isArchived') ?? '0';
         $tryout = $request->query('isTryout') ?? null;
 

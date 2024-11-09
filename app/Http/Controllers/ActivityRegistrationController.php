@@ -45,16 +45,19 @@ class ActivityRegistrationController extends Controller
                 $activity->user->sport = $sports->get($activity->user->sport_id);
                 $activity->user->organization = $organizations->get($activity->user->organization_id);
             }
-            $studentRegistrations = [];
+
+            $studentRegistrations = null;
 
             if ($activity->type == 3 && $activity->target_player == 1) {
                 $studentRegistrations = ActivityRegistration::with(['activity'])
                     ->where('user_id', $studentUserId)
                     ->whereHas('activity', function ($query) {
                         $query->where('type', 1)
+                            ->where('status', 1)
                             ->where('is_deleted', 0);
                     })
-                    ->get();
+                    ->orderBy('id', 'desc')
+                    ->first();
             }
 
             $activity->student_registrations = $studentRegistrations ?? null;
