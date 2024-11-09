@@ -68,7 +68,7 @@
                                             View
                                         </button>
                                         <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-id="{{ $activity->id }}">Delete</button>
+                                            data-bs-target="#deleteModal" data-id="{{ $activity->id }}">Delete Permanently</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -117,7 +117,7 @@
                         @if (auth()->user()->hasRole('coach'))
                             <div class="form-group col">
                                 <label for="organization">Sport</label>
-                                <input type="text" value="{{ auth()->user()->sport->name }}" id="view_sport_id"
+                                <input type="text" value="{{ isset(auth()->user()->sport->name) ? auth()->user()->sport->name : '' }}" id="view_sport_id"
                                     class="form-control" readonly>
                             </div>
                         @elseif (auth()->user()->hasRole('adviser'))

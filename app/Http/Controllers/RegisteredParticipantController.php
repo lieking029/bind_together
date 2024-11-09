@@ -14,6 +14,7 @@ class RegisteredParticipantController extends Controller
     public function __invoke(Request $request)
     {
         $status = $request->query('status', '0');
+        $deleted = $request->query('isArchived') ?? 0;
 
         $athletes = ActivityRegistration::query()
             ->with(['activity', 'user.campus', 'sport'])
@@ -21,7 +22,7 @@ class RegisteredParticipantController extends Controller
             ->whereHas('activity', function ($query) {
                 $query->whereIn('type', [ActivityType::Tryout, ActivityType::Practice]);
             })
-            ->where('is_deleted', 0)
+            ->where('is_deleted', $deleted)
             ->get();
 
         return view('coach.athlete-record.index', ['auditions' => $athletes, 'status' => $status]);

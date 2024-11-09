@@ -355,6 +355,15 @@
                         <span class="sidebar-text">{{ __('Official Player') }}</span>
                     </a>
                 </li>
+
+                <li class="nav-item  {{ request()->routeIs('registered.participant') ? 'active' : '' }}">
+                    <a href="{{ route('registered.participant', ['status' => '0', 'isArchived' => 1]) }}" class="nav-link">
+                        <span class="sidebar-icon me-3">
+                            <i class="fas fa-user-alt fa-fw"></i>
+                        </span>
+                        <span class="sidebar-text" style="font-size: 12px">{{ __('Archived Participants') }}</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </li>

@@ -156,6 +156,7 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::resource('activity', ActivityController::class);
     Route::resource('activity-registration', ActivityRegistrationController::class);
     Route::get('activity-registration-delete/{id}', [ActivityRegistrationController::class, 'deletion']);
+    Route::post('participants-unarchive/{id}', [ActivityRegistrationController::class, 'unarchive']);
     Route::resource('deleted-post', DeletedPostController::class);
     Route::resource('deleted-comment', DeletedCommentController::class);
     Route::resource('feedback', FeedbackController::class);

@@ -4,7 +4,13 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
-            <h4>Registered Participants</h4>
+            <h4>
+                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                Archived Participants
+                @else
+                Registered Participants
+                @endif
+            </h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -22,11 +28,11 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>ID</th>
-                            
-                                <th>Other File</th>
-                            
 
-                            
+                            <th>Other File</th>
+
+
+
                             <th>Status</th>
                             <th>Date Registered</th>
                             <th>Action</th>
@@ -34,58 +40,70 @@
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
-                                                @php
-                                                    if (!function_exists('ordinal')) {
-                                                        function ordinal($number)
-                                                        {
-                                                            $suffixes = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
-                                                            if ((int) $number % 100 >= 11 && (int) $number % 100 <= 13) {
-                                                                return $number . 'th';
-                                                            }
-                                                            return $number . $suffixes[$number % 10];
-                                                        }
-                                                    }
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
-                                                    <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
-                                                    <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
-                                                    <td>{{ $audition->user->email ?? 'N/A' }}</td>
-                                                    <td>{{ $audition->height }}</td>
-                                                    <td>{{ $audition->weight }}</td>
-                                                    <td>{{ $audition->person_to_contact ?? 'N/A' }}</td>
-                                                    <td>{{ $audition->emergency_contact }}</td>
-                                                    <td>{{ $audition->relationship }}</td>
-                                                    <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt=""></td>
-                                                    <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
-                                    
-                                                        <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt=""></td>
-                                                    
-                                                        
-                                                    
-                                                    <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
-                                                    <td>{{ $audition->created_at }}</td>
-                                                    <td>
-                                                        @if ($audition->status == 0)
-                                                        <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
-                                                            data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
-                                                        <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
-                                                            data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
-                                                    @endif
-                                                    
-                                                    <!-- Additional View and Delete Buttons -->
-                                                    <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                                            data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
-                                                        View
-                                                    </button>
-                                    
-                                                    <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})"> 
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                        @php
+                        if (!function_exists('ordinal')) {
+                        function ordinal($number)
+                        {
+                        $suffixes = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+                        if ((int) $number % 100 >= 11 && (int) $number % 100 <= 13) {
+                            return $number . 'th' ;
+                            }
+                            return $number . $suffixes[$number % 10];
+                            }
+                            }
+                            @endphp
+                            <tr>
+                            <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
+                            <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
+                            <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
+                            <td>{{ $audition->user->email ?? 'N/A' }}</td>
+                            <td>{{ $audition->height }}</td>
+                            <td>{{ $audition->weight }}</td>
+                            <td>{{ $audition->person_to_contact ?? 'N/A' }}</td>
+                            <td>{{ $audition->emergency_contact }}</td>
+                            <td>{{ $audition->relationship }}</td>
+                            <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt=""></td>
+                            <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
+
+                            <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt=""></td>
+
+
+
+                            <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
+                            <td>{{ $audition->created_at }}</td>
+                            <td>
+                                @if ($audition->status == 0 && !request()->query('isArchived'))
+                                <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
+                                <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
+                                @endif
+
+                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                <button class="btn btn-primary unarchiveBtn" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
+                                @endif
+
+                                <!-- Additional View and Delete Buttons -->
+                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                    View
+                                </button>
+
+                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
+                                    Delete Permanently
+                                </button>
+                                @else
+                                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
+                                    Archive
+                                </button>
+                                @endif
+                            </td>
+                            </tr>
+                            @endforeach
                     </tbody>
                 </table>
             </div>
@@ -101,16 +119,16 @@
                 @csrf
                 @method('GET')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Deletion</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Archive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to proceed with this deletion?</p>
+                    <p>Are you sure you want to proceed with this archive?</p>
                     <input type="hidden" id="deleteUserId" name="id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Archive</button>
                 </div>
             </form>
         </div>
@@ -130,6 +148,29 @@
                 @method('PUT')
                 <div class="modal-body">
                     Are you sure you want to approve this user?
+                    <input type="hidden" name="status" value="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="unarchiveModal" tabindex="-1" aria-labelledby="unarchiveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unarchiveModalLabel">Unarchive</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" id="unarchiveForm" method="POST">
+                @csrf
+                @method('POST')
+                <div class="modal-body">
+                    Are you sure you want to unarchive?
                     <input type="hidden" name="status" value="1">
                 </div>
                 <div class="modal-footer">
@@ -218,7 +259,7 @@
                             <label for="audition-contact-person" class="form-label">Contact Person</label>
                             <input type="text" id="audition-contact-person" class="form-control" readonly>
                         </div>
-                        
+
                         <!-- Emergency Contact -->
                         <div class="col-md-6 mb-3">
                             <label for="audition-emergency-contact" class="form-label">Emergency Contact</label>
@@ -387,15 +428,19 @@
     $(() => {
         $('#datatable').DataTable();
 
-        $('.approveBtn').click(function () {
+        $('.approveBtn').click(function() {
             $('#approveForm').attr('action', '/activity-registration/' + $(this).data('id'))
         });
 
-        $('.declineBtn').click(function () {
+        $('.unarchiveBtn').click(function() {
+            $('#unarchiveForm').attr('action', '/participants-unarchive/' + $(this).data('id'))
+        });
+
+        $('.declineBtn').click(function() {
             $('#declineForm').attr('action', '/activity-registration/' + $(this).data('id'))
         });
 
-        $('.viewBtn').click(function () {
+        $('.viewBtn').click(function() {
             fetch('fetch-activity/' + $(this).data('id'))
                 .then(response => response.json())
                 .then(audition => {
@@ -408,7 +453,7 @@
                     $('#audition-weight').val(audition.weight);
                     $('#audition-emergency-contact').val(audition.emergency_contact);
                     $('#audition-relationship').val(audition.relationship);
-                    $('#audition-contact-person').val(audition.person_to_contact);  // Set contact person
+                    $('#audition-contact-person').val(audition.person_to_contact); // Set contact person
 
                     // Image sources
                     $('#certificate-of-registration').attr('src', '/storage/' + audition.certificate_of_registration);
