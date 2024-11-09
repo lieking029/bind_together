@@ -154,7 +154,7 @@
             <img src="{{ asset('images/bindtogether-logo.png') }}" alt="University Logo" style="width: 100px;" class="mb-3">
 
             </div>
-            <h5 class="modal-title text-center" id="termsModalLabel" style="font-size: 1.5rem; font-weight: bold;">Terms and Conditions</h5>
+            <h5 class="modal-title text-center" id="termsModalLabel" style="font-size: 1.5rem; font-weight: bold;">TERMS AND CONDITIONS</h5>
             <!-- Modal Body with Terms -->
             <div class="modal-body">
                 <h6><strong>Acceptance of Terms</strong></h6>
@@ -167,11 +167,63 @@
                 <p>The "Bind Together" system aims to streamline event management for organizers and students by enabling organizers to post events and manage schedules for practices, competitions, performances, and other social gatherings. The system ensures that students are promptly notified of these activities via SMS notifications, improving communication and participation across the university.</p>
 
                 <h6><strong>Login Policy</strong></h6>
-                <p>Upon login, users have up to five login attempts before further attempts are temporarily blocked. If a user fails five login attempts, they must wait for 3 minutes before trying again. During this time, an email is sent to inform the user about the unsuccessful attempts and explain the 3-minute delay for security reasons.</p>
+                <p><strong>&nbsp;Authorized Access</strong></p>
+                <ul>
+                    <li>Only registered users with valid BPSU email addresses (e.g., @bpsu.edu.ph) are authorized to access the system.</li>
+                    <li>Users are required to use their BPSU email addresses to log in and interact with the platform.</li>
+                </ul>
 
-                <h6><strong>Reported Comments and Posts Policy</strong></h6>
-                <p>When a user reports a comment or post on "Bind Together," it triggers a review process to ensure content compliance with our Community Guidelines and Terms and Conditions. The reported content is evaluated by our moderation team to determine if it violates platform rules. If the content is deemed inappropriate, actions such as issuing warnings, removing the content, or suspending or banning the user may be taken. Users who report content are notified of the outcome, but specifics of the actions taken may be kept confidential. Users can appeal moderation decisions through an established appeals process. The policy is subject to updates, and users will be informed of significant changes. For questions or concerns about this process, users may contact the system administrator.</p>
+                <p><strong>&nbsp;Credentials Issuance</strong></p>
+                <ul>
+                    <li>After completing the registration process, the system will send the login credentials (email and temporary password) to the registered BPSU email address.</li>
+                    <li>Users must check their BPSU email inbox to retrieve the login credentials provided.</li>
+                </ul>
 
+                <p><strong>&nbsp;Login Procedure</strong></p>
+                <ul>
+                    <li>Users must enter the provided BPSU email and password accurately to gain access to the system.</li>
+                    <li>For security, users are encouraged to change their temporary password upon first login.</li>
+                </ul>
+
+                <p><strong>&nbsp;Security Reminder</strong></p>
+                <ul>
+                    <li>Users are advised to keep their login credentials secure and not share them with others.</li>
+                    <li>For added security, users should log out after each session, especially on shared or public devices.</li>
+                </ul>
+
+                <h6><strong>Password Requirements</strong></h6>
+                <ul>
+                    <li>Passwords must be at least 8 characters long, containing a mix of letters, numbers, and special characters.</li>
+                    <li>Users are encouraged to update their passwords periodically for security.</li>
+                </ul>
+
+                <h6><strong>Rate Limiting and Lockout Mechanism</strong></h6>
+                <ul>
+                    <li>To protect against unauthorized access and brute-force attacks, the system will temporarily lock users out after multiple unsuccessful login attempts.</li>
+                    <li>Failed Login Attempts: After 6 consecutive failed login attempts, the account will be temporarily locked.</li>
+                    <li>Lockout Duration: The account will remain locked for 45 minutes. During this time, users will see a message indicating the time remaining before they can try again.</li>
+                </ul>
+
+                <h6><strong>Account Recovery</strong></h6>
+                <ul>
+                    <li>Users who have forgotten their passwords can use the "Forgot Password" feature to reset it.</li>
+                    <li>The system will send a password reset link to the registered BPSU email. Users must click the link and follow the instructions to reset their passwords.</li>
+                </ul>
+
+                <h6><strong>Reported Comments and Posts Policy:</strong></h6>
+                <ul>
+                    <li><strong>Reporting Process:</strong> When a user reports a comment or post, it triggers a review process to ensure compliance with our Bind Together Community Guidelines and Terms and Conditions.</li>
+                    <li><strong>Content Evaluation:</strong> The reported content is reviewed by the moderation team to determine if it violates platform rules.</li>
+                    <li><strong>Actions for Violations:</strong> If content is found to be inappropriate, possible actions include:</li>
+                    <ol>
+                        <li>Issuing warnings</li>
+                        <li>Removing the content</li>
+                        <li>Suspending or banning the user</li>
+                    </ol>
+                    <li><strong>Notification of Outcome:</strong> Users who report content will be notified of the outcome, but the specifics of actions taken may remain confidential.</li>
+                    <li><strong>Questions and Concerns:</strong> For any questions or concerns about the process, users can contact the system administrator or provide feedback through the system.</li>
+                </ul>
+                
                 <h6><strong>Account Responsibilities</strong></h6>
                 <p>• You are responsible for maintaining the confidentiality of your account login information and are fully responsible for all activities that occur under your account. Notify the system administrator immediately if you suspect any unauthorized use of your account.</p>
 
@@ -180,7 +232,7 @@
                 <p>• You must not post any content that infringes on the intellectual property rights of others. If found in violation, your content may be removed, and your account may be suspended or terminated.</p>
 
                 <h6><strong>Prohibited Activities</strong></h6>
-                <p>• You agree not to:</p>
+                <p><strong>&nbsp;You agree not to:</strong></p>
                 <ul>
                     <li>Use the platform for any unlawful purpose.</li>
                     <li>Post or share any content that is abusive, threatening, obscene, defamatory, or otherwise objectionable.</li>
@@ -202,49 +254,76 @@
                 <p>• "Bind Together" reserves the right to modify these Terms and Conditions at any time. You will be notified of significant changes, and your continued use of the platform constitutes acceptance of the updated Terms and Conditions.</p>
 
                 <h6><strong>Contact Information</strong></h6>
-                <p>• For any questions or concerns regarding these Terms and Conditions, please contact the system administrator at bind.together@gmail.com</p>
+                <p>• For any questions or concerns regarding these Terms and Conditions, please contact the system administrator at bpsu.bindtogether@gmail.com</p>
 
                 <h6><strong>Community Guidelines</strong></h6>
-                <p>1. <strong>Respect and Inclusivity</strong></p>
+                <p>Our goal is to create a safe, respectful, and supportive space for BPSU athletes, performers, and artists to connect, collaborate, and share. By following these guidelines, you contribute to fostering a positive community. Violations of these guidelines may result in content removal, warnings, or account suspension/banning.</p>
+                <p><strong>1. Respectful Communication</strong></p>
                 <ul>
-                    <li><strong>Respect All Members</strong>: Treat every member with respect, regardless of their background, experience level, or opinions. Discrimination, harassment, and bullying of any kind will not be tolerated.</li>
-                    <li><strong>Inclusive Environment</strong>: We strive to create a welcoming and inclusive environment for everyone, including athletes, performers, artists, and community members.</li>
+                    <li><strong>Respect All Members</strong>: Treat every member with respect and courtesy, regardless of their background, experience level, or opinions.</li>
+                    <li><strong>No Harassment or Bullying</strong>: Harassment, bullying, or intimidation in any form is strictly prohibited. Personal attacks, insults, or derogatory language will not be tolerated.</li>
+                    <li><strong>Constructive Engagement</strong>: Avoid making inflammatory or offensive comments that disrupt the harmony of the community.</li>
                 </ul>
-                <p>2. <strong>Content Guidelines</strong></p>
+
+                <p><strong>2. Inclusive and Supportive Environment</strong></p>
                 <ul>
-                    <li><strong>Appropriate Content</strong>: All content shared on the platform must be appropriate for all ages. Do not share or post any content that is offensive, explicit, or harmful.</li>
-                    <li><strong>Accuracy</strong>: Ensure that all information you share is accurate and truthful. Misleading or false information can harm others and is not permitted.</li>
-                    <li><strong>No Spam</strong>: Avoid posting repetitive, irrelevant, or promotional content that does not contribute to the community’s purpose.</li>
+                <li><strong>Celebrate Diversity</strong>: We encourage an inclusive environment where all individuals are respected. Discriminatory content based on race, gender, sexuality, religion, or any personal characteristic will not be accepted.</li>
+                <li><strong>Support and Encouragement</strong>: Show support for fellow community members, recognizing their efforts and achievements. Celebrate success together!</li>
                 </ul>
-                <p>3. <strong>Privacy and Confidentiality</strong></p>
+
+                <p><strong>3. Appropriate Content</strong></p>
                 <ul>
-                    <li><strong>Respect Privacy</strong>: Do not share personal information of others without their explicit consent. This includes contact details, private messages, and other sensitive information.</li>
-                    <li><strong>Confidential Information</strong>: Respect the confidentiality of any sensitive or proprietary information shared within the community.</li>
+                <li><strong>Safe Content</strong>: All content shared should be appropriate for all ages. Avoid sharing content that is offensive, sexually explicit, or inappropriate for an academic or professional setting.</li>
+                <li><strong>Prohibited Content</strong>: Content promoting violence, illegal activities, or harmful behavior, including spam, phishing, and scams, will be removed immediately.</li>
                 </ul>
-                <p>4. <strong>Participation and Engagement</strong></p>
+
+                <p><strong>4. Truthful and Accurate Information</strong></p>
                 <ul>
-                    <li><strong>Active Participation</strong>: Engage actively in discussions, events, and activities. Share your knowledge and experiences to contribute positively to the community.</li>
-                    <li><strong>Constructive Feedback</strong>: When providing feedback, ensure it is constructive and aimed at helping others improve or grow. Avoid negative or destructive criticism.</li>
+                    <li><strong>Honesty is the Key</strong>: Only share truthful, accurate, and constructive information. Avoid spreading false or misleading information, rumors, or unverified content.</li>
+                    <li><strong>No Misinformation</strong>: Ensure all shared content is well-founded. Content that misleads or misrepresents facts could harm others and will not be tolerated.</li>
                 </ul>
-                <p>5. <strong>Reporting Violations</strong></p>
+
+                <p><strong>5. Privacy and Confidentiality</strong></p>
                 <ul>
-                    <li><strong>Report Inappropriate Behavior</strong>: If you encounter behavior that violates these guidelines, report it to the system administrators. We take all reports seriously and will take appropriate action.</li>
-                    <li><strong>No Retaliation</strong>: Retaliation against anyone who reports a violation is strictly prohibited and will result in severe consequences.</li>
+                    <li><strong>Respect Privacy</strong>: Do not share personal or confidential information of yourself or others without consent. This includes contact details, private messages, and other sensitive data.</li>
+                    <li><strong>Confidential Information</strong>: Keep sensitive information shared within the community confidential. Breaches of privacy are taken seriously.</li>
                 </ul>
-                <p>6. <strong>Consequences of Violations</strong></p>
+
+                <p><strong>6. Follow Posting Etiquette</strong></p>
                 <ul>
-                    <li><strong>Warnings and Bans</strong>: Violations of these guidelines may result in warnings, temporary bans, or permanent removal from the community, depending on the severity of the offense.</li>
-                    <li><strong>Appeals</strong>: If you believe you have been unfairly penalized, you may appeal the decision through the appropriate channels.</li>
+                    <li><strong>Be Respectful</strong>: Share content thoughtfully and avoid posting anything that disrupts the flow of the community. Engage in discussions that add value and foster a positive atmosphere for everyone.</li>
                 </ul>
-                <p>7. <strong>Community Support</strong></p>
+
+                <p><strong>7. Participation and Engagement</strong></p>
                 <ul>
-                    <li><strong>Support Each Other</strong>: Offer support and encouragement to fellow members. We are a community built on mutual respect and helping each other succeed.</li>
-                    <li><strong>Seek Help When Needed</strong>: If you need assistance or guidance, don’t hesitate to reach out to the community or system administrators.</li>
+                    <li><strong>Active Participation</strong>: Engage actively in discussions, events, and activities. Share your knowledge and experiences to help others grow and connect.</li>
+                    <li><strong>Constructive Inquiry</strong>: Provide inquiries that is aimed at helping others improve, rather than criticizing for the sake of negativity.</li>
                 </ul>
-                <p>8. <strong>Modifications to Guidelines</strong></p>
-                <p>• Updates: These guidelines may be updated periodically to reflect the evolving needs of the community. Users will be notified of significant changes.</p>
-                <p>• Compliance: By continuing to use the platform, you agree to comply with the updated guidelines.</p>
-            </div>
+
+                <p><strong>8. Reporting Violations</strong></p>
+                <ul>
+                    <li><strong>Report Inappropriate Behavior</strong>: If you come across content or behavior that violates these guidelines, please report it to the moderation team.</li>
+                    <li><strong>No Retaliation</strong>: Retaliating against someone who reports a violation is strictly prohibited and will result in severe consequences.</li>
+                </ul>
+
+                <p><strong>9. Consequences of Violations</strong></p>
+                <ul>
+                    <li><strong>Warnings and Bans</strong>: Violations may result in warnings, temporary bans, or permanent removal from the community, depending on the severity.</li>
+                </ul>
+
+                <p><strong>10. Community Support</strong></p>
+                <ul>
+                    <li><strong>Support One Another</strong>: Offer support and encouragement to fellow members. We are a community built on mutual respect and helping each other succeed.</li>
+                    <li><strong>Seeking Assistance</strong>: If you need help, don’t hesitate to reach out to the community or system administrators.</li>
+                </ul>
+
+                <p><strong>11. Modifications to Guidelines</strong></p>
+                <ul>
+                    <li><strong>Updates</strong>: These guidelines may be updated periodically to reflect the evolving needs of the community. Users will be notified of any significant changes.</li>
+                </ul>
+
+                <p>By adhering to these guidelines, we ensure that <strong>Bind Together</strong> remains a thriving, supportive, and respectful space for all BPSU athletes, performers, and artists.</p>
+                </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">
