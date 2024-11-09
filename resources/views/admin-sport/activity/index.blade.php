@@ -80,7 +80,7 @@
                         
                                                 <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal" data-id="{{ $activity->id }}">
-                                                    Delete
+                                                    Archive
                                                 </button>
                                             @else
                                                 @if ($activity->status == 1)
@@ -88,7 +88,7 @@
                                                         Edit
                                                     </button>
                                                     <button type="button" class="btn btn-secondary" disabled>
-                                                        Delete
+                                                        Archive
                                                     </button>
                                                     <button type="button" class="btn btn-secondary" disabled>
                                                         Approve
@@ -101,7 +101,7 @@
                                                         Edit
                                                     </button>
                                                     <button type="button" class="btn btn-secondary" disabled>
-                                                        Delete
+                                                        Archive
                                                     </button>
                         
                                                     <form action="{{ route('approve', $activity->id) }}" method="POST" style="display: inline;">
@@ -128,7 +128,7 @@
                                             </button>
                         
                                             <button type="button" class="btn btn-danger " >
-                                                Delete
+                                                Archive
                                             </button>
                                             @else
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -139,7 +139,7 @@
                         
                                             <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal" data-id="{{ $activity->id }}">
-                                                Delete
+                                                Archive
                                             </button>
                                             @endif
                                         @endif
@@ -328,12 +328,12 @@
                     @csrf
                     @method('DELETE')
                     <div class="modal-body">
-                        Are you sure you want to delete this?
+                        Are you sure you want to archive this?
                         <input type="hidden" name="status" value="2">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="submit" class="btn btn-primary">Archive</button>
                     </div>
                 </form>
 
