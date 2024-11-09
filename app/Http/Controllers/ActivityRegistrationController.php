@@ -51,7 +51,8 @@ class ActivityRegistrationController extends Controller
                 $studentRegistrations = ActivityRegistration::with(['activity'])
                     ->where('user_id', $studentUserId)
                     ->whereHas('activity', function ($query) {
-                        $query->where('type', 1);
+                        $query->where('type', 1)
+                            ->where('is_deleted', 0);
                     })
                     ->get();
             }
