@@ -51,7 +51,6 @@
                     @if(($activity->type == 2 && count($activity->registrations) == 0) || ($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null))
                     
                     @else
-                    {{$activity}}
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
                         <div class="card h-100 shadow-sm">
                             <div class="card-body">
