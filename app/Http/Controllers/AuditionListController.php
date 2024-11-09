@@ -16,11 +16,15 @@ class AuditionListController extends Controller
     {
         $user = Auth::user()->load('organization');
 
-        // Get status from the request, defaulting to '0' if not provided
         $status = $request->query('status', '0');
 
-        // Fetch audition registrations with related activity and user details
         $type   = null;
+
+        $isDeleted = 0;
+
+        if ($request->has('isArchived')) {
+            $isDeleted = $request->query('isArchived');
+        }
 
         if ($request->has('type')) {
             $type = $request->query('type');
@@ -33,7 +37,7 @@ class AuditionListController extends Controller
                 'user.roles'
             ])
             ->whereIn('status',  $type == null ? [$status] : [$status, 1, 2])
-            ->where('is_deleted', 0);
+            ->where('is_deleted', $isDeleted);
 
         $auditions->whereHas('activity', function ($query) use ($user) {
             $query->where('user_id', $user->id);
@@ -51,5 +55,37 @@ class AuditionListController extends Controller
 
         // Return view with auditions and the status filter
         return view('adviser.performer-record.index', ['auditions' => $auditions, 'status' => $status]);
+    }
+
+    public function permanentDelete($id)
+    {
+        $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 2]);
+
+        alert()->success('Deleted');
+
+        return redirect()->back();
+    }
+
+    public function unarchive($id)
+    {
+        $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 0]);
+
+        alert()->success('Unarchived');
+
+        return redirect()->back();
     }
 }

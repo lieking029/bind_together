@@ -5,7 +5,11 @@
     <div class="card">
         <div class="card-header">
             @if ($status == 0)
+            @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+            <h4> Archived Participants</h4>
+            @else
             <h4>{{ request()->query('type') && request()->query('type') == '3' ? 'Registered Participants' : 'List of Auditionees' }}</h4>
+            @endif
             @else
             <h4>Official Performers</h4>
             @endif
@@ -36,7 +40,7 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>Photocopy</th>
-                            @if (($status == 0  && request()->query('type') != 3)|| request()->query('status') == 1)
+                            @if (($status == 0 && request()->query('type') != 3)|| request()->query('status') == 1)
                             <th>Other File</th>
                             @else
                             <th>Parent Consent</th>
@@ -137,14 +141,19 @@
                             </td>
                             @if ($status == 0)
                             <td>
-                                @if($audition->status == 0)
+                                @if($audition->status == 0 && !request()->query('isArchived'))
                                 <button class="btn btn-primary approveBtn" onclick="approveHandler({{ $audition->id }});" type="button" data-bs-toggle="modal"
                                     data-bs-target="#approveModal"
                                     data-id="{{ $audition->id }}">Approve</button>
-                                <button class="btn btn-secondary declineBtn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#declineModal" onclick="declineHandler({{ $audition->id }});"
-                                    data-id="{{ $audition->id }}">Decline</button>
+                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" onclick="declineHandler({{$audition->id}});" data-bs-target="#declineReasonModal">
+                                    Decline
+                                </button>
                                 @endif
+                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                <button class="btn btn-primary unarchiveBtn" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
+                                @endif
+
                                 @if($audition->status != 0 && auth()->user()->roles[0]["id"] != 2)
                                 <button class="btn btn-primary " type="button">Approve</button>
                                 <button class="btn btn-secondary " type="button">Decline</button>
@@ -153,12 +162,18 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}" onclick="viewHandler({{ $audition->id }});">
                                     View
                                 </button>
+                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                    data-bs-target="#deletePerModal" data-id="{{ $audition->id }}" onclick="deletePerHandler({{$audition->id}})">
+                                    Delete Permanently
+                                </button>
+                                @endif
                                 @if($audition->status == 1 || $audition->status == 2)
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
                                     data-id="{{ $audition->id }}">Delete</button>
                                 @else
-                                <button class="btn btn-secondary " type="button">Delete</button>
+                                <!-- <button class="btn btn-secondary " type="button">Delete</button> -->
                                 @endif
                             </td>
                             @endif
@@ -208,6 +223,83 @@
     </div>
 </div>
 
+<div class="modal fade" id="unarchiveModal" tabindex="-1" aria-labelledby="unarchiveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unarchiveModalLabel">Unarchive</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" id="unarchiveForm" method="POST">
+                @csrf
+                @method('POST')
+                <div class="modal-body">
+                    Are you sure you want to unarchive?
+                    <input type="hidden" name="status" value="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deletePerModal" tabindex="-1" aria-labelledby="deletePerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deletePerForm" action="" method="POST">
+                @csrf
+                @method('POST')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePerModalLabel">Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to proceed with this permanent deletion?</p>
+                    <input type="hidden" id="deleteUserId" name="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="declineReasonModal" tabindex="-1" aria-labelledby="declineReasonModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="declineReasonModalLabel">Decline Reason</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form inside modal -->
+                <form action="" id="declineForm" method="POST" style="display: inline;">
+                    @csrf
+                    @method('PUT')
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <label for="title" class="form-label">Reason</label>
+                            <input type="hidden" name="status" value="2">
+                            <input type="text" class="form-control" placeholder="Type here" name="reason" required>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Approve -->
 <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -222,30 +314,6 @@
                 <div class="modal-body">
                     Are you sure you want to approve this user?
                     <input type="hidden" name="status" value="1">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Decline -->
-<div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="declineModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="declineModalLabel">Decline</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="" id="declineForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    Are you sure you want to decline this user?
-                    <input type="hidden" name="status" value="2">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -380,9 +448,17 @@
         $('#declineForm').attr('action', '/activity-registration/' + id)
     }
 
-    function deleteHandler(id) {
-        $('#deleteForm').attr('action', '/activity-registration-delete/' + id);
+    function deletePerHandler(id) {
+        $('#deletePerForm').attr('action', '/participants-delete/' + id);
     }
+
+    function deleteHandler(id) {
+        $('#deleteForm').attr('action', '/audition-registration-delete/' + id);
+    }
+
+    $('.unarchiveBtn').click(function() {
+        $('#unarchiveForm').attr('action', '/audition-unarchive/' + $(this).data('id'))
+    });
 
     function viewHandler(id) {
         fetch('fetch-activity/' + id)
