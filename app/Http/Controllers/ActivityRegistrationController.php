@@ -161,7 +161,23 @@ class ActivityRegistrationController extends Controller
 
         $act->update(['is_deleted' => 1]);
 
-        alert()->success('Deleted successfully');
+        alert()->success('Archived');
+
+        return redirect()->back();
+    }
+
+    public function permanentDelete($id)
+    {
+        $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 2]);
+
+        alert()->success('Deleted');
 
         return redirect()->back();
     }

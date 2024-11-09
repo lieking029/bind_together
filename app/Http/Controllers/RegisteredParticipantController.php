@@ -13,14 +13,19 @@ class RegisteredParticipantController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $status = $request->query('status', '0');
-        $deleted = $request->query('isArchived') ?? 0;
+        $status = $request->query('status', '0') ?? '0';
+        $deleted = $request->query('isArchived') ?? '0';
+        $tryout = $request->query('isTryout') ?? null;
 
         $athletes = ActivityRegistration::query()
-            ->with(['activity', 'user.campus', 'sport'])
-            ->where('status', $status)
-            ->whereHas('activity', function ($query) {
-                $query->whereIn('type', [ActivityType::Tryout, ActivityType::Practice]);
+            ->with([
+                'activity.user.sport',
+                'user.campus',
+                'sport'
+            ])
+            ->whereIn('status', [$status, 1, 2])
+            ->whereHas('activity', function ($query) use ($tryout) {
+                $query->where('type', $tryout !== null ? ActivityType::Tryout : ActivityType::Competition);
             })
             ->where('is_deleted', $deleted)
             ->get();

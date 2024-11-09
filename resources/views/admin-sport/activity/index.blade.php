@@ -103,14 +103,8 @@
                                 <button type="button" class="btn btn-secondary" disabled>
                                     Archive
                                 </button>
-
-                                <form action="{{ route('approve', $activity->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success">
-                                        Approve
-                                    </button>
-                                </form>
+                                <button class="btn btn-success approveBtn" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#approveModal" data-id="{{ $activity->id }}">Approve</button>
 
                                 <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#declineReasonModal">
                                     Decline
@@ -151,6 +145,30 @@
 
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Approval</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" id="approveForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    Are you sure you want to approve?
+                    <input type="hidden" name="status" value="1">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -279,7 +297,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form inside modal -->
-                <form action="{{ route('decline', $activity->id) }}" method="POST" style="display: inline;">
+                <form action="" method="POST" style="display: inline;">
                     @csrf
                     @method('PUT')
                     <div class="row mb-2">
@@ -479,6 +497,10 @@
     @push('scripts')
     <script>
         $('#datatable').DataTable();
+
+        $('.approveBtn').click(function() {
+            $('#approveForm').attr('action', '/approve-activity/' + $(this).data('id'))
+        });
 
         function loadActivityData(activityId) {
             // Call the show route using AJAX

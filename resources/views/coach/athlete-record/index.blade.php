@@ -7,6 +7,8 @@
             <h4>
                 @if(request()->query('isArchived') && request()->query('isArchived') == 1)
                 Archived Participants
+                @elseif(request()->query('status') && request()->query('status') == 1)
+                Official Players
                 @else
                 Registered Participants
                 @endif
@@ -16,7 +18,20 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
+                        @if(request()->query('isTryout') && request()->query('isTryout') == 1)
                         <tr>
+                            <th>Student Number</th>
+                            <th>Name</th>
+                            <th>Year Level</th>
+                            <th>Campus</th>
+                            <th>Sports Name</th>
+                            <th>Coach</th>
+                            <th>Date Registered</th>
+                            <th>Action</th>
+                        </tr>
+                        @else
+                        <tr>
+                            <th>Title of Competition</th>
                             <th>Name</th>
                             <th>Year Level</th>
                             <th>Campus</th>
@@ -28,15 +43,12 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>ID</th>
-
-                            <th>Other File</th>
-
-
-
+                            <th>Parent Cosent</th>
                             <th>Status</th>
                             <th>Date Registered</th>
                             <th>Action</th>
                         </tr>
+                        @endif
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
@@ -52,57 +64,88 @@
                             }
                             }
                             @endphp
+                            @if(request()->query('isTryout') && request()->query('isTryout') == 1)
                             <tr>
-                            <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
-                            <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
-                            <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
-                            <td>{{ $audition->user->email ?? 'N/A' }}</td>
-                            <td>{{ $audition->height }}</td>
-                            <td>{{ $audition->weight }}</td>
-                            <td>{{ $audition->person_to_contact ?? 'N/A' }}</td>
-                            <td>{{ $audition->emergency_contact }}</td>
-                            <td>{{ $audition->relationship }}</td>
-                            <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt=""></td>
-                            <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
+                                <td>{{ $audition->user->student_number}}</td>
+                                <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
+                                <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
+                                <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
+                                <td>{{ (isset($audition->activity->user->sport->name) ? $audition->activity->user->sport->name : '')}}</td>
+                                <td>{{ $audition->activity["user"]["firstname"]." ".$audition->activity["user"]["lastname"]}}</td>
+                                <td>{{ $audition->created_at }}</td>
 
-                            <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt=""></td>
-
-
-
-                            <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
-                            <td>{{ $audition->created_at }}</td>
-                            <td>
-                                @if ($audition->status == 0 && !request()->query('isArchived'))
-                                <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
-                                <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
-                                @endif
-
-                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
-                                <button class="btn btn-primary unarchiveBtn" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
-                                @endif
-
-                                <!-- Additional View and Delete Buttons -->
-                                <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                    data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
-                                    View
-                                </button>
-
-                                @if(request()->query('isArchived') && request()->query('isArchived') == 1)
-                                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
-                                    Delete Permanently
-                                </button>
-                                @else
-                                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
-                                    Archive
-                                </button>
-                                @endif
-                            </td>
+                                <td>
+                                    <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                        data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                        View
+                                    </button>
+                                </td>
                             </tr>
+                            @else
+                            <tr>
+                                <td>{{$audition->activity->title}}</td>
+                                <td>{{ $audition->user->firstname ?? 'Unknown' }} {{ $audition->user->lastname ?? '' }}</td>
+                                <td>{{ ordinal($audition->user->year_level ?? 'N/A') }} Year</td>
+                                <td>{{ $audition->user->campus->name ?? 'N/A' }}</td>
+                                <td>{{ $audition->user->email ?? 'N/A' }}</td>
+                                <td>{{ $audition->height }}</td>
+                                <td>{{ $audition->weight }}</td>
+                                <td>{{ $audition->person_to_contact ?? 'N/A' }}</td>
+                                <td>{{ $audition->emergency_contact }}</td>
+                                <td>{{ $audition->relationship }}</td>
+                                <td>
+                                    <a href="{{ asset('storage/' . $audition->certificate_of_registration) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt="View Image" style="width: 100px; height: auto;">
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="{{ asset('storage/' . $audition->photo_copy_id) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt="View Photo Copy ID" style="width: 100px; height: auto;">
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="{{ asset('storage/' . $audition->parent_consent) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="View Parent Consent" style="width: 100px; height: auto;">
+                                    </a>
+                                </td>
+
+                                <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
+                                <td>{{ $audition->created_at }}</td>
+                                <td>
+                                    @if ($audition->status == 0 && !request()->query('isArchived'))
+                                    <button class="btn btn-primary approveBtn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#approveModal" data-id="{{ $audition->id }}">Approve</button>
+                                    <button class="btn btn-secondary declineBtn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#declineModal" data-id="{{ $audition->id }}">Decline</button>
+                                    @endif
+
+                                    @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                    <button class="btn btn-primary unarchiveBtn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
+                                    @endif
+
+                                    <!-- Additional View and Delete Buttons -->
+                                    <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
+                                        data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
+                                        View
+                                    </button>
+
+                                    @if(request()->query('isArchived') && request()->query('isArchived') == 1)
+                                    <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                        data-bs-target="#deletePerModal" data-id="{{ $audition->id }}" onclick="deletePerHandler({{$audition->id}})">
+                                        Delete Permanently
+                                    </button>
+                                    @else
+                                    <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
+                                        Archive
+                                    </button>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endif
                             @endforeach
                     </tbody>
                 </table>
@@ -134,6 +177,32 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="deletePerModal" tabindex="-1" aria-labelledby="deletePerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="deletePerForm" action="" method="POST">
+                @csrf
+                @method('POST')
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePerModalLabel">Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to proceed with this permanent deletion?</p>
+                    <input type="hidden" id="deleteUserId" name="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- Approve -->
 <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
@@ -325,7 +394,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewAuditionModalLabel">View Audition Details</h5>
+                <h5 class="modal-title" id="viewAuditionModalLabel">View Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -425,6 +494,11 @@
         $('#deleteForm').attr('action', '/activity-registration-delete/' + id);
     }
 
+    function deletePerHandler(id) {
+        $('#deletePerForm').attr('action', '/participants-delete/' + id);
+    }
+
+
     $(() => {
         $('#datatable').DataTable();
 
@@ -460,7 +534,7 @@
                     $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
                     // Conditional rendering based on status
-                    if (audition.status == 0) {
+                    if (audition.status == 1) {
                         $('#other-file-row').show();
                         $('#parent-consent-row').hide();
                         $('#other-file').attr('src', '/storage/' + audition.other_file);

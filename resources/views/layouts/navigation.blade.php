@@ -348,7 +348,7 @@
                 </li>
 
                 <li class="nav-item {{ request()->query('status') == '1' ? 'active' : '' }}">
-                    <a href="{{ route('registered.participant', ['status' => '1']) }}" class="nav-link">
+                    <a href="{{ route('registered.participant', ['status' => '1', 'isTryout' => 1]) }}" class="nav-link">
                         <span class="sidebar-icon me-3">
                             <i class="fas fa-user-alt fa-fw"></i>
                         </span>
@@ -658,7 +658,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item  {{ request()->routeIs('registered.participant') ? 'active' : '' }}">
+                <li class="nav-item  {{ request()->query('status') == '0'  ? 'active' : '' }}">
                     <a href="{{ route('registered.participant', ['status' => '0']) }}" class="nav-link">
                         <span class="sidebar-icon me-3">
                             <i class="fas fa-user-alt fa-fw"></i>
