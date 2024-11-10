@@ -60,7 +60,6 @@
                     </thead>
                     <tbody>
                         @foreach ($auditions as $audition)
-                        {{$audition}}
                         @php
                         if (!function_exists('ordinal')) {
                         function ordinal($number)
