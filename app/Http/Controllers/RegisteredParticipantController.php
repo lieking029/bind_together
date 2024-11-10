@@ -28,7 +28,7 @@ class RegisteredParticipantController extends Controller
             array_push($stats, 2);
         }
 
-        if($user->hasRole('admin_sport')){
+        if($user->hasRole('coach') && $deleted != 0){
             array_push($stats, 2);
         }
 
