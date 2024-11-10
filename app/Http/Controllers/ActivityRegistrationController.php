@@ -49,16 +49,14 @@ class ActivityRegistrationController extends Controller
             $studentRegistrations = null;
 
             if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && ($activity->target_player == 0 || $activity->target_player == 1)) {
-                $studentRegistrations = ActivityRegistration::with(['activity'])
-                    ->where('user_id', $studentUserId)
-                    ->whereHas('activity', function ($query) {
-                        $query->where('type', 1)
-                            ->where('is_deleted', 0);
-                    })
-                    ->where('is_deleted', 0)
-                    ->where('status', 1)
-                    ->orderBy('id', 'desc')
-                    ->first();
+                $studentRegistrations = ActivityRegistration::join('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->where('activities.type', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->orderBy('activity_registrations.id', 'desc')
+                    ->first(['activity_registrations.*']);
             }
 
             $activity->student_registrations = $studentRegistrations ?? null;
@@ -171,7 +169,7 @@ class ActivityRegistrationController extends Controller
                 alert()->success('Approved');
             } else if ((int)$request->status === 2) {
                 $user = Auth::user();
-                
+
                 if ($user->hasRole('admin_sport')) {
                     $act->update(['status' => 2]);
                 } else {
