@@ -48,7 +48,7 @@ class ActivityRegistrationController extends Controller
 
             $studentRegistrations = null;
 
-            if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && ($activity->target_player == 0 || $activity->target_player == 1)) {
+            if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && ($activity->target_player == 1)) {
                 $studentRegistrations = ActivityRegistration::join('activities', 'activity_registrations.activity_id', '=', 'activities.id')
                     ->where('activity_registrations.user_id', $studentUserId)
                     ->where('activity_registrations.is_deleted', 0)
