@@ -20,7 +20,7 @@ class StatusActivityController extends Controller
         
         Activity::find($activityId)->update(['is_deleted' => $permanent ? 3 : 0]);
 
-        alert()->success('Activity has been updated');
+        alert()->success($permanent == false ? 'Unarchived'  :'Deleted');
         return redirect()->back();
     }
 }

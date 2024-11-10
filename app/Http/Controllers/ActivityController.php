@@ -159,7 +159,7 @@ class ActivityController extends Controller
             "is_deleted" => 1
         ]);
 
-        alert()->success('Activity deleted successfully');
+        alert()->success('Archived');
         return redirect()->route('activity.index');
     }
 }

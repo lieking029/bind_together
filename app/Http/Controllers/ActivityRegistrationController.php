@@ -120,7 +120,7 @@ class ActivityRegistrationController extends Controller
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
                 Coach</p>';
 
-                $message->to("kikomataks@gmail.com")
+                $message->to($act["user"]["email"])
                     ->subject('Tryouts Approved - ' . $act["activity"]["title"])
                     ->html($htmlContent);
             });
@@ -136,13 +136,13 @@ class ActivityRegistrationController extends Controller
                     <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
                     <p>Thank you for your interest in participating in ' . $act["activity"]["title"] . '. Unfortunately, we regret to inform you that you did not make it into the finals.</p>
                     <p><strong>Reason for Declining:</strong><br>
-                        '. $request->input('reason') . '</p>
+                        ' . $request->input('reason') . '</p>
                     <p>We appreciate your enthusiasm and encourage you to register for future activities. If you have any questions or would like to give feedback, please feel free to reach out.</p>
                     <p>Best regards,<br>
                     ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
                     Coach</p>';
 
-                $message->to("kikomataks@gmail.com")
+                $message->to($act["user"]["email"])
                     ->subject('Tryouts Status - ' . $act["activity"]["title"])
                     ->html($htmlContent);
             });
@@ -170,8 +170,14 @@ class ActivityRegistrationController extends Controller
                 });
                 alert()->success('Approved');
             } else if ((int)$request->status === 2) {
-                $act->update(['is_deleted' => 1]);
                 $user = Auth::user();
+                
+                if ($user->hasRole('admin_sport')) {
+                    $act->update(['status' => 2]);
+                } else {
+                    $act->update(['is_deleted' => 1]);
+                }
+
                 Mail::send([], [], function ($message) use ($act, $user, $request) {
                     $getRole = $user->getRoleNames();
                     $htmlContent = '

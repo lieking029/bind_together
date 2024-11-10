@@ -48,7 +48,7 @@
                             <th>COR</th>
                             <th>ID</th>
                             @if(auth()->user()->hasRole('admin_sport'))
-                            <th?>Parent Consent</th>
+                            <th>Parent Consent</th>
                                 @else
                                 <th>Other File</th>
                                 @endif
@@ -165,7 +165,7 @@
                                         Delete Permanently
                                     </button>
                                     @endif
-                                    @if(($audition->status != 0 && !request()->query('isArchived')) || request()->query('allTryout'))
+                                    @if(($audition->status != 0 && !request()->query('isArchived')))
                                     <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal" data-id="{{ $audition->id }}" onclick="deleteHandler({{$audition->id}})">
                                         Archive

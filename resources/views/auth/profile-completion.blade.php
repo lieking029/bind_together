@@ -14,13 +14,13 @@
 <body>
 
     @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="margin:20px; font-family: 'Poppins', sans-serif;">
@@ -31,11 +31,11 @@
             <h5 class="text-primary">Basic Information</h5>
             <div class="row mb-3">
                 @student
-                    <div class="col-md-6">
-                        <label for="student_number" class="form-label">Student Number</label>
-                        <input type="text" class="form-control" id="student_number" name="student_number"
-                            value="{{ auth()->user()->student_number }}" readonly>
-                    </div>
+                <div class="col-md-6">
+                    <label for="student_number" class="form-label">Student Number</label>
+                    <input type="text" class="form-control" id="student_number" name="student_number"
+                        value="{{ auth()->user()->student_number }}" readonly>
+                </div>
                 @endstudent
 
                 <div class="col-md-6">
@@ -87,14 +87,14 @@
 
             <h5 class="text-primary mt-2">Contact Information</h5>
             <div class="row mb-3 mt-2">
-            <div class="col-md-6 mt-2"> 
-    <label for="contact_number" class="form-label">Contact Number</label>
-    <div class="input-group">
-        <span class="input-group-text">+63</span>
-        <input type="text" class="form-control" maxlength="10" id="contact_number" name="contact"
-               value="{{ auth()->user()->contact }}"  inputmode="numeric" pattern="\d*" required>
-    </div>
-</div>
+                <div class="col-md-6 mt-2">
+                    <label for="contact_number" class="form-label">Contact Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text">+63</span>
+                        <input type="text" class="form-control" maxlength="10" id="contact_number" name="contact"
+                            value="{{ auth()->user()->contact }}" inputmode="numeric" pattern="\d*" required>
+                    </div>
+                </div>
 
                 <div class="col-md-6 mt-2">
                     <label for="email" class="form-label">Email</label>
@@ -104,59 +104,73 @@
             </div>
 
 
-            
+
 
             @student
-                <h5 class="text-primary mt-2">School Information</h5>
-                <div class="row mb-3">
-                    <div class="col-md-6 mt-2">
-                        <label for="campus_id" class="form-label">Campus Name</label>
-                        <select name="campus_id" id="campus_id" class="form-control" >
-                            <option value="" selected disabled>Select Campus</option>
-                            @foreach ($campuses as $campus)
-                                <option value="{{ $campus->id }}"
-                                    {{ auth()->user()->campus_id == $campus->id ? 'selected' : '' }}>
-                                    {{ $campus->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mt-2">
-                        <label for="program_id" class="form-label">Program Name</label>
-                        <select name="program_id" id="program_id" class="form-control" onchange="toggleOtherProgramInput(this)">
-                            <option value="" selected disabled>Select Program</option>
-                            @foreach ($programs as $program)
-                                <option value="{{ $program->id }}"
-                                    {{ auth()->user()->program_id == $program->id ? 'selected' : '' }}>
-                                    {{ $program->name }}
-                                </option>
-                            @endforeach
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mt-2" id="other_program_input" style="display: none;">
-                        <label for="other_program" class="form-label">Enter Program Name</label>
-                        <input type="text" class="form-control" id="other_program" name="other_program">
-                    </div>
-
-                    <div class="col mt-2">
-                        <label for="year_level" class="form-label">Year Level</label>
-                        <select class="form-control" id="year_level" name="year_level" required>
-                            <option value="1" {{ auth()->user()->year_level == 1 ? 'selected' : '' }}>1st Year
-                            </option>
-                            <option value="2" {{ auth()->user()->year_level == 2 ? 'selected' : '' }}>2nd Year
-                            </option>
-                            <option value="3" {{ auth()->user()->year_level == 3 ? 'selected' : '' }}>3rd Year
-                            </option>
-                            <option value="4" {{ auth()->user()->year_level == 4 ? 'selected' : '' }}>4th Year
-                            </option>
-                        </select>
-                    </div>
+            <h5 class="text-primary mt-2">School Information</h5>
+            <div class="row mb-3">
+                <div class="col-md-6 mt-2">
+                    <label for="campus_id" class="form-label">Campus Name</label>
+                    <select name="campus_id" id="campus_id" class="form-control">
+                        <option value="" selected disabled>Select Campus</option>
+                        @foreach ($campuses as $campus)
+                        <option value="{{ $campus->id }}"
+                            {{ auth()->user()->campus_id == $campus->id ? 'selected' : '' }}>
+                            {{ $campus->name }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
+
+                <div class="col-md-6 mt-2">
+                    <label for="program_id" class="form-label">Program Name</label>
+                    <select name="program_id" id="program_id" class="form-control" onchange="toggleOtherProgramInput(this)">
+                        <option value="" selected disabled>Select Program</option>
+                        @foreach ($programs as $program)
+                        <option value="{{ $program->id }}"
+                            {{ auth()->user()->program_id == $program->id ? 'selected' : '' }}>
+                            {{ $program->name }}
+                        </option>
+                        @endforeach
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mt-2" id="other_program_input" style="display: none;">
+                    <label for="other_program" class="form-label">Enter Program Name</label>
+                    <input type="text" class="form-control" id="other_program" name="other_program">
+                </div>
+
+                <div class="col mt-2">
+                    <label for="year_level" class="form-label">Year Level</label>
+                    <select class="form-control" id="year_level" name="year_level" required>
+                        <option value="1" {{ auth()->user()->year_level == 1 ? 'selected' : '' }}>1st Year
+                        </option>
+                        <option value="2" {{ auth()->user()->year_level == 2 ? 'selected' : '' }}>2nd Year
+                        </option>
+                        <option value="3" {{ auth()->user()->year_level == 3 ? 'selected' : '' }}>3rd Year
+                        </option>
+                        <option value="4" {{ auth()->user()->year_level == 4 ? 'selected' : '' }}>4th Year
+                        </option>
+                    </select>
+                </div>
+            </div>
             @endstudent
 
+
+            <h5 class="text-primary mt-2">Personal Details and Verification</h5>
+            <div class="row mb-3">
+                <div class="col mt-2">
+                    <label for="person_to_contact" class="form-label">Contact Person</label>
+                    <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
+                        value="{{ auth()->user()->person_to_contact ?? ''}}" placeholder="Type here" required>
+                </div>
+                <div class="col mt-2">
+                    <label for="person_to_contact" class="form-label">Relationship</label>
+                    <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
+                        value="{{ auth()->user()->person_to_contact ?? ''}}" placeholder="Type here" required>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="">Profile Picture</label>
                 <input type="file" name="avatar" class="form-control">

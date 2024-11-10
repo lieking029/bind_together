@@ -101,7 +101,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/test-mail-config', function () {
     try {
         Mail::raw('This is a test message', function ($message) {
-            $message->to('kikomataks@gmail.com')
+            $message->to('')
                 ->subject('Test Email Configuration');
         });
         return 'Test email sent successfully!';

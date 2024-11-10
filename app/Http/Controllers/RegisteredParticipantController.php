@@ -20,10 +20,16 @@ class RegisteredParticipantController extends Controller
         $tryout = $request->query('isTryout') ?? null;
         $allTryout = $request->query('allTryout') ?? null;
 
-        $stats = [$status, 2];
+        $stats = [$status];
 
         if(!$allTryout){
             array_push($stats, 1);
+        }else{
+            array_push($stats, 2);
+        }
+
+        if($user->hasRole('admin_sport')){
+            array_push($stats, 2);
         }
 
         $athletes = ActivityRegistration::query()
