@@ -48,20 +48,20 @@ class ActivityRegistrationController extends Controller
 
             $studentRegistrations = null;
 
-            if (((int)$activity->type == 3 && (int)$activity->target_player == 1) || ((int)$activity->type == 2 && (int)$activity->target_player == 1) || ((int)$activity->type == 1 && (int)$activity->target_player == 1)) {
-                $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
-                    ->where('activity_registrations.user_id', $studentUserId)
-                    ->where('activity_registrations.is_deleted', 0)
-                    ->where('activity_registrations.status', 1)
-                    ->where(function ($query) {
-                        $query->where('activities.type', 1)
-                            ->where('activities.target_player', 0)
-                            ->where('activities.status', 1)
-                            ->where('activities.is_deleted', 0);
-                    })
-                    ->latest('activity_registrations.created_at')
-                    ->first(['activity_registrations.*', 'activities.*']);
-            }
+            // if (((int)$activity->type == 3 && (int)$activity->target_player == 1) || ((int)$activity->type == 2 && (int)$activity->target_player == 1) || ((int)$activity->type == 1 && (int)$activity->target_player == 1)) {
+            $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+                ->where('activity_registrations.user_id', $studentUserId)
+                ->where('activity_registrations.is_deleted', 0)
+                ->where('activity_registrations.status', 1)
+                ->where(function ($query) {
+                    $query->where('activities.type', 1)
+                        ->whereIn('activities.target_player', [0, 1])
+                        ->where('activities.status', 1)
+                        ->where('activities.is_deleted', 0);
+                })
+                ->latest('activity_registrations.created_at')
+                ->first(['activity_registrations.*', 'activities.*']);
+            // }
 
             $activity->student_registrations = $studentRegistrations ?? null;
         });
