@@ -48,18 +48,18 @@ class ActivityRegistrationController extends Controller
 
             $studentRegistrations = null;
 
-            if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && ($activity->target_player == 1) || $activity->type == 1 && ($activity->target_player == 1)) {
-                $studentRegistrations = ActivityRegistration::with(['activity'])
-                    ->where('user_id', $studentUserId)
-                    ->whereHas('activity', function ($query) {
-                        $query->where('type', 1)
-                            ->where('is_deleted', 0);
-                    })
-                    ->where('is_deleted', 0)
-                    ->where('status', 1)
-                    ->orderBy('id', 'desc')
-                    ->first();
-            }
+            // if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && ($activity->target_player == 1) || $activity->type == 1 && ($activity->target_player == 1)) {
+            $studentRegistrations = ActivityRegistration::with(['activity'])
+                ->where('user_id', $studentUserId)
+                ->whereHas('activity', function ($query) {
+                    $query->where('type', 1)
+                        ->where('is_deleted', 0);
+                })
+                ->where('is_deleted', 0)
+                ->where('status', 1)
+                ->orderBy('id', 'desc')
+                ->first();
+            // }
 
             $activity->student_registrations = $studentRegistrations ?? null;
         });
