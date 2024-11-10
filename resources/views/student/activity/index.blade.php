@@ -48,7 +48,7 @@
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
                     {{$activity->student_registrations}}
-                    @if(($activity->type == 1 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->student_registrations == null) || ($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null))
+                    @if(($activity->type == 1 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->target_player == 1  && $activity->student_registrations == null) || ($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null))
 
                     @else
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
