@@ -55,7 +55,7 @@ class ActivityRegistrationController extends Controller
                         $query->where('type', 1)
                             ->where('is_deleted', 0);
                     })
-                    ->where('is_deleted', 0)
+                    // ->where('is_deleted', 0)
                     ->where('status', 1)
                     ->orderBy('id', 'desc')
                     ->first();

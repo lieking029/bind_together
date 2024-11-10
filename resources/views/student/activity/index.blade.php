@@ -57,10 +57,10 @@
                                 <h5 class="card-title">{{ $activity->title }}</h5>
                                 <p class="card-text">
                                     <strong>Posted By:</strong> {{ $activity->user->firstname . '' . $activity->user->lastname }} <br>
-                                    @if($activity->type == 0 || $activity->type == 2)
+                                    @if($activity->type == 0)
                                     <strong>Organization:</strong> {{ $activity->user->organization->name ?? 'N/A' }} <br>
                                     @endif
-                                    @if($activity->type == 1)
+                                    @if($activity->type == 1 || $activity->type == 2)
                                     <strong>Sport name:</strong> {{ $activity->user->sport->name ?? 'N/A' }} <br>
                                     @endif
                                     <strong>Type:</strong> {{ $activityTypes[$activity->type] ?? '' }} <br>
@@ -301,20 +301,20 @@
                 <h5 class="modal-title" id="notGoingPracticeModalLabel">Join Practice</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form action="" id="notGoingForm" method="POST">
-                    @csrf
+            <form action="" id="notGoingForm" method="POST">
+                @csrf
+                <div class="modal-body">
                     <p>Why are you not going?</p>
                     <input type="hidden" name="status" value="0">
                     <input type="hidden" name="activity_id" id="notGoingActivityId">
                     <textarea name="reason" id="" rows="2" class="form-control" placeholder="Reason"></textarea>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
         </div>
+        </form>
     </div>
 </div>
 @endsection

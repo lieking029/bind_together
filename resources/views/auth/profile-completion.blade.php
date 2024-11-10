@@ -167,8 +167,30 @@
                 </div>
                 <div class="col mt-2">
                     <label for="person_to_contact" class="form-label">Relationship</label>
-                    <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
+                    <input type="text" class="form-control" id="person_to_contact" name="relationship"
                         value="{{ auth()->user()->person_to_contact ?? ''}}" placeholder="Type here" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col mt-2">
+                    <label for="person_to_contact" class="form-label">Emergency Contact Number</label>
+                    <input type="text" class="form-control" id="person_to_contact" name="emergency_contact"
+                        value="{{ auth()->user()->person_to_contact ?? ''}}" placeholder="Type here" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col mt-2">
+                    <div class="form-group">
+                        <label for="">Certificate of Registration</label>
+                        <input type="file" name="cert_registration" class="form-control">
+                    </div>
+                </div>
+                <div class="col mt-2">
+                    <div class="form-group">
+                        <label for="">Photocopy of ID</label>
+                        <input type="file" name="photo_id" class="form-control">
+                    </div>
                 </div>
             </div>
             <div class="form-group">
