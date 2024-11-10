@@ -48,7 +48,7 @@ class ActivityRegistrationController extends Controller
 
             $studentRegistrations = null;
 
-            if ($activity->type == 3 && $activity->target_player == 1) {
+            if ($activity->type == 3 && $activity->target_player == 1 || $activity->type == 2 && $activity->target_player == 1) {
                 $studentRegistrations = ActivityRegistration::with(['activity'])
                     ->where('user_id', $studentUserId)
                     ->whereHas('activity', function ($query) {

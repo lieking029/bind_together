@@ -9,6 +9,8 @@
                 Archived Participants
                 @elseif(request()->query('status') && request()->query('status') == 1)
                 Official Players
+                @elseif(auth()->user()->hasRole('coach') && request()->query('status') == 0)
+                Tryouts Participants
                 @else
                 Registered Participants
                 @endif
@@ -31,7 +33,9 @@
                         </tr>
                         @else
                         <tr>
+                            @if(auth()->user()->hasRole('admin_sport'))
                             <th>Title of Competition</th>
+                            @endif
                             <th>Name</th>
                             <th>Year Level</th>
                             <th>Campus</th>
@@ -43,10 +47,14 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>ID</th>
-                            <th>Parent Consent</th>
-                            <th>Status</th>
-                            <th>Date Registered</th>
-                            <th>Action</th>
+                            @if(auth()->user()->hasRole('admin_sport'))
+                            <th?>Parent Consent</th>
+                                @else
+                                <th>Other File</th>
+                                @endif
+                                <th>Status</th>
+                                <th>Date Registered</th>
+                                <th>Action</th>
                         </tr>
                         @endif
                     </thead>
@@ -104,12 +112,19 @@
                                         <img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt="View Photo Copy ID" style="width: 100px; height: auto;">
                                     </a>
                                 </td>
-
+                                @if(auth()->user()->hasRole('admin_sport'))
                                 <td>
                                     <a href="{{ asset('storage/' . $audition->parent_consent) }}" target="_blank">
                                         <img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="View Parent Consent" style="width: 100px; height: auto;">
                                     </a>
                                 </td>
+                                @else
+                                <td>
+                                    <a href="{{ asset('storage/' . $audition->other_file) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $audition->other_file) }}" alt="View Other File" style="width: 100px; height: auto;">
+                                    </a>
+                                </td>
+                                @endif
 
                                 <td>{{ $audition->status == 0 ? 'Pending' : 'Approved' }}</td>
                                 <td>{{ $audition->created_at }}</td>

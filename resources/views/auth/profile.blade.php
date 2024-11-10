@@ -132,6 +132,20 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                            @if(auth()->user()->roles[0]->id == 5)
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-info">Assigned Sports</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="width: 200px !important;">Sport Name: </th>
+                                                        <td style="width: 200px !important;">{{ auth()->user()->load('sport')->sport->name ?? 'N/A' }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            @endif
                                             @if(auth()->user()->roles[0]->id == 4)
                                             <table class="table">
                                                 <tbody>

@@ -51,10 +51,18 @@ class ActivityController extends Controller
                     ])
                     ->get();
             } else {
-                $activities = Activity::where('user_id', $user->id)
-                    ->whereIn('status', [0, 1])
-                    ->where('is_deleted', 0)
-                    ->get();
+
+                if ($user->hasRole('coach')) {
+                    $activities = Activity::where('user_id', $user->id)
+                        ->whereIn('status', [0, 1, 2])
+                        ->where('is_deleted', 0)
+                        ->get();
+                } else {
+                    $activities = Activity::where('user_id', $user->id)
+                        ->whereIn('status', [0, 1])
+                        ->where('is_deleted', 0)
+                        ->get();
+                }
             }
         }
 
@@ -131,7 +139,12 @@ class ActivityController extends Controller
      */
     public function update(StoreActivityRequest $request, Activity $activity)
     {
-        $activity->update($request->validated());
+        $payload = $request->validated();
+        if ($activity->status == 2) {
+            $payload["status"] = 0;
+        }
+
+        $activity->update($payload);
 
         alert()->success('Activity updated successfully');
         return redirect()->route('activity.index');

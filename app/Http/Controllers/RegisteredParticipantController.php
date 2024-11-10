@@ -17,6 +17,8 @@ class RegisteredParticipantController extends Controller
         $deleted = $request->query('isArchived') ?? '0';
         $tryout = $request->query('isTryout') ?? null;
 
+        $allTryout = $request->query('allTryout') ?? null;
+
         $athletes = ActivityRegistration::query()
             ->with([
                 'activity.user.sport',
@@ -24,8 +26,16 @@ class RegisteredParticipantController extends Controller
                 'sport'
             ])
             ->whereIn('status', [$status, 1, 2])
-            ->whereHas('activity', function ($query) use ($tryout) {
-                $query->where('type', $tryout !== null ? ActivityType::Tryout : ActivityType::Competition);
+            ->whereHas('activity', function ($query) use ($tryout, $allTryout) {
+                if ($tryout) {
+                    $query->where('type', ActivityType::Tryout);
+                } else {
+                    if ($allTryout) {
+                        $query->where('type', ActivityType::Tryout);
+                    } else {
+                        $query->where('type', ActivityType::Competition);
+                    }
+                }
             })
             ->where('is_deleted', $deleted)
             ->get();
