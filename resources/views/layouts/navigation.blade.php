@@ -660,7 +660,7 @@
     </span>
     <div class="multi-level collapse" role="list" id="submenu-app1" aria-expanded="false">
         <ul class="flex-column nav">
-            <li class="nav-item  {{ request()->routeIs('practice.index') ? 'active' : '' }}">
+            <li class="nav-item  {{ request()->routeIs('practice.index')? 'active' : '' }}">
                 <a href="{{ route('practice.index', ['status' => '0']) }}" class="nav-link">
                     <span class="sidebar-icon me-3">
                         <i class="fas fa-user-alt fa-fw"></i>
@@ -669,7 +669,7 @@
                 </a>
             </li>
 
-            <li class="nav-item  {{ request()->query('status') == '0'  ? 'active' : '' }}">
+            <li class="nav-item  {{ request()->query('allTryout') == 1  ? 'active' : '' }}">
                 <a href="{{ route('registered.participant', ['status' => '0', 'allTryout' => 1]) }}" class="nav-link">
                     <span class="sidebar-icon me-3">
                         <i class="fas fa-user-alt fa-fw"></i>
@@ -684,6 +684,15 @@
                         <i class="fas fa-user-alt fa-fw"></i>
                     </span>
                     <span class="sidebar-text">{{ __('Official Player') }}</span>
+                </a>
+            </li>
+
+            <li class="nav-item  {{ request()->query('isArchived') ? 'active' : '' }}">
+                <a href="{{ route('registered.participant', ['status' => '0', 'isArchived' => 1]) }}" class="nav-link">
+                    <span class="sidebar-icon me-3">
+                        <i class="fas fa-user-alt fa-fw"></i>
+                    </span>
+                    <span class="sidebar-text" style="font-size: 12px">{{ __('Archived Participants') }}</span>
                 </a>
             </li>
         </ul>

@@ -105,8 +105,7 @@ class ActivityRegistrationController extends Controller
     public function update(Request $request, int $activityRegistrationId)
     {
         $act = ActivityRegistration::with(['user', 'activity'])->find($activityRegistrationId);
-
-        if ((int)$request->status === 1) {
+        if ($act->activity->type == 1 && (int)$request->status === 1) {
             $act->update(['status' => 1]);
 
             $user = Auth::user();
@@ -115,42 +114,88 @@ class ActivityRegistrationController extends Controller
                 $getRole = $user->getRoleNames();
                 $htmlContent = '
                 <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
-                <p>We are pleased to inform you that your registration for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
+                <p>We are pleased to inform you that your participation for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
                 <p>Please stay tuned for further updates and information.</p>
                 <p>Best regards,<br>
                 ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                ' . ucfirst($getRole[0] == "admin_org" ? "Admin Org" : $getRole[0]) . '</p>';
+                Coach</p>';
 
-                $message->to($act["user"]["email"])
-                    ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
+                $message->to("kikomataks@gmail.com")
+                    ->subject('Tryouts Approved - ' . $act["activity"]["title"])
                     ->html($htmlContent);
             });
             alert()->success('Approved');
-        } else if ((int)$request->status === 2) {
-            $act->update(['is_deleted' => 1]);
+        } else if ($act->activity->type == 1 && (int)$request->status === 2) {
+            $act->update(['status' => 2]);
+
             $user = Auth::user();
+
             Mail::send([], [], function ($message) use ($act, $user, $request) {
                 $getRole = $user->getRoleNames();
                 $htmlContent = '
-                    <p>SUBJECT: REGISTRATION STATUS UPDATE - ' . $act["activity"]["title"] . '</p>
                     <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
-                    <p>Thank you for registering for ' . $act["activity"]["title"] . '. After reviewing all applications, we regret to inform you that your registration is not approved.</p>
-                    <p>Reason for declining:<br>
-                    ' . $request->input('reason') . '</p>
-                    <p>We encourage you to stay involved and consider applying for future activities. If you have any questions or need more information, please don’t hesitate to reach out.</p>
+                    <p>Thank you for your interest in participating in ' . $act["activity"]["title"] . '. Unfortunately, we regret to inform you that you did not make it into the finals.</p>
+                    <p><strong>Reason for Declining:</strong><br>
+                        '. $request->input('reason') . '</p>
+                    <p>We appreciate your enthusiasm and encourage you to register for future activities. If you have any questions or would like to give feedback, please feel free to reach out.</p>
                     <p>Best regards,<br>
                     ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
-                     ' . ucfirst($getRole[0] == "admin_org" ? "Admin Org" : $getRole[0]) . '</p>';
+                    Coach</p>';
 
-                $message->to($act["user"]["email"])
-                    ->subject('REGISTRATION STATUS UPDATE - ' . $act["activity"]["title"])
+                $message->to("kikomataks@gmail.com")
+                    ->subject('Tryouts Status - ' . $act["activity"]["title"])
                     ->html($htmlContent);
             });
 
             alert()->success('Declined');
         } else {
-            alert()->success('Updated successfully');
+            if ((int)$request->status === 1) {
+                $act->update(['status' => 1]);
+
+                $user = Auth::user();
+
+                Mail::send([], [], function ($message) use ($act, $user) {
+                    $getRole = $user->getRoleNames();
+                    $htmlContent = '
+                    <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
+                    <p>We are pleased to inform you that your registration for ' . $act["activity"]["title"] . ' has been approved! We are excited to have you on board and look forward to seeing you participate.</p>
+                    <p>Please stay tuned for further updates and information.</p>
+                    <p>Best regards,<br>
+                    ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
+                    ' . ucfirst($getRole[0] == "admin_org" ? "Admin Org" : $getRole[0]) . '</p>';
+
+                    $message->to($act["user"]["email"])
+                        ->subject('Registration Approved - Welcome to ' . $act["activity"]["title"] . '!')
+                        ->html($htmlContent);
+                });
+                alert()->success('Approved');
+            } else if ((int)$request->status === 2) {
+                $act->update(['is_deleted' => 1]);
+                $user = Auth::user();
+                Mail::send([], [], function ($message) use ($act, $user, $request) {
+                    $getRole = $user->getRoleNames();
+                    $htmlContent = '
+                        <p>SUBJECT: REGISTRATION STATUS UPDATE - ' . $act["activity"]["title"] . '</p>
+                        <p>Dear ' . $act["user"]["firstname"] . ' ' . $act["user"]["lastname"] . ',</p>
+                        <p>Thank you for registering for ' . $act["activity"]["title"] . '. After reviewing all applications, we regret to inform you that your registration is not approved.</p>
+                        <p>Reason for declining:<br>
+                        ' . $request->input('reason') . '</p>
+                        <p>We encourage you to stay involved and consider applying for future activities. If you have any questions or need more information, please don’t hesitate to reach out.</p>
+                        <p>Best regards,<br>
+                        ' . $user["firstname"] . ' ' . $user["lastname"] . '<br>
+                         ' . ucfirst($getRole[0] == "admin_org" ? "Admin Org" : $getRole[0]) . '</p>';
+
+                    $message->to($act["user"]["email"])
+                        ->subject('REGISTRATION STATUS UPDATE - ' . $act["activity"]["title"])
+                        ->html($htmlContent);
+                });
+
+                alert()->success('Declined');
+            } else {
+                alert()->success('Updated successfully');
+            }
         }
+
         return redirect()->back();
     }
 

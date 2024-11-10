@@ -12,7 +12,7 @@ class FetchActivityRegistration extends Controller
      */
     public function __invoke(Request $request, int $activityId)
     {
-        $activity = ActivityRegistration::with('user.campus')->find($activityId);
+        $activity = ActivityRegistration::with(['user.campus', 'activity'])->find($activityId);
 
         return response()->json($activity);
     }
