@@ -55,13 +55,13 @@ class ActivityRegistrationController extends Controller
                     $query->where('type', 1)
                         ->where('is_deleted', 0);
                 })
-                // ->where('is_deleted', 0)
-                // ->where('status', 1)
+                ->where('is_deleted', 0)
+                ->where('status', 1)
                 ->orderBy('id', 'desc')
-                ->first();
+                ->get();
             // }
 
-            $activity->student_registrations = $studentRegistrations ?? null;
+            $activity->student_registrations = $studentRegistrations[0] ?? null;
         });
 
         return view('student.activity.index', compact('activities'));
