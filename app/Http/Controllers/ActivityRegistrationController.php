@@ -55,6 +55,10 @@ class ActivityRegistrationController extends Controller
                 ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
                 ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id') 
                 ->where('activity_registrations.user_id', $studentUserId)
+                ->where('activities.status', 1)
+                ->where('activities.is_deleted', 0)
+                ->where('activity_registrations.is_deleted', 0)
+                ->where('activity_registrations.status', 1)
                 ->orderByDesc('activity_registrations.id')
                 ->limit(1)
                 ->first();
