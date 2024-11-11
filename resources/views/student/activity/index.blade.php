@@ -47,6 +47,7 @@
                     $hasJoinedPractice = $practice && $practice->status == 1; // Check if user has joined (status = 1)
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
+                    {{$studentRegistrations}}
                     @if(($activity->type == 1 && $activity->target_player == 1 && $studentRegistrations == null) || ($activity->type == 2 && $activity->target_player == 1  && $studentRegistrations == null) || ($activity->type == 3 && $activity->target_player == 1 && $studentRegistrations == null))
 
                     @else
