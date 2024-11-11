@@ -12,6 +12,7 @@ use App\Models\Sport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -46,20 +47,15 @@ class ActivityRegistrationController extends Controller
                 $activity->user->organization = $organizations->get($activity->user->organization_id) ?? null;
             }
 
-            $studentRegistrations = null;
-
-            $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+            $studentRegistrations = DB::table('activity_registrations')
+                ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted')
                 ->where('activity_registrations.user_id', $studentUserId)
-                ->where('activity_registrations.is_deleted', 0)
-                ->where('activity_registrations.status', 1)
-                ->where(function ($query) {
-                    $query->where('activities.type', 1)
-                        ->whereIn('activities.target_player', [0, 1])
-                        ->where('activities.status', 1)
-                        ->where('activities.is_deleted', 0);
-                })
-                ->latest('activity_registrations.created_at')
-                ->first(['activity_registrations.*', 'activities.*']);
+                ->orderByDesc('activity_registrations.id')
+                ->limit(1)
+                ->first();
+
+
 
             $activity->student_registrations = $studentRegistrations ?? null;
         });
