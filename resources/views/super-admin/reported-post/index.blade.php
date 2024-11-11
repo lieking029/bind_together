@@ -52,47 +52,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($groupedByReportedPosts as $reportedPostId => $newsfeeds)
-                        @foreach ($newsfeeds as $entry)
+                        @foreach ($reportedNewsfeeds as $reportedNewsfeed)
                         <tr>
-                            <td>{{ $entry['newsfeed']->description }}</td>
-                            <td>{{ $entry['newsfeed']->user->firstname }} {{ $entry['newsfeed']->user->lastname }}</td>
-
-                            {{-- Check if user exists for each reportedPost --}}
+                            <td>{{ $reportedNewsfeed->description }}</td>
+                            <td>{{ $reportedNewsfeed->user->firstname }} {{ $reportedNewsfeed->user->lastname }}</td>
                             <td>
-                                @if ($entry['reportedPost']->user)
-                                {{ $entry['reportedPost']->user->firstname }} {{ $entry['reportedPost']->user->lastname }}
-                                @else
-                                No user available
-                                @endif
+                                @php
+                                $names = $reportedNewsfeed->reportedPosts->map(function($reported_post) {
+                                return $reported_post->user->firstname . " " . $reported_post->user->lastname;
+                                })->implode(', ');
+                                @endphp
+                                {{ $names }}
                             </td>
 
-                            <td>{{ $entry['reportedPost']->reason }}</td>
-                            <td>{{ $entry['newsfeed']->report_count }}</td>
-
                             <td>
-                                @if ($entry['newsfeed']->status == 1)
+                                @php
+                                $string = "";
+
+                                foreach($reportedNewsfeed->reportedPosts as $reported_post){
+                                $string .= $reported_post->other_reason ? $reported_post->other_reason : $reported_post->reason . " ";
+                                }
+
+                                $words = explode(' ', strtolower($string));
+                                $uniqueWords = array_unique($words);
+                                $result = implode(' ', $uniqueWords);
+
+                                @endphp
+                                {{ucfirst($result);}}
+                            </td>
+                            <td>{{ $reportedNewsfeed->report_count }}</td>
+                            <td>
+                                @if ($reportedNewsfeed->status == 1)
                                 <span class="badge text-black" style="background: yellow">Pending</span>
-                                @elseif ($entry['newsfeed']->status == 0)
+                                @elseif ($reportedNewsfeed->status == 0)
                                 <span class="badge bg-danger">Declined</span>
-                                @elseif ($entry['newsfeed']->status == 2)
+                                @elseif ($reportedNewsfeed->status == 2)
                                 <span class="badge bg-success">Approved</span>
                                 @endif
                             </td>
-
-                            <td>{{ $entry['newsfeed']->created_at }}</td>
-
+                            <td>{{ $reportedNewsfeed->created_at }}</td>
+                            {{-- <td>{{ $reportedNewsfeed->created_at }}</td> --}}
                             @php
-                            $isDisabled = $entry['newsfeed']->status != 1;
+                            $isDisabled = $reportedNewsfeed->status != 1;
                             @endphp
                             <td>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actionModal"
-                                    onclick="setStatus(2, {{ $entry['reportedPost']->id }},  {{$entry['newsfeed']->id}}, false)" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
-                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#declineModal"
-                                    onclick="setStatus(0, {{ $entry['reportedPost']->id }}, {{$entry['newsfeed']->id}}, true)" {{ $isDisabled ? 'disabled' : '' }}>Decline</button>
+                                    onclick="setStatus(2, {{ $reportedNewsfeed->id }})" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#declineModal"
+                                    onclick="setStatus(0, {{ $reportedNewsfeed->id }}, true)" {{ $isDisabled ? 'disabled' : '' }}>Decline</button>
                             </td>
                         </tr>
-                        @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -117,7 +126,6 @@
                 <div class="modal-body">
                     <p>Are you sure you want to approve?</p>
                     <input type="hidden" name="status" id="statusInput">
-                    <input type="hidden" name="newsfeed_id" id="newsfeedId">
                 </div>
 
                 <div class="modal-footer">
@@ -145,8 +153,7 @@
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <label for="title" class="form-label">Reason</label>
-                            <input type="hidden" name="status" value="0">
-                            <input type="hidden" name="newsfeed_id" id="newsfeedDecId">
+                            <input type="hidden" name="status" id="statusInputDec">
                             <input type="text" class="form-control" placeholder="Type here" name="reason" required>
                         </div>
                     </div>
@@ -169,14 +176,13 @@
         $('#datatable').DataTable();
     })
 
-    function setStatus(status, report_id, newsfeed_id, is_decline = false) {
+    function setStatus(status, newsfeed_id, is_decline = false) {
         if (!is_decline) {
             document.getElementById('statusInput').value = status;
-            document.getElementById('newsfeedId').value = newsfeed_id;
-            document.getElementById('statusForm').action = `/reported-post-update/${report_id}`;
+            document.getElementById('statusForm').action = `/reported-post-update/${newsfeed_id}`;
         } else {
-            document.getElementById('newsfeedDecId').value = newsfeed_id;
-            document.getElementById('declineForm').action = `/reported-post-update/${report_id}`;
+            document.getElementById('statusInputDec').value = status;
+            document.getElementById('declineForm').action = `/reported-post-update/${newsfeed_id}`;
         }
 
     }

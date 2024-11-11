@@ -35,19 +35,7 @@ class ReportedPostController extends Controller
             ])
             ->get();
 
-        $groupedByReportedPosts = [];
-
-        foreach ($reportedNewsfeeds as $newsfeed) {
-            foreach ($newsfeed->reportedPosts as $reportedPost) {
-                $groupedByReportedPosts[$reportedPost->id][] = [
-                    'newsfeed' => $newsfeed,
-                    'reportedPost' => $reportedPost,
-                    'user' => $reportedPost->user,
-                ];
-            }
-        }
-
-        return view('super-admin.reported-post.index', compact('groupedByReportedPosts'));
+        return view('super-admin.reported-post.index', compact('reportedNewsfeeds'));
     }
 
 
@@ -111,86 +99,92 @@ class ReportedPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $reportedPost = ReportedPost::find($id);
+        $reportedPost = ReportedPost::with('newsfeed.user', 'user')->where('newsfeed_id', $id)->get();
+        $newsfeed = Newsfeed::with('user')->find($id);
 
         if ($request->status == 2) {
-            // deleted
 
-            DeletedPost::create([
-                'newsfeed_id' => $request->newsfeed_id,
-                'user_id' => $reportedPost->user_id,
-                'reason' => $reportedPost->reason,
-                'other_reason' => $reportedPost->other_reason,
-                'status' => 0,
-            ]);
-
-            $newsfeed = Newsfeed::find($request->newsfeed_id);
+            $newsfeed = Newsfeed::find($id);
 
             $newsfeed->update(['status' => 2]);
 
-            if (isset($request->newsfeed_id)) {
-                DB::table('reported_posts')
-                    ->where('newsfeed_id', (int)$request->newsfeed_id)
-                    ->update([
-                        "status" => 2
-                    ]);
+            DB::table('reported_posts')
+                ->where('newsfeed_id', $id)
+                ->update([
+                    "status" => 2
+                ]);
 
-                $sendMail = ReportedPost::where('newsfeed_id', (int)$request->newsfeed_id)
-                    ->join('users', 'reported_posts.user_id', '=', 'users.id')
-                    ->select('reported_posts.*', 'users.firstname', 'users.lastname', 'users.email')
-                    ->get();
+            Mail::send([], [], function ($message) use ($newsfeed) {
+                $user = Auth::user();
+                $htmlContent = "
+                        <h1>APPROVE POST</h1>
+                        <p>Dear " . ($newsfeed->user->firstname . " " . $newsfeed->user->lastname) . ",</p>
+                        <p>We hope this message finds you well. We want to inform you that your post, titled <b>" . $newsfeed->description . " </b> was recently reported by another user for violating our community guidelines.</p>
+                        <p>After careful review, we have determined that the content does not adhere to our standards and policies. As a result, the post will be removed from our platform.</p>
+                        <p>We encourage you to review our community guidelines to ensure that future posts comply with our rules. If you believe this decision was made in error, please feel free to contact us for further clarification.</p>
+                        <p>Thank you for your understanding and cooperation in maintaining a respectful community space.</p>
+                        <p>Best regards,<br>" . $user->firstname . " " . $user->lastname . "<br>Admin</p>
+                    ";
 
-                foreach ($sendMail as $send) {
-                    Mail::send([], [], function ($message) use ($request, $send) {
-                        $htmlContent = "
-                            <p>Dear " . $send->firstname . ' ' . $send->lastname . ",</p>
-                            <p>Thank you for bringing the issue to our attention. After reviewing the report, we are pleased to inform you that the report has been approved.</p>
-                            <p>If you have any further questions, feel free to contact us.</p>
-                            <p>Best regards,<br> Super Admin</p>
-                        ";
+                $message->to($newsfeed->user->email)
+                    ->subject('Notice of Post Removal Due to Community Guidelines Violation')
+                    ->html($htmlContent);
+            });
+        }
 
-                        $message->to($send->email)
-                            ->subject('Report Approved Notification')
-                            ->html($htmlContent);
-                    });
-                }
-            }
+
+        if ($request->status == 1) {
+            DB::table('reported_posts')
+                ->where('newsfeed_id', $id)
+                ->update([
+                    "status" => 1
+                ]);
+
+            DB::table('newsfeeds')
+                ->where('id', $id)
+                ->update([
+                    "status" => 1
+                ]);
         }
 
         if ($request->status == 0) {
-            if (isset($request->newsfeed_id)) {
-                DB::table('reported_posts')
-                    ->where('newsfeed_id', (int)$request->newsfeed_id)
-                    ->update([
-                        "status" => 0
-                    ]);
+            DB::table('reported_posts')
+                ->where('newsfeed_id', $id)
+                ->update([
+                    "status" => 0
+                ]);
 
-                $sendMail = ReportedPost::where('newsfeed_id', (int)$request->newsfeed_id)
-                    ->join('users', 'reported_posts.user_id', '=', 'users.id')
-                    ->select('reported_posts.*', 'users.firstname', 'users.lastname', 'users.email')
-                    ->get();
-
-                foreach ($sendMail as $send) {
-                    Mail::send([], [], function ($message) use ($request, $send) {
-                        $htmlContent = "
-                            <p>Dear " . $send->firstname . ' ' . $send->lastname . ",</p>
-                            <p>Thank you for bringing the issue to our attention. After reviewing the report, we regret to inform you that the report has been declined.</p>
-                            <p><strong>Reason for Decline:</strong> <br>" . $request->reason . "</p>
-                            <p>If you have any further questions, feel free to contact us.</p>
-                            <p>Best regards,<br> Super Admin</p>
+            foreach ($reportedPost as $item) {
+                Mail::send([], [], function ($message) use ($item, $request) {
+                    $user = Auth::user();
+                    $htmlContent = "
+                            <h1>DECLINE POST</h1>
+                            <p>Dear " . ($item->user->firstname . " " . $item->user->lastname) . ",</p>
+                            <p>Thank you for bringing the reported posts to our attention. We have thoroughly reviewed your report and appreciate your concern.</p>
+                            <p><strong>Reason for Declining:</strong><br>
+                            " . $request->reason . "</p>
+                            <p>Please understand that our decision is based on the established rules and standards we follow for content review. We encourage you to continue engaging with our platform and to reach out if you have any additional concerns.</p>
+                            <p>Thank you for your vigilance in helping maintain the quality of our community.</p>
+                            <p>Best regards,<br>" . $user->firstname . " " . $user->lastname . "<br>Admin</p>
                         ";
 
-                        $message->to("kikomataks@gmail.com")
-                            ->subject('Report Declined Notification')
-                            ->html($htmlContent);
-                    });
-                }
+                    $message->to($user->email)
+                        ->subject('Response to Your Reported Posts')
+                        ->html($htmlContent);
+                });
             }
         }
-        $alert_message = "'Reported post status has been updated'";
+
+        $alert_message = "";
+        $is_restore = false;
 
         if ($request->status == 0) {
             $alert_message = "Declined";
+        }
+
+        if ($request->status == 1) {
+            $alert_message = "Restored";
+            $is_restore  = true;
         }
 
         if ($request->status == 2) {
@@ -198,7 +192,7 @@ class ReportedPostController extends Controller
         }
 
         alert()->success($alert_message);
-        return redirect()->route('reported-post.index');
+        return redirect()->route($is_restore ? 'deleted-post.index' : 'reported-post.index');
     }
 
     /**
