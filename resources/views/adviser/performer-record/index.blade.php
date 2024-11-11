@@ -85,9 +85,11 @@
                                     data-bs-target="#viewAuditionModal" data-id="{{ $audition->id }}">
                                     View
                                 </button>
+                                @if(auth()->user()->roles[0]["id"] == 2 && request()->query('type'))
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
-                                    data-id="{{ $audition->id }}">Delete</button>
+                                    data-id="{{ $audition->id }}">Archive</button>
+                                @endif
                             </td>
                         </tr>
                         @else
@@ -168,12 +170,10 @@
                                     Delete Permanently
                                 </button>
                                 @endif
-                                @if($audition->status == 1 || $audition->status == 2)
+                                @if(($audition->status == 1 || $audition->status == 2 ) && !request()->query('isArchived'))
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
-                                    data-id="{{ $audition->id }}">Delete</button>
-                                @else
-                                <!-- <button class="btn btn-secondary " type="button">Delete</button> -->
+                                    data-id="{{ $audition->id }}">Archive</button>
                                 @endif
                             </td>
                             @endif
@@ -186,7 +186,7 @@
                                 </button>
                                 <button class="btn btn-secondary deleteBtn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteHandler({{ $audition->id }});"
-                                    data-id="{{ $audition->id }}">Delete</button>
+                                    data-id="{{ $audition->id }}">Archive</button>
                                 @endif
                             </td>
                         </tr>
@@ -205,18 +205,18 @@
         <div class="modal-content">
             <form id="deleteForm" action="" method="POST">
                 @csrf
-                @method('GET')
+                @method('POST')
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Deletion</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Archive</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to proceed with this deletion?</p>
+                    <p>Are you sure you want to proceed with this archive?</p>
                     <input type="hidden" id="deleteUserId" name="id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Archive</button>
                 </div>
             </form>
         </div>
@@ -453,7 +453,7 @@
     }
 
     function deleteHandler(id) {
-        $('#deleteForm').attr('action', '/audition-registration-delete/' + id);
+        $('#deleteForm').attr('action', '/audition-archive/' + id);
     }
 
     $('.unarchiveBtn').click(function() {

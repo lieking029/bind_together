@@ -16,7 +16,7 @@ class AuditionListController extends Controller
     {
         $user = Auth::user()->load('organization');
 
-        $status = $request->query('status', '0');
+        $status = $request->query('status') ?? 0;
 
         $type   = null;
 
@@ -43,17 +43,18 @@ class AuditionListController extends Controller
             $query->where('user_id', $user->id);
         });
 
-        $auditions = $auditions->whereHas('activity', function ($query) use ($type) {
+        $auditions = $auditions->whereHas('activity', function ($query) use ($type, $user) {
             if ($type == '3') {
                 $query->where('type', ActivityType::Competition);
             } else {
-                $query->where('type', ActivityType::Audition);
+                if(!$user->hasRole('admin_org')){
+                    $query->where('type', ActivityType::Audition);
+                }
             }
         });
 
         $auditions = $auditions->get();
 
-        // Return view with auditions and the status filter
         return view('adviser.performer-record.index', ['auditions' => $auditions, 'status' => $status]);
     }
 
@@ -85,6 +86,22 @@ class AuditionListController extends Controller
         $act->update(['is_deleted' => 0]);
 
         alert()->success('Unarchived');
+
+        return redirect()->back();
+    }
+
+    public function archive($id)
+    {
+        $act = ActivityRegistration::find($id);
+
+        if (!$act) {
+            alert()->error('Record not found.');
+            return redirect()->back();
+        }
+
+        $act->update(['is_deleted' => 1]);
+
+        alert()->success('Archived');
 
         return redirect()->back();
     }

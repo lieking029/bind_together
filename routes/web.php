@@ -158,6 +158,7 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::get('activity-registration-delete/{id}', [ActivityRegistrationController::class, 'deletion']);
     Route::post('participants-unarchive/{id}', [ActivityRegistrationController::class, 'unarchive']);
     Route::post('audition-unarchive/{id}', [AuditionListController::class, 'unarchive']);
+    Route::post('audition-archive/{id}', [AuditionListController::class, 'archive']);
     Route::post('participants-delete/{id}', [ActivityRegistrationController::class, 'permanentDelete']);
     Route::post('audition-delete/{id}', [AuditionListController::class, 'permanentDelete']);
     Route::resource('deleted-post', DeletedPostController::class);
