@@ -47,10 +47,9 @@
                     $hasJoinedPractice = $practice && $practice->status == 1; // Check if user has joined (status = 1)
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
-                    {{$studentRegistrations}}
-                    @if(($activity->type == 1 && $activity->target_player == 1 && $studentRegistrations == null) || ($activity->type == 2 && $activity->target_player == 1  && $studentRegistrations == null) || ($activity->type == 3 && $activity->target_player == 1 && $studentRegistrations == null))
+                    <!-- @if(($activity->type == 1 && $activity->target_player == 1 && $studentRegistrations == null) || ($activity->type == 2 && $activity->target_player == 1  && $studentRegistrations == null) || ($activity->type == 3 && $activity->target_player == 1 && $studentRegistrations == null))
 
-                    @else
+                    @else -->
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
                         <div class="card h-100 shadow-sm">
                             <div class="card-body">
@@ -97,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                    <!-- @endif -->
                     @endforeach
                 </div>
             </div>
