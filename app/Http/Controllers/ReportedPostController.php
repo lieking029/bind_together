@@ -109,19 +109,21 @@ class ReportedPostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ReportedPost $reportedPost)
+    public function update(Request $request, $id)
     {
+        $reportedPost = ReportedPost::with('newsfeed')->find($id);
+
         if ($request->status == 2) {
             // deleted
             DeletedPost::create([
-                'newsfeed_id' => $reportedPost->newsfeed_id,
+                'newsfeed_id' => $request->newsfeed_id,
                 'user_id' => $reportedPost->user_id,
                 'reason' => $reportedPost->reason,
                 'other_reason' => $reportedPost->other_reason,
                 'status' => 0,
             ]);
 
-            $reportedPost->newsfeed()->update(['status' => 2]);
+            (Newsfeed::find($id))->update(['status' => 2]);
 
             if (isset($request->newsfeed_id)) {
                 DB::table('reported_posts')

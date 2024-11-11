@@ -87,7 +87,7 @@
                             @endphp
                             <td>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actionModal"
-                                    onclick="setStatus(2, {{ $entry['newsfeed']->id }},  {{$entry['newsfeed']->id}})" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
+                                    onclick="setStatus(2, {{ $entry['newsfeed']->id }},  {{$entry['newsfeed']->id}}, false)" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#declineModal"
                                     onclick="setStatus(0, {{ $entry['newsfeed']->id }}, {{$entry['newsfeed']->id}}, true)" {{ $isDisabled ? 'disabled' : '' }}>Decline</button>
                             </td>
@@ -109,7 +109,6 @@
             <form id="statusForm" method="POST" action="">
                 @csrf
                 @method('PUT')
-
                 <div class="modal-header">
                     <h5 class="modal-title" id="actionModalLabel">Approval</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
