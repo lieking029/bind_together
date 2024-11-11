@@ -24,6 +24,19 @@ class ActivityRegistrationController extends Controller
     {
         $studentUserId = Auth::user()->id;
 
+        $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+            ->where('activity_registrations.user_id', $studentUserId)
+            ->where('activity_registrations.is_deleted', 0)
+            ->where('activity_registrations.status', 1)
+            ->where(function ($query) {
+                $query->where('activities.type', 1)
+                    ->where('activities.target_player', 0)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0);
+            })
+            ->latest('activity_registrations.created_at')
+            ->first(['activity_registrations.*', 'activities.*']);
+
         $activities = Activity::where('status', 1)
             ->where('is_deleted', 0)
             ->where('end_date', '>=', now())
@@ -45,28 +58,9 @@ class ActivityRegistrationController extends Controller
                 $activity->user->sport = $sports->get($activity->user->sport_id);
                 $activity->user->organization = $organizations->get($activity->user->organization_id);
             }
-
-            $studentRegistrations = null;
-
-            // if (((int)$activity->type == 3 && (int)$activity->target_player == 1) || ((int)$activity->type == 2 && (int)$activity->target_player == 1) || ((int)$activity->type == 1 && (int)$activity->target_player == 1)) {
-            $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
-                ->where('activity_registrations.user_id', $studentUserId)
-                ->where('activity_registrations.is_deleted', 0)
-                ->where('activity_registrations.status', 1)
-                ->where(function ($query) {
-                    $query->where('activities.type', 1)
-                        ->whereIn('activities.target_player', [0, 1])
-                        ->where('activities.status', 1)
-                        ->where('activities.is_deleted', 0);
-                })
-                ->latest('activity_registrations.created_at')
-                ->first(['activity_registrations.*', 'activities.*']);
-            // }
-
-            $activity->student_registrations = $studentRegistrations ?? null;
         });
 
-        return view('student.activity.index', compact('activities'));
+        return view('student.activity.index', compact('activities', 'studentRegistrations'));
     }
 
     /**
