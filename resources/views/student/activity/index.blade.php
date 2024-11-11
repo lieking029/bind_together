@@ -47,7 +47,12 @@
                     $hasJoinedPractice = $practice && $practice->status == 1; // Check if user has joined (status = 1)
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
+
+                    {{$activity->joined_tryouts}}
                     
+                    @if(($activity->type == 3 && $activity->target_player == 1) && $activity->joined_tryouts == null)
+
+                    @else
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
                         <div class="card h-100 shadow-sm">
                             <div class="card-body">
@@ -94,6 +99,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     @endforeach
                 </div>
             </div>
