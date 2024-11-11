@@ -151,10 +151,14 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::resource('organization', OrganizationController::class);
     Route::resource('newsfeed', NewsfeedController::class);
     Route::resource('comments', CommentController::class)->except('update', 'destroy');
-    Route::resource('reported-comment', ReportedCommentController::class);
+
+    Route::resource('reported-comment', ReportedCommentController::class)->except('update', 'destroy');
+
+    Route::put('/reported-comment-update/{id}', [ReportedCommentController::class, 'update']);
+    Route::put('/reported-comment-update/{id}', [ReportedCommentController::class, 'update']);
+
 
     Route::resource('reported-post', ReportedPostController::class)->except('update', 'destroy');
-
     Route::put('/reported-post-update/{id}', [ReportedPostController::class, 'update']);
 
     Route::resource('activity', ActivityController::class);

@@ -104,8 +104,6 @@ class ReportedPostController extends Controller
 
         if ($request->status == 2) {
 
-            $newsfeed = Newsfeed::find($id);
-
             $newsfeed->update(['status' => 2]);
 
             DB::table('reported_posts')

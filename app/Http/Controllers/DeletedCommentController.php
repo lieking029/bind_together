@@ -16,26 +16,25 @@ class DeletedCommentController extends Controller
      */
     public function index()
     {
-        $reportedComments = Comments::withWhereHas('reportedComments', function ($query) {
-            $query->where('status', 2); // Only get comments with status 0
-        })
+        $reportedComments = Comments::where('status', 2)
+            ->withWhereHas('reportedComments', function ($query) {
+                $query->whereIn('status', [2]);
+            })
             ->with([
-                'user', // Eager load the user for the comment
+                'user',
                 'reportedComments' => function ($query) {
-                    $query->where('status', 2); // Only load reportedComments with status 0
+                    $query->with(['user']);
+                    $query->whereIn('status', [2]);
                 }
             ])
             ->withCount([
                 'reportedComments as report_count' => function ($query) {
-                    $query->where('status', 0); // Count reportedComments with status 0
+                    $query->whereIn('status', [2]);
                 }
             ])
-            ->where('status', 2)
             ->get();
 
-        return view('super-admin.deleted-comment.index', [
-            'deletedComments' => $reportedComments,
-        ]);
+        return view('super-admin.deleted-comment.index', compact('reportedComments'));
     }
 
     /**

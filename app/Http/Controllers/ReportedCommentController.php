@@ -8,6 +8,7 @@ use App\Models\DeletedComment;
 use App\Models\ReportedComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class ReportedCommentController extends Controller
@@ -24,6 +25,7 @@ class ReportedCommentController extends Controller
             ->with([
                 'user',
                 'reportedComments' => function ($query) {
+                    $query->with(['user']);
                     $query->whereIn('status', [1, 2]);
                 }
             ])
@@ -95,44 +97,86 @@ class ReportedCommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $reportedComment)
+    public function update(Request $request, int $id)
     {
-        // $comment = $reportedComment->comments_id;
 
-        $reported_data = Comments::where('id', $reportedComment)->first();
-        // dd($reported_data);
-        $user_email =  $reported_data->user->email;
-        $fullname = $reported_data->user->firstname . ' '. $reported_data->user->lastname;
-       
+        $reportedComment = ReportedComment::with('comments.user', 'user')->where('comments_id', $id)->get();
+        $comments = Comments::find($id);
 
-        //put to deleted comments
-        DeletedComment::create([
-            'comments_id' => $reported_data->id,
-            'user_id' => $reported_data->user_id,
-            'reason' => $reported_data->description,
-            'status' => 2,
-        ]);
+        if ($request->status == 2) {
 
-        
+            $comments->update(['status' => 2]);
 
+            DB::table('reported_comments')
+                ->where('comments_id', $id)
+                ->update([
+                    "status" => 2
+                ]);
 
-        $comment = Comments::with('reportedComments')->find($reportedComment);
-        // if ($request->status == 2) {
-        //     $comment->update(['status' => 0]);
-        // }
-    
+            Mail::send([], [], function ($message) use ($comments) {
+                $user = Auth::user();
+                $htmlContent = "
+                        <h1>APPROVE Comment</h1>";
 
-        
-        foreach ($comment->reportedComments as $rComment) {
-            $rComment->update([
-                'status' => $request->status, 
-                'declined_reason' => $request->declined_reason ?? ''
-            ]);
+                $message->to("kikomataks@gmail.com")
+                    ->subject('Approve Comment')
+                    ->html($htmlContent);
+            });
         }
 
-        Mail::to($user_email)->send(new ApproveReport($fullname, $reported_data->description));
-        alert()->success('Reported comment status has been updated');
-        return redirect()->back();
+
+        if ($request->status == 1) {
+            DB::table('reported_comments')
+                ->where('comments_id', $id)
+                ->update([
+                    "status" => 1
+                ]);
+
+            DB::table('comments')
+                ->where('id', $id)
+                ->update([
+                    "status" => 1
+                ]);
+        }
+
+        if ($request->status == 0) {
+            DB::table('reported_comments')
+                ->where('comments_id', $id)
+                ->update([
+                    "status" => 0
+                ]);
+
+            foreach ($reportedComment as $item) {
+                Mail::send([], [], function ($message) use ($item, $request) {
+                    $user = Auth::user();
+                    $htmlContent = "
+                            <h1>DECLINE COMMENT</h1>";
+
+                    $message->to("kikomataks@gmail.com")
+                        ->subject('Decline Post')
+                        ->html($htmlContent);
+                });
+            }
+        }
+
+        $alert_message = "";
+        $is_restore = false;
+
+        if ($request->status == 0) {
+            $alert_message = "Declined";
+        }
+
+        if ($request->status == 1) {
+            $alert_message = "Restored";
+            $is_restore  = true;
+        }
+
+        if ($request->status == 2) {
+            $alert_message = "Approved";
+        }
+
+        alert()->success($alert_message);
+        return redirect()->route($is_restore ? 'deleted-comment.index' : 'reported-comment.index');
     }
 
 
