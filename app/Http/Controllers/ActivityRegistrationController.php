@@ -47,6 +47,8 @@ class ActivityRegistrationController extends Controller
                 $activity->user->organization = $organizations->get($activity->user->organization_id) ?? null;
             }
 
+            $studentRegistrations = null;
+
             $studentRegistrations = DB::table('activity_registrations')
                 ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
                 ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted')
@@ -54,8 +56,6 @@ class ActivityRegistrationController extends Controller
                 ->orderByDesc('activity_registrations.id')
                 ->limit(1)
                 ->first();
-
-
 
             $activity->student_registrations = $studentRegistrations ?? null;
         });
