@@ -87,9 +87,9 @@
                             @endphp
                             <td>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actionModal"
-                                    onclick="setStatus(2, {{ $entry['newsfeed']->id }},  {{$entry['newsfeed']->id}}, false)" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
+                                    onclick="setStatus(2, {{ $entry['reportedPost']->id }},  {{$entry['newsfeed']->id}}, false)" {{ $isDisabled ? 'disabled' : '' }}>Approve</button>
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#declineModal"
-                                    onclick="setStatus(0, {{ $entry['newsfeed']->id }}, {{$entry['newsfeed']->id}}, true)" {{ $isDisabled ? 'disabled' : '' }}>Decline</button>
+                                    onclick="setStatus(0, {{ $entry['reportedPost']->id }}, {{$entry['newsfeed']->id}}, true)" {{ $isDisabled ? 'disabled' : '' }}>Decline</button>
                             </td>
                         </tr>
                         @endforeach
@@ -169,14 +169,14 @@
         $('#datatable').DataTable();
     })
 
-    function setStatus(status, commentId, newsfeed_id, is_decline = false) {
+    function setStatus(status, report_id, newsfeed_id, is_decline = false) {
         if (!is_decline) {
             document.getElementById('statusInput').value = status;
             document.getElementById('newsfeedId').value = newsfeed_id;
-            document.getElementById('statusForm').action = `/reported-post-update/${commentId}`;
+            document.getElementById('statusForm').action = `/reported-post-update/${report_id}`;
         } else {
             document.getElementById('newsfeedDecId').value = newsfeed_id;
-            document.getElementById('declineForm').action = `/reported-post-update/${commentId}`;
+            document.getElementById('declineForm').action = `/reported-post-update/${report_id}`;
         }
 
     }

@@ -115,6 +115,7 @@ class ReportedPostController extends Controller
 
         if ($request->status == 2) {
             // deleted
+
             DeletedPost::create([
                 'newsfeed_id' => $request->newsfeed_id,
                 'user_id' => $reportedPost->user_id,
@@ -123,7 +124,9 @@ class ReportedPostController extends Controller
                 'status' => 0,
             ]);
 
-            (Newsfeed::find($id))->update(['status' => 2]);
+            $newsfeed = Newsfeed::find($request->newsfeed_id);
+
+            $newsfeed->update(['status' => 2]);
 
             if (isset($request->newsfeed_id)) {
                 DB::table('reported_posts')
