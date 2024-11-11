@@ -111,7 +111,7 @@ class ReportedPostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $reportedPost = ReportedPost::with('newsfeed')->find($id);
+        $reportedPost = ReportedPost::find($id);
 
         if ($request->status == 2) {
             // deleted
