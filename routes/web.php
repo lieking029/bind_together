@@ -155,7 +155,7 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
 
     Route::resource('reported-post', ReportedPostController::class)->except('update', 'destroy');
 
-    Route::put('reported-post-update', [ReportedPostController::class, 'update']);
+    Route::put('/reported-post-update/{id}', [ReportedPostController::class, 'update']);
 
     Route::resource('activity', ActivityController::class);
     Route::resource('activity-registration', ActivityRegistrationController::class);
