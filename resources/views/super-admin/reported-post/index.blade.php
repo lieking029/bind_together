@@ -106,7 +106,7 @@
 <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="statusForm" method="PUT" action="">
+            <form id="statusForm" method="POST" action="">
                 @csrf
                 @method('PUT')
 
@@ -140,7 +140,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form inside modal -->
-                <form action="" id="declineForm" method="PUT" style="display: inline;">
+                <form action="" id="declineForm" method="POST" style="display: inline;">
                     @csrf
                     @method('PUT')
                     <div class="row mb-2">
@@ -174,10 +174,10 @@
         if (!is_decline) {
             document.getElementById('statusInput').value = status;
             document.getElementById('newsfeedId').value = newsfeed_id;
-            document.getElementById('statusForm').action = `/reported-post/${commentId}`;
+            document.getElementById('statusForm').action = `/reported-post-update/${commentId}`;
         } else {
             document.getElementById('newsfeedDecId').value = newsfeed_id;
-            document.getElementById('declineForm').action = `/reported-post/${commentId}`;
+            document.getElementById('declineForm').action = `/reported-post-update/${commentId}`;
         }
 
     }

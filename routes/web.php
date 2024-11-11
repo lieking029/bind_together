@@ -54,7 +54,7 @@ use App\Mail\ApproveTryout;
 
 
 Route::get('/test-email', function () {
-    
+
     $data = [
         'user' => (object) ['firstname' => 'John', 'lastname' => 'Doe'], // Sample user
         'activity' => (object) ['title' => 'Soccer'], // Sample activity
@@ -152,7 +152,11 @@ Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::resource('newsfeed', NewsfeedController::class);
     Route::resource('comments', CommentController::class)->except('update', 'destroy');
     Route::resource('reported-comment', ReportedCommentController::class);
-    Route::resource('reported-post', ReportedPostController::class);
+
+    Route::resource('reported-post', ReportedPostController::class)->except('update', 'destroy');
+
+    Route::put('reported-post-update', [ReportedPostController::class, 'update']);
+
     Route::resource('activity', ActivityController::class);
     Route::resource('activity-registration', ActivityRegistrationController::class);
     Route::get('activity-registration-delete/{id}', [ActivityRegistrationController::class, 'deletion']);
