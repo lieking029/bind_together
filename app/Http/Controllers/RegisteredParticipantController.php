@@ -22,13 +22,13 @@ class RegisteredParticipantController extends Controller
 
         $stats = [$status];
 
-        if(!$allTryout){
+        if (!$allTryout) {
             array_push($stats, 1);
-        }else{
+        } else {
             array_push($stats, 2);
         }
 
-        if($user->hasRole('coach') && $deleted != 0){
+        if ($user->hasRole('coach') && $deleted != 0) {
             array_push($stats, 2);
         }
 
@@ -40,22 +40,29 @@ class RegisteredParticipantController extends Controller
             ])
             ->whereIn('status', $stats)
             ->whereHas('activity', function ($query) use ($tryout, $allTryout, $user) {
+                $query->join('users', 'users.id', '=', 'activities.user_id');
+
                 if ($tryout) {
-                    $query->where('type', ActivityType::Tryout);
+                    $query->where('activities.type', ActivityType::Tryout);
                 } else {
                     if ($allTryout) {
-                        $query->where('type', ActivityType::Tryout);
+                        $query->where('activities.type', ActivityType::Tryout);
+                        if ($user->hasRole('coach')) {
+                            $query->where('users.sport_id', $user->sport->id); 
+                        }
                     } else {
                         if ($user->hasRole('coach')) {
-                            $query->where('type', ActivityType::Tryout);
+                            $query->where('activities.type', ActivityType::Tryout)
+                                ->where('users.sport_id', $user->sport->id); 
                         } else {
-                            $query->where('type', ActivityType::Competition);
+                            $query->where('activities.type', ActivityType::Competition);
                         }
                     }
                 }
             })
             ->where('is_deleted', $deleted)
             ->get();
+
 
         return view('coach.athlete-record.index', ['auditions' => $athletes, 'status' => $status]);
     }
