@@ -31,6 +31,7 @@
                 <!-- Activities Section -->
                 <div class="row" id="activities-container">
                     @foreach ($activities as $activity)
+                    @if($activity->id)
                     @php
                     $activityTypes = [
                     \App\Enums\ActivityType::Audition => 'Audition',
@@ -48,7 +49,7 @@
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
 
-                    @if(($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 &&  $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 &&  $activity->target_player == 1 && $activity->student_registrations != null && $activity->user->sport->id != $activity->student_registrations->sport_id))
+                    @if(($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations != null && $activity->user->sport->id != $activity->student_registrations->sport_id))
 
                     @else
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
@@ -97,6 +98,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     @endif
                     @endforeach
                 </div>
