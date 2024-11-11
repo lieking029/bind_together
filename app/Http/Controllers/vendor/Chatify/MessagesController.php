@@ -45,7 +45,7 @@ class MessagesController extends Controller
     {
         $messenger_color = Auth::user()->messenger_color;
         $user = User::find($id);
-    
+
         // Check if user exists, then format the full name
         $fullName = $user ? "{$user->firstname} {$user->lastname}" : 'User';
         $avatar = $user && $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar/image_place.jpg');
@@ -228,29 +228,29 @@ class MessagesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+
     public function getContacts(Request $request)
     {
-        // get all users that received/sent message from/to [Auth user]
-        $users = Message::join('users',  function ($join) {
+        $users = Message::join('users', function ($join) {
             $join->on('ch_messages.from_id', '=', 'users.id')
-                ->orOn('ch_messages.to_id', '=', 'users.id');
+                ->orWhere('ch_messages.to_id', '=', 'users.id');
         })
-            ->where(function ($q) {
-                $q->where('ch_messages.from_id', Auth::user()->id)
-                    ->orWhere('ch_messages.to_id', Auth::user()->id);
+            ->where(function ($query) {
+                $query->where('ch_messages.from_id', Auth::id())
+                    ->orWhere('ch_messages.to_id', Auth::id());
             })
-            ->where('users.id', '!=', Auth::user()->id)
-            ->select('users.*', DB::raw('MAX(ch_messages.created_at) max_created_at'))
+            ->where('users.id', '!=', Auth::id())
+            ->select('users.id', 'users.email', DB::raw('MAX(ch_messages.created_at) as max_created_at'))
             ->orderBy('max_created_at', 'desc')
-            ->groupBy('users.id')
-            ->paginate($request->per_page ?? $this->perPage);
+            ->groupBy('users.id', 'users.email') 
+            ->paginate($request->get('per_page', $this->perPage));
 
         $usersList = $users->items();
+        $contacts = '';
 
-        if (count($usersList) > 0) {
-            $contacts = '';
+        if (!empty($usersList)) {
             foreach ($usersList as $user) {
-                $contacts .= Chatify::getContactItem($user);
+                $contacts .= Chatify::getContactItem($user); 
             }
         } else {
             $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
@@ -258,8 +258,8 @@ class MessagesController extends Controller
 
         return Response::json([
             'contacts' => $contacts,
-            'total' => $users->total() ?? 0,
-            'last_page' => $users->lastPage() ?? 1,
+            'total' => $users->total(),
+            'last_page' => $users->lastPage(),
         ], 200);
     }
 

@@ -143,7 +143,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <!-- Navigation -->
         <nav  id="navmenu" class="navmenu" style="font-family: 'Poppins', sans-serif;">
             <ul >
-                <li><a href="#" style="margin-left: 70vh; text-decoration:none;">Home</a></li>
+                <li><a href="/" style="margin-left: 70vh; text-decoration:none;">Home</a></li>
+                <li><a href="/register" style="margin-right: 10px; text-decoration:none;">Sign Up</a></li>
                 
             </ul>
         </nav>
@@ -153,5 +154,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         color: white;
         border-radius: 25px;
         padding: 6px 20px;">Login</a>
+        
     </div>
 </header>

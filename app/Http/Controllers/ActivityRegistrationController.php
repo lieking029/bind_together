@@ -53,7 +53,7 @@ class ActivityRegistrationController extends Controller
                 ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
                 ->leftJoin('users', 'users.id', '=', 'activities.user_id')
                 ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
-                ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id') 
+                ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
                 ->where('activity_registrations.user_id', $studentUserId)
                 ->where('activities.status', 1)
                 ->where('activities.is_deleted', 0)
@@ -178,6 +178,8 @@ class ActivityRegistrationController extends Controller
 
                 if ($user->hasRole('admin_sport')) {
                     $act->update(['status' => 2]);
+                } else if ($user->hasRole('adviser')) {
+                    $act->update(['status' => 2, 'is_deleted' => 1]);
                 } else {
                     $act->update(['is_deleted' => 1]);
                 }

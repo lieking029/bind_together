@@ -184,7 +184,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <ul class="list-unstyled">
-                            <li><strong>Sport Name:</strong> <span id="activity-sport-name"></span></li>
+                            {{-- <li><strong>Sport Name:</strong> <span id="activity-sport-name"></span></li> --}}
                             <li><strong>Title:</strong> <span id="activity-title"></span></li>
                             <li><strong>Target Players:</strong> <span id="activity-target-players"></span></li>
                             <li><strong>Content:</strong> <span id="activity-content"></span></li>

@@ -819,6 +819,15 @@
                     <span class="sidebar-text">{{ __('Practice') }}</span>
                 </a>
             </li>
+
+            <li class="nav-item  {{ request()->query('isArchived') ? 'active' : '' }}">
+                <a href="{{ route('audition.list', ['status' => '0', 'isArchived' => 1]) }}" class="nav-link">
+                    <span class="sidebar-icon me-3">
+                        <i class="fas fa-user-alt fa-fw"></i>
+                    </span>
+                    <span class="sidebar-text" style="font-size: 12px">{{ __('Archived Participants') }}</span>
+                </a>
+            </li>
         </ul>
     </div>
 </li>

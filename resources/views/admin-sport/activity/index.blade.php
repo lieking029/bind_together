@@ -194,11 +194,24 @@
                         </div>
                         <!-- Target Players -->
                         <div class="col-md-6">
-                            <label for="target_players" class="form-label">Target players</label>
+                            <label for="target_players" class="form-label">
+                                @if (auth()->user()->hasRole('admin_org') || auth()->user()->hasRole('adviser'))
+                                Target Audience
+                                @else
+                                Target Players
+                                @endif
+                            </label>
                             <select class="form-select" name="target_player" required>
                                 <option value="" disabled selected>Select target</option>
                                 <option value="0">All Student</option>
-                                <option value="1">Official Player</option>
+                                <option value="1">
+                                    @if (auth()->user()->hasRole('admin_org') || auth()->user()->hasRole('adviser'))
+                                    Official Performers
+                                    @else
+                                    Official Player
+                                    @endif
+                                   
+                                </option>
                             </select>
                         </div>
                     </div>

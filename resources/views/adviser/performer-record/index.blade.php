@@ -120,14 +120,27 @@
                             <td>{{ $audition->person_to_contact ? $audition->person_to_contact : 'N/A' }}</td>
                             <td>{{ $audition->emergency_contact }}</td>
                             <td>{{ $audition->relationship }}</td>
-                            <td><img src="{{ asset('storage/' . $audition->certificate_of_registration) }}"
-                                    alt=""></td>
-                            <td><img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt=""></td>
-                            @if (($status == 0 && request()->query('type') != 3) || request()->query('status') == 1)
-                            <td><img src="{{ asset('storage/' . $audition->other_file) }}" alt="">
+                            <td>
+                                <a href="{{ asset('storage/' . $audition->certificate_of_registration) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $audition->certificate_of_registration) }}" alt="View Image" style="width: 100px; height: auto;">
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ asset('storage/' . $audition->photo_copy_id) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt="View Photo Copy ID" style="width: 100px; height: auto;">
+                                </a>
+                            </td>
+                            @if (($status == 0 && request()->query('type') == 3) || request()->query('status') == 1)
+                            <td>
+                                <a href="{{ asset('storage/' . $audition->parent_consent) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="View Parent Consent" style="width: 100px; height: auto;">
+                                </a>
                             </td>
                             @else
-                            <td><img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="">
+                            <td>
+                                <a href="{{ asset('storage/' . $audition->other_file) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $audition->other_file) }}" alt="View Other File" style="width: 100px; height: auto;">
+                                </a>
                             </td>
                             @endif
                             {{-- <td>{{ $audition->type ?? '' }}</td> --}}
@@ -156,7 +169,7 @@
                                     data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
                                 @endif
 
-                                @if($audition->status != 0 && auth()->user()->roles[0]["id"] != 2)
+                                @if($audition->status != 0 && $audition->status != 2  && auth()->user()->roles[0]["id"] != 2 && !request()->query('isArchived'))
                                 <button class="btn btn-primary " type="button">Approve</button>
                                 <button class="btn btn-secondary " type="button">Decline</button>
                                 @endif
@@ -464,7 +477,6 @@
         fetch('fetch-activity/' + id)
             .then(response => response.json())
             .then(audition => {
-                console.log(audition);
                 $('#user-fullname').val(audition.user.firstname + ' ' + audition.user.lastname);
                 $('#user-year-level').val(audition.user.year_level + ' Year');
                 $('#user-campus').val(audition.user.campus.name);
@@ -480,7 +492,7 @@
                 $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
                 // Conditional rendering based on status
-                if (audition.status == 1) {
+                if (audition.status == 1 && audition.activity.type != 3) {
                     $('#other-file-row').show();
                     $('#parent-consent-row').hide();
                     $('#other-file').attr('src', '/storage/' + audition.other_file);

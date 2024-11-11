@@ -22,8 +22,15 @@ class AuditionListController extends Controller
 
         $isDeleted = 0;
 
+        $adviser_arch = false;
+
         if ($request->has('isArchived')) {
-            $isDeleted = $request->query('isArchived');
+            if ($user->hasRole('adviser')) {
+                $adviser_arch = true;
+                $isDeleted = 1;
+            } else {
+                $isDeleted = $request->query('isArchived');
+            }
         }
 
         if ($request->has('type')) {
@@ -36,7 +43,7 @@ class AuditionListController extends Controller
                 'activity.user.organization',
                 'user.roles'
             ])
-            ->whereIn('status',  $type == null ? [$status] : [$status, 1, 2])
+            ->whereIn('status',  $type == null ? ($adviser_arch ? [2] :[$status, 2]) : [$status, 1, 2])
             ->where('is_deleted', $isDeleted);
 
         $auditions->whereHas('activity', function ($query) use ($user) {

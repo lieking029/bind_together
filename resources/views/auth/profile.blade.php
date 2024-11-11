@@ -365,8 +365,8 @@
                                                         <div class="mb-3">
                                                             <label for="profile" class="form-label">Update
                                                                 profile</label>
-                                                            <input class="form-control" type="file" id="profile"
-                                                                name="avatar">
+                                                                <input class="form-control" type="file" id="profile" name="avatar" accept=".png,.jpg,.jpeg">
+
                                                             <small class="text-danger">Max. 5MB</small>
                                                         </div>
                                                     </div>
