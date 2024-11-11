@@ -480,7 +480,7 @@
                 $('#photo-copy-id').attr('src', '/storage/' + audition.photo_copy_id);
 
                 // Conditional rendering based on status
-                if (audition.status == 0) {
+                if (audition.status == 1) {
                     $('#other-file-row').show();
                     $('#parent-consent-row').hide();
                     $('#other-file').attr('src', '/storage/' + audition.other_file);

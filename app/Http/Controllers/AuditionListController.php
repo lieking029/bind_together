@@ -40,16 +40,16 @@ class AuditionListController extends Controller
             ->where('is_deleted', $isDeleted);
 
         $auditions->whereHas('activity', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
+            if ($user->hasRole('adviser')) {
+                $query->where('user_id', $user->id);
+            }
         });
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type, $user) {
             if ($type == '3') {
                 $query->where('type', ActivityType::Competition);
             } else {
-                if(!$user->hasRole('admin_org')){
-                    $query->where('type', ActivityType::Audition);
-                }
+                $query->where('type', ActivityType::Audition);
             }
         });
 
