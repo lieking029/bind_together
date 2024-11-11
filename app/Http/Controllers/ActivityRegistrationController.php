@@ -20,22 +20,22 @@ class ActivityRegistrationController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    // $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+    //     ->where('activity_registrations.user_id', $studentUserId)
+    //     ->where('activity_registrations.is_deleted', 0)
+    //     ->where('activity_registrations.status', 1)
+    //     ->where(function ($query) {
+    //         $query->where('activities.type', 1)
+    //             ->where('activities.target_player', 0)
+    //             ->where('activities.status', 1)
+    //             ->where('activities.is_deleted', 0);
+    //     })
+    //     ->latest('activity_registrations.created_at')
+    //     ->first(['activity_registrations.*', 'activities.*']);
     public function index()
     {
         $studentUserId = Auth::user()->id;
-
-        $studentRegistrations = ActivityRegistration::leftJoin('activities', 'activity_registrations.activity_id', '=', 'activities.id')
-            ->where('activity_registrations.user_id', $studentUserId)
-            ->where('activity_registrations.is_deleted', 0)
-            ->where('activity_registrations.status', 1)
-            ->where(function ($query) {
-                $query->where('activities.type', 1)
-                    ->where('activities.target_player', 0)
-                    ->where('activities.status', 1)
-                    ->where('activities.is_deleted', 0);
-            })
-            ->latest('activity_registrations.created_at')
-            ->first(['activity_registrations.*', 'activities.*']);
 
         $activities = Activity::where('status', 1)
             ->where('is_deleted', 0)
@@ -51,17 +51,18 @@ class ActivityRegistrationController extends Controller
         $organizationIds = $users->pluck('organization_id')->unique();
         $organizations = Organization::whereIn('id', $organizationIds)->get()->keyBy('id');
 
-        $activities->each(function ($activity) use ($users, $sports, $organizations, $studentUserId) {
-            $activity->user = $users->get($activity->user_id);
+        $activities->each(function ($activity) use ($users, $sports, $organizations) {
+            $activity->user = $users->get($activity->user_id) ?? null;
 
             if ($activity->user) {
-                $activity->user->sport = $sports->get($activity->user->sport_id);
-                $activity->user->organization = $organizations->get($activity->user->organization_id);
+                $activity->user->sport = $sports->get($activity->user->sport_id) ?? null;
+                $activity->user->organization = $organizations->get($activity->user->organization_id) ?? null;
             }
         });
 
-        return view('student.activity.index', compact('activities', 'studentRegistrations'));
+        return view('student.activity.index', compact('activities'));
     }
+
 
     /**
      * Store a newly created resource in storage.
