@@ -79,7 +79,7 @@
 
                             <td>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#restoreModal"
-                                    onclick="setStatus(1, {{ $reported_comment->id }})">Restore</button>
+                                    onclick="setStatus(1, {{ $reportedComment->id }})">Restore</button>
                             </td>
                         </tr>
                         @endforeach
