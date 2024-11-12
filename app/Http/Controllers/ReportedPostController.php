@@ -166,8 +166,8 @@ class ReportedPostController extends Controller
                             <p>Best regards,<br>" . $user->firstname . " " . $user->lastname . "<br>Admin</p>
                         ";
 
-                    $message->to($user->email)
-                        ->subject('Response to Your Reported Posts')
+                    $message->to($item->user->email)
+                        ->subject('Response to Your Reported Post')
                         ->html($htmlContent);
                 });
             }

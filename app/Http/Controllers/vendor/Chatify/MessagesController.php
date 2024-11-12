@@ -229,41 +229,46 @@ class MessagesController extends Controller
      * @return JsonResponse
      */
 
-    public function getContacts(Request $request)
-    {
-        $latestMessages = Message::select('from_id', 'to_id', DB::raw('MAX(created_at) as max_created_at'))
-            ->where(function ($q) {
-                $q->where('from_id', Auth::user()->id)
-                    ->orWhere('to_id', Auth::user()->id);
-            })
-            ->groupBy('from_id', 'to_id');
-
-        $users = User::joinSub($latestMessages, 'latest_messages', function ($join) {
-            $join->on('users.id', '=', 'latest_messages.from_id')
-                ->orOn('users.id', '=', 'latest_messages.to_id');
-        })
-            ->where('users.id', '!=', Auth::user()->id)
-            ->select('users.*', 'latest_messages.max_created_at')
-            ->orderBy('max_created_at', 'desc')
-            ->paginate($request->per_page ?? $this->perPage);
-
-        $usersList = $users->items();
-
-        if (count($usersList) > 0) {
-            $contacts = '';
-            foreach ($usersList as $user) {
-                $contacts .= Chatify::getContactItem($user);
-            }
-        } else {
-            $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
-        }
-
-        return Response::json([
-            'contacts' => $contacts,
-            'total' => $users->total() ?? 0,
-            'last_page' => $users->lastPage() ?? 1,
-        ], 200);
-    }
+     public function getContacts(Request $request)
+     {
+         $userId = Auth::user()->id;
+     
+         $latestMessages = Message::select(
+                 DB::raw('LEAST(from_id, to_id) as user1'), 
+                 DB::raw('GREATEST(from_id, to_id) as user2'),
+                 DB::raw('MAX(created_at) as max_created_at')
+             )
+             ->where(function ($q) use ($userId) {
+                 $q->where('from_id', $userId)
+                     ->orWhere('to_id', $userId);
+             })
+             ->groupBy('user1', 'user2');
+     
+         $users = User::joinSub($latestMessages, 'latest_messages', function ($join) use ($userId) {
+                 $join->on('users.id', '=', DB::raw("IF(latest_messages.user1 = $userId, latest_messages.user2, latest_messages.user1)"));
+             })
+             ->select('users.*', 'latest_messages.max_created_at')
+             ->orderBy('max_created_at', 'desc')
+             ->paginate($request->per_page ?? $this->perPage);
+     
+         $usersList = $users->items();
+     
+         if (count($usersList) > 0) {
+             $contacts = '';
+             foreach ($usersList as $user) {
+                 $contacts .= Chatify::getContactItem($user);
+             }
+         } else {
+             $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
+         }
+     
+         return Response::json([
+             'contacts' => $contacts,
+             'total' => $users->total() ?? 0,
+             'last_page' => $users->lastPage() ?? 1,
+         ], 200);
+     }
+     
 
 
     /**

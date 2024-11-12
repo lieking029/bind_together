@@ -166,7 +166,7 @@ class ReportedCommentController extends Controller
                         <p>Best regards,<br>" . $user->firstname . " " . $user->lastname . "<br>Admin</p>";
 
                     $message->to($item->user->email)
-                        ->subject('Decline Post')
+                        ->subject('Response to Your Reported Comments')
                         ->html($htmlContent);
                 });
             }

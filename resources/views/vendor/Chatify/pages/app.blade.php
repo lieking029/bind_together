@@ -64,7 +64,7 @@
                 {{-- header buttons --}}
                 <nav class="m-header-right">
                     <a href="#" class="add-to-favorite"><i class="fas fa-star"></i></a>
-                    <a href="{{ route('home') }}"><i class="fas fa-home"></i></a>
+                    <a href="{{ route(auth()->user()->hasRole('student') ? 'stud-newsfeed' : 'home') }}"><i class="fas fa-home"></i></a>
                     <a href="#" class="show-infoSide"><i class="fas fa-info-circle"></i></a>
                 </nav>
             </nav>
@@ -108,6 +108,7 @@
         {!! view('Chatify::layouts.info')->with('full_name', $full_name)->with('avatar', $avatar)->render() !!}
     </div>
 </div>
+
 
 @include('Chatify::layouts.modals')
 @include('Chatify::layouts.footerLinks')

@@ -116,6 +116,7 @@ Auth::routes();
 
 Route::middleware(['auth', 'email.verified'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/stud-newsfeed', [App\Http\Controllers\NewsfeedController::class, 'index'])->name('stud-newsfeed');
     Route::view('about', 'about')->name('about');
 
     Route::post('users/activate/{id}', ActivateUserController::class);
