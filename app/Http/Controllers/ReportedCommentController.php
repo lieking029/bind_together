@@ -116,9 +116,15 @@ class ReportedCommentController extends Controller
             Mail::send([], [], function ($message) use ($comments) {
                 $user = Auth::user();
                 $htmlContent = "
-                        <h1>APPROVE Comment</h1>";
+                        <h1>APPROVE REPORT</h1>
+                        <p>Dear ".$comments->user->firstname . " ". $comments->user->lastname .",</p>
+                        <p>We hope this message finds you well. We want to inform you that your comment titled <b>".$comments->description."</b> was recently reported by another user for violating our community guidelines.</p>
+                        <p>After careful review, we have determined that the comment does not adhere to our standards and policies. As a result, the comment will be removed from our platform.</p>
+                        <p>We encourage you to review our community guidelines to ensure that future comments comply with our rules. If you believe this decision was made in error, please feel free to contact us for further clarification.</p>
+                        <p>Thank you for your understanding and cooperation in maintaining a respectful community space.</p>
+                        <p>Best regards,<br>{$user->firstname}<br>Admin</p>";
 
-                $message->to("kikomataks@gmail.com")
+                $message->to($user->email)
                     ->subject('Approve Comment')
                     ->html($htmlContent);
             });
@@ -149,10 +155,17 @@ class ReportedCommentController extends Controller
             foreach ($reportedComment as $item) {
                 Mail::send([], [], function ($message) use ($item, $request) {
                     $user = Auth::user();
-                    $htmlContent = "
-                            <h1>DECLINE COMMENT</h1>";
 
-                    $message->to("kikomataks@gmail.com")
+                    $htmlContent = "
+                        <h1>DECLINE REPORT</h1>
+                        <p>Dear " . $item->user->firstname . " " . $item->user->lastname . ",</p>
+                        <p>Thank you for bringing the reported comments to our attention. We have thoroughly reviewed your report and appreciate your concern.</p>
+                        <p><strong>Reason for Declining:</strong> <br>" . $request->reason . "</p>
+                        <p>Please understand that our decision is based on the established rules and standards we follow for content review. We encourage you to continue engaging with our platform and to reach out if you have any additional concerns.</p>
+                        <p>Thank you for your vigilance in helping maintain the quality of our community.</p>
+                        <p>Best regards,<br>" . $user->firstname . " " . $user->lastname . "<br>Admin</p>";
+
+                    $message->to($item->user->email)
                         ->subject('Decline Post')
                         ->html($htmlContent);
                 });
