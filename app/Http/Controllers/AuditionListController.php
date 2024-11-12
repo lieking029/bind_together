@@ -43,7 +43,7 @@ class AuditionListController extends Controller
                 'activity.user.organization',
                 'user.roles'
             ])
-            ->whereIn('status',  $type == null ? ($adviser_arch ? [2] :[$status, 2]) : [$status, 1, 2])
+            ->whereIn('status',  $type == null ? ($adviser_arch ? [1,2] :[$status, 2]) : [$status, 1, 2])
             ->where('is_deleted', $isDeleted);
 
         $auditions->whereHas('activity', function ($query) use ($user) {

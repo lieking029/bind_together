@@ -40,7 +40,7 @@
                             <th>Relationship</th>
                             <th>COR</th>
                             <th>Photocopy</th>
-                            @if (($status == 0 && request()->query('type') != 3)|| request()->query('status') == 1)
+                            @if ((($status == 0 && request()->query('type') != 3)|| request()->query('status') == 1) || (auth()->user()->hasRole('adviser')))
                             <th>Other File</th>
                             @else
                             <th>Parent Consent</th>
@@ -130,7 +130,7 @@
                                     <img src="{{ asset('storage/' . $audition->photo_copy_id) }}" alt="View Photo Copy ID" style="width: 100px; height: auto;">
                                 </a>
                             </td>
-                            @if (($status == 0 && request()->query('type') == 3) || request()->query('status') == 1)
+                            @if ((($status == 0 && request()->query('type') == 3) || request()->query('status') == 1) && !(auth()->user()->hasRole('adviser')))
                             <td>
                                 <a href="{{ asset('storage/' . $audition->parent_consent) }}" target="_blank">
                                     <img src="{{ asset('storage/' . $audition->parent_consent) }}" alt="View Parent Consent" style="width: 100px; height: auto;">

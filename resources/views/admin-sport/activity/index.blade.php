@@ -54,7 +54,7 @@
                             <td>{{ $activityTypes[$activity->type] ?? 'Unknown Type' }}</td>
                             <td>{{ $activity->venue }}</td>
                             <td>{{ $activity->address }}</td>
-                            <td>{{ $activity->target_player == 0 ? 'All Students' : 'Official Players' }}</td>
+                            <td>{{ $activity->target_player == 0 ? 'All Students' : (auth()->user()->hasRole('adviser') || auth()->user()->hasRole('admin_org') ? 'Official Performers' : 'Official Players') }}</td>
                             <td>
                                 {{ \Carbon\Carbon::parse($activity->start_date)->format('F d, Y h:i A') }} -
                                 {{ \Carbon\Carbon::parse($activity->end_date)->format('F d, Y h:i A') }}
