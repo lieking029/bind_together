@@ -125,7 +125,7 @@ class ReportedCommentController extends Controller
                         <p>Best regards,<br>{$user->firstname}<br>Admin</p>";
 
                 $message->to($comments->user->email)
-                    ->subject('Approve Comment')
+                    ->subject('Notice of Comment Removal Due to Community Guidelines Violation')
                     ->html($htmlContent);
             });
         }
