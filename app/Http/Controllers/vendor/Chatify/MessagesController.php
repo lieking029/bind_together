@@ -231,26 +231,28 @@ class MessagesController extends Controller
 
     public function getContacts(Request $request)
     {
-        $users = Message::join('users', function ($join) {
-            $join->on('ch_messages.from_id', '=', 'users.id')
-                ->orWhere('ch_messages.to_id', '=', 'users.id');
-        })
-            ->where(function ($query) {
-                $query->where('ch_messages.from_id', Auth::id())
-                    ->orWhere('ch_messages.to_id', Auth::id());
+        $latestMessages = Message::select('from_id', 'to_id', DB::raw('MAX(created_at) as max_created_at'))
+            ->where(function ($q) {
+                $q->where('from_id', Auth::user()->id)
+                    ->orWhere('to_id', Auth::user()->id);
             })
-            ->where('users.id', '!=', Auth::id())
-            ->select('users.id', 'users.email', DB::raw('MAX(ch_messages.created_at) as max_created_at'))
+            ->groupBy('from_id', 'to_id');
+
+        $users = User::joinSub($latestMessages, 'latest_messages', function ($join) {
+            $join->on('users.id', '=', 'latest_messages.from_id')
+                ->orOn('users.id', '=', 'latest_messages.to_id');
+        })
+            ->where('users.id', '!=', Auth::user()->id)
+            ->select('users.*', 'latest_messages.max_created_at')
             ->orderBy('max_created_at', 'desc')
-            ->groupBy('users.id', 'users.email') 
-            ->paginate($request->get('per_page', $this->perPage));
+            ->paginate($request->per_page ?? $this->perPage);
 
         $usersList = $users->items();
-        $contacts = '';
 
-        if (!empty($usersList)) {
+        if (count($usersList) > 0) {
+            $contacts = '';
             foreach ($usersList as $user) {
-                $contacts .= Chatify::getContactItem($user); 
+                $contacts .= Chatify::getContactItem($user);
             }
         } else {
             $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
@@ -258,10 +260,11 @@ class MessagesController extends Controller
 
         return Response::json([
             'contacts' => $contacts,
-            'total' => $users->total(),
-            'last_page' => $users->lastPage(),
+            'total' => $users->total() ?? 0,
+            'last_page' => $users->lastPage() ?? 1,
         ], 200);
     }
+
 
     /**
      * Update user's list item data

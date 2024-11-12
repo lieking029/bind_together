@@ -124,7 +124,7 @@ class ReportedCommentController extends Controller
                         <p>Thank you for your understanding and cooperation in maintaining a respectful community space.</p>
                         <p>Best regards,<br>{$user->firstname}<br>Admin</p>";
 
-                $message->to($user->email)
+                $message->to($comments->user->email)
                     ->subject('Approve Comment')
                     ->html($htmlContent);
             });
