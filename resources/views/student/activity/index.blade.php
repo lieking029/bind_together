@@ -248,17 +248,17 @@
                             name="emergency_contact" placeholder="Enter Emergency Contact Number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="medical_certificate" class="form-label">Certificate of Registration</label>
+                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only)</label>
                         <input type="file" class="form-control" id="medical_certificate"
-                            name="certificate_of_registration" required>
+                            name="certificate_of_registration" accept="image/*" required>
                     </div>
                     <div class="mb-3">
-                        <label for="student_id" class="form-label">Photo Copy of Student ID</label>
-                        <input type="file" class="form-control" id="student_id" name="photo_copy_id" required>
+                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)</label>
+                        <input type="file" class="form-control" accept="image/*" id="student_id" name="photo_copy_id" required>
                     </div>
                     <div class="mb-3">
-                        <label for="other_file" class="form-label">Other File</label>
-                        <input type="file" class="form-control" id="other_file" name="other_file" required>
+                        <label for="other_file" class="form-label">Other File (Image Only)</label>
+                        <input type="file" class="form-control" accept="image/*" id="other_file" name="other_file" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

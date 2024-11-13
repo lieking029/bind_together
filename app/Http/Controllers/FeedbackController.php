@@ -36,7 +36,7 @@ class FeedbackController extends Controller
     {
         Feedback::create($request->validated() + ['status' => 0, 'user_id' => Auth::id()]);
 
-        alert()->success('Feedback submitted successfully');
+        alert()->success('Submitted Successfully');
         return redirect()->route('feedback.create');
     }
 
