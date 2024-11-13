@@ -18,7 +18,7 @@
             <div class="table-responsive">
                 <table id="datatable" class="table table-bordered">
                     <thead>
-                        @if(auth()->user()->roles[0]["id"] == 2 && request()->query('status') == 1)
+                        @if(auth()->user()->hasRole('admin_org') && request()->query('status') == 1)
                         <th>STUDENT NUMBER</th>
                         <th>STUDENT NAME</th>
                         <th>YEAR LEVEL</th>
@@ -453,18 +453,10 @@
 
 @push('scripts')
 <script>
-    
-    $('#datatable').DataTable({
-        ajax: 'data-source-url',
-        columns: [{
-                data: 'name'
-            },
-            {
-                data: 'position'
-            }
-        ]
-    });
 
+    $(document).ready(function() {
+        $('#datatable').DataTable();
+    });
 
     function approveHandler(id) {
         $('#approveForm').attr('action', '/activity-registration/' + id);

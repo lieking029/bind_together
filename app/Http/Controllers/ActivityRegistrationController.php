@@ -47,7 +47,96 @@ class ActivityRegistrationController extends Controller
                 $activity->user->organization = $organizations->get($activity->user->organization_id) ?? null;
             }
 
-            $studentRegistrations = null;
+            $is_visible = true;
+
+            if ($activity->type == 0 && $activity->target_player == 1  && $activity->user->hasRole('adviser')) {
+                $studentRegistrations = DB::table('activity_registrations')
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
+                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
+                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->where('activities.type', 0)
+                    ->where('activities.target_player', 0)
+                    ->where('activities.user_id', $activity->user_id)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->orderByDesc('activity_registrations.id')
+                    ->limit(1)
+                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
+            }
+
+
+            if ($activity->type == 2 && ($activity->target_player == 0 || $activity->target_player == 1) && $activity->user->hasRole('adviser')) {
+                $studentRegistrations = DB::table('activity_registrations')
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
+                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
+                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->where('activities.type', 0)
+                    ->where('activities.target_player', 0)
+                    ->where('activities.user_id', $activity->user_id)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->orderByDesc('activity_registrations.id')
+                    ->limit(1)
+                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
+            }
+
+            if ($activity->type == 1 && $activity->target_player == 1  && $activity->user->hasRole('coach')) {
+                $studentRegistrations = DB::table('activity_registrations')
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
+                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
+                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->where('activities.type', 1)
+                    ->where('activities.target_player', 0)
+                    ->where('activities.user_id', $activity->user_id)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->orderByDesc('activity_registrations.id')
+                    ->limit(1)
+                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
+            }
+
+            if ($activity->type == 2 && ($activity->target_player == 0 || $activity->target_player == 1) && $activity->user->hasRole('coach')) {
+                $studentRegistrations = DB::table('activity_registrations')
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
+                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
+                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->where('activities.type', 1)
+                    ->where('activities.target_player', 0)
+                    ->where('activities.user_id', $activity->user_id)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->orderByDesc('activity_registrations.id')
+                    ->limit(1)
+                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
+            }
 
             if ($activity->type == 3 && $activity->target_player == 1 && $activity->user->hasRole('admin_org')) {
                 $studentRegistrations = DB::table('activity_registrations')
@@ -57,46 +146,42 @@ class ActivityRegistrationController extends Controller
                     ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
                     ->where('activity_registrations.user_id', $studentUserId)
                     ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
                     ->where('activities.type', 0)
-                    ->where('activities.is_deleted', 0)
+                    ->where('activities.target_player', 0)
                     ->where('activity_registrations.is_deleted', 0)
                     ->where('activity_registrations.status', 1)
                     ->orderByDesc('activity_registrations.id')
                     ->limit(1)
                     ->first();
-            } else if ($activity->type == 2 && $activity->target_player == 1 && $activity->user->hasRole('adviser')) {
-                $studentRegistrations = DB::table('activity_registrations')
-                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
-                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
-                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
-                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
-                    ->where('activity_registrations.user_id', $studentUserId)
-                    ->where('activities.status', 1)
-                    ->where('activities.type', 0)
-                    ->where('activities.user_id', $activity->user_id)
-                    ->where('activities.is_deleted', 0)
-                    ->where('activity_registrations.is_deleted', 0)
-                    ->where('activity_registrations.status', 1)
-                    ->orderByDesc('activity_registrations.id')
-                    ->limit(1)
-                    ->first();
-            } else {
-                $studentRegistrations = DB::table('activity_registrations')
-                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
-                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
-                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
-                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
-                    ->where('activity_registrations.user_id', $studentUserId)
-                    ->where('activities.status', 1)
-                    ->where('activities.is_deleted', 0)
-                    ->where('activity_registrations.is_deleted', 0)
-                    ->where('activity_registrations.status', 1)
-                    ->orderByDesc('activity_registrations.id')
-                    ->limit(1)
-                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
             }
 
-            $activity->student_registrations = $studentRegistrations ?? null;
+            if ($activity->type == 3 && $activity->target_player == 1 && $activity->user->hasRole('admin_sport')) {
+                $studentRegistrations = DB::table('activity_registrations')
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_registrations.activity_id')
+                    ->leftJoin('users', 'users.id', '=', 'activities.user_id')
+                    ->leftJoin('sports', 'sports.id', '=', 'users.sport_id')
+                    ->select('activities.type', 'activities.status', 'activities.target_player', 'activities.is_deleted', 'sports.id as sport_id')
+                    ->where('activity_registrations.user_id', $studentUserId)
+                    ->where('activities.status', 1)
+                    ->where('activities.is_deleted', 0)
+                    ->where('activities.type', 1)
+                    ->where('activities.target_player', 0)
+                    ->where('activity_registrations.is_deleted', 0)
+                    ->where('activity_registrations.status', 1)
+                    ->orderByDesc('activity_registrations.id')
+                    ->limit(1)
+                    ->first();
+                if (!$studentRegistrations) {
+                    $is_visible = false;
+                }
+            }
+
+
+            $activity->is_visible = $is_visible;
         });
 
         return view('student.activity.index', compact('activities'));

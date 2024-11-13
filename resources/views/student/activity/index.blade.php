@@ -49,16 +49,8 @@
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
 
-                    @if(($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null)
-                    || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations == null)
-
-                    || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations != null && !$activity->user->hasRole('adviser') &&
-
-                    (
-                    !isset($activity->user->sport) || $activity->user->sport->id != $activity->student_registrations->sport_id)
-                    )
-
-                    )
+                    @if(!$activity->is_visible)
+                  
 
                     @else
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
@@ -333,6 +325,7 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        $('#datatable').DataTable();
 
         $('#search').on('input', function() {
             var searchQuery = $(this).val()
