@@ -169,7 +169,7 @@
                                     data-bs-target="#unarchiveModal" data-id="{{ $audition->id }}">Unarchive</button>
                                 @endif
 
-                                @if($audition->status != 0 && $audition->status != 2  && auth()->user()->roles[0]["id"] != 2 && !request()->query('isArchived'))
+                                @if($audition->status != 0 && $audition->status != 2 && auth()->user()->roles[0]["id"] != 2 && !request()->query('isArchived'))
                                 <button class="btn btn-primary " type="button">Approve</button>
                                 <button class="btn btn-secondary " type="button">Decline</button>
                                 @endif
@@ -453,7 +453,19 @@
 
 @push('scripts')
 <script>
-     $('#datatable').DataTable();
+    
+    $('#datatable').DataTable({
+        ajax: 'data-source-url',
+        columns: [{
+                data: 'name'
+            },
+            {
+                data: 'position'
+            }
+        ]
+    });
+
+
     function approveHandler(id) {
         $('#approveForm').attr('action', '/activity-registration/' + id);
     }
