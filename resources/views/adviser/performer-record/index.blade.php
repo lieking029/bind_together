@@ -453,6 +453,7 @@
 
 @push('scripts')
 <script>
+     $('#datatable').DataTable();
     function approveHandler(id) {
         $('#approveForm').attr('action', '/activity-registration/' + id);
     }
