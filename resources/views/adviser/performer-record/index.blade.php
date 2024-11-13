@@ -47,7 +47,7 @@
                             @endif
                             <th>Date Registered</th>
                             <th>Status</th>
-                            @if (($status == 0 && request()->query('type') != 3) || request()->query('status') == 1)
+                            @if (($status == 0 && request()->query('type') != 3) || request()->query('status') == 1 || request()->query('type') )
                             <th>Action</th>
                             @endif
                         </tr>
