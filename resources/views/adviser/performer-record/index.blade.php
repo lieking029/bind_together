@@ -189,8 +189,7 @@
                                     data-id="{{ $audition->id }}">Archive</button>
                                 @endif
                             </td>
-                            @endif
-
+                            @else
                             <td>
                                 @if($status != 0 && request()->query('status') == 1)
                                 <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
@@ -202,6 +201,9 @@
                                     data-id="{{ $audition->id }}">Archive</button>
                                 @endif
                             </td>
+                            @endif
+
+
                         </tr>
 
                         @endif
@@ -453,7 +455,6 @@
 
 @push('scripts')
 <script>
-
     $(document).ready(function() {
         $('#datatable').DataTable();
     });
