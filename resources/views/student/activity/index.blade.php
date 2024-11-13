@@ -49,6 +49,8 @@
                     $notGoing = $practice && $practice->status == 0;
                     @endphp
 
+                    {{$activity->official_performers}}
+
                     @if(($activity->type == 3 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations == null) || ($activity->type == 2 && $activity->target_player == 1 && $activity->student_registrations != null && (!isset($activity->user->sport) || $activity->user->sport->id != $activity->student_registrations->sport_id)))
 
                     @else
