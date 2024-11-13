@@ -49,12 +49,12 @@
                             <th>ID</th>
                             @if(auth()->user()->hasRole('admin_sport'))
                             <th>Parent Consent</th>
-                                @else
-                                <th>Other File</th>
-                                @endif
-                                <th>Status</th>
-                                <th>Date Registered</th>
-                                <th>Action</th>
+                            @else
+                            <th>Other File</th>
+                            @endif
+                            <th>Status</th>
+                            <th>Date Registered</th>
+                            <th>Action</th>
                         </tr>
                         @endif
                     </thead>
@@ -426,6 +426,8 @@
 
 @push('scripts')
 <script>
+    $('#datatable').DataTable();
+
     function deleteHandler(id) {
         $('#deleteForm').attr('action', '/activity-registration-delete/' + id);
     }
@@ -444,7 +446,6 @@
 
 
     $(() => {
-        $('#datatable').DataTable();
 
         $('.approveBtn').click(function() {
 
