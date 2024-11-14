@@ -44,14 +44,40 @@
             padding: unset !important;
         }
 
-        .m-wd{
+        .m-wd {
             position: relative;
             max-width: 100% !important;
         }
-        .m-rv-ml{
+
+        .m-rv-ml {
             margin-left: unset !important;
         }
-        
+
+        .m-lbl {}
+
+        table tbody tr td {
+            max-width: 200px !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+        }
+
+        .m-nav-list {
+            padding: 5px !important;
+            display: flex !important;
+            overflow-x: scroll;
+            flex-wrap: nowrap  !important;
+            
+            
+        }
+
+        .nav-item a {
+            font-size: 14px !important;
+            padding: 5px !important;
+        }
+
+       
+
     }
 </style>
 
@@ -79,7 +105,7 @@
                             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" style="margin-bottom:20px;">
                                 @csrf
                                 @method('PUT')
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <ul class="nav nav-tabs m-nav-list" id="myTab" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" id="profile-info-tab" data-bs-toggle="tab"
                                             href="#profile-info" role="tab" aria-controls="profile-info"
@@ -150,7 +176,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Email</th>
-                                                    <td>{{ auth()->user()->email }}</td>
+                                                    <td class="m-lbl">{{ auth()->user()->email }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

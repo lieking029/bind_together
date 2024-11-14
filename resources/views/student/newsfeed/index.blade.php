@@ -10,11 +10,18 @@
         </ul>
     </div>
 @endif
+<style>
+     @media screen and (max-width: 768px) {
+        .m-wd {
+            width: unset;
+        }
+     }
+</style>
 <div class="container my-4">
     <!-- Create Post Section -->
     <div class="card mb-4">
         <div class="card-body row">
-            <div class="col-1">
+            <div class="col-1 m-wd">
                 <img src="{{ asset('storage/' . auth()->user()->avatar) }}" width="50" height="50"
                     class="rounded-circle me-3" alt="User Avatar">
             </div>
