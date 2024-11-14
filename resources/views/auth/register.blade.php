@@ -2,156 +2,164 @@
 
 @section('content')
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap JS with Popper.js (for modals) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS with Popper.js (for modals) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+<style>
+    @media screen and (max-width: 768px) {
+        .m-btn {
+            min-width: 100% !important;
+        }
+    }
+</style>
+
+<div class="container mb-5" style="font-family: 'Poppins', sans-serif;">
+    <div class="card shadow">
+        <div class="card-header bg-white">
+            <h3 class="text-center">Registration</h3>
+            <p class="text-center">Fill in the required fields below</p>
         </div>
-    @endif
-
-    <div class="container mb-5" style="font-family: 'Poppins', sans-serif;">
-        <div class="card shadow">
-            <div class="card-header bg-white">
-                <h3 class="text-center">Registration</h3>
-                <p class="text-center">Fill in the required fields below</p>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" id="registrationForm">
-                    @csrf
-                    <!-- Basic Information -->
-                    <h5 class="mb-3 text-muted">Basic Information</h5>
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label for="student_number" class="form-label">Student number</label>
-                            <input type="text" class="form-control" id="student_number" name="student_number"
-                                placeholder="ex: 21-00000" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="firstname" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstname" name="firstname"
-                                placeholder="First name" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="middlename" class="form-label">Middle name</label>
-                            <input type="text" class="form-control" id="middlename" name="middlename"
-                                placeholder="Middle name">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="lastname" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname"
-                                placeholder="Last name" required>
-                        </div>
+        <div class="card-body">
+            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" id="registrationForm">
+                @csrf
+                <!-- Basic Information -->
+                <h5 class="mb-3 text-muted">Basic Information</h5>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="student_number" class="form-label">Student number</label>
+                        <input type="text" class="form-control" id="student_number" name="student_number"
+                            placeholder="ex: 21-00000" required>
                     </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6 mb-3">
-                            <label for="suffix" class="form-label">Suffix</label>
-                            <input type="text" class="form-control" id="suffix" name="suffix" maxlength="10"
-                                placeholder="Enter suffix (e.g., Jr, Sr)">
-                            <div class="text-danger" id="suffixError"></div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select class="form-select" id="gender" name="gender" required>
-                                <option value="" disabled selected>Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="firstname" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="firstname" name="firstname"
+                            placeholder="First name" required>
                     </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="middlename" class="form-label">Middle name</label>
+                        <input type="text" class="form-control" id="middlename" name="middlename"
+                            placeholder="Middle name">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="lastname" class="form-label">Last name</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname"
+                            placeholder="Last name" required>
+                    </div>
+                </div>
 
-                    <!-- Contact Information -->
-                    <h5 class="mb-3 text-muted">Contact Information</h5>
-                    <div class="row">
-                        {{-- <div class="col-md-6 mb-3">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label for="suffix" class="form-label">Suffix</label>
+                        <input type="text" class="form-control" id="suffix" name="suffix" maxlength="10"
+                            placeholder="Enter suffix (e.g., Jr, Sr)">
+                        <div class="text-danger" id="suffixError"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <h5 class="mb-3 text-muted">Contact Information</h5>
+                <div class="row">
+                    {{-- <div class="col-md-6 mb-3">
                             <label for="contact_number" class="form-label">Contact number</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="contact_number" name="contact"
                                     placeholder="09123456789" required>
                             </div>
                         </div> --}}
-                        <div class="col-md-12 mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                placeholder="University email address" required>
-                            <div class="text-danger" style="font-size: 12px" id="emailError"></div>
-                        </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            placeholder="University email address" required>
+                        <div class="text-danger" style="font-size: 12px" id="emailError"></div>
                     </div>
+                </div>
 
-                    <!-- Account Password -->
-                    <h5 class="mb-3 text-muted">Account Password</h5>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Password" required>
-                                <span class="input-group-text">
-                                    <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;"></i>
-                                </span>
-                            </div>
-                            <div class="text-danger" style="font-size: 12px" id="passwordError"></div>
+                <!-- Account Password -->
+                <h5 class="mb-3 text-muted">Account Password</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password" required>
+                            <span class="input-group-text">
+                                <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                            </span>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="confirm_password" class="form-label">Confirm password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="confirm_password"
-                                    name="password_confirmation" placeholder="Retype password" required>
-                                <span class="input-group-text">
-                                    <i class="fas fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
-                                </span>
-                            </div>
-                            <div class="text-danger" style="font-size: 12px" id="confirmPasswordError"></div>
-                        </div>
+                        <div class="text-danger" style="font-size: 12px" id="passwordError"></div>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="confirm_password" class="form-label">Confirm password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirm_password"
+                                name="password_confirmation" placeholder="Retype password" required>
+                            <span class="input-group-text">
+                                <i class="fas fa-eye" id="toggleConfirmPassword" style="cursor: pointer;"></i>
+                            </span>
+                        </div>
+                        <div class="text-danger" style="font-size: 12px" id="confirmPasswordError"></div>
+                    </div>
+                </div>
 
-                    <!-- Profile Picture -->
-                    {{-- <h5 class="mb-3 text-muted">Profile Picture</h5>
+                <!-- Profile Picture -->
+                {{-- <h5 class="mb-3 text-muted">Profile Picture</h5>
                     <div class="mb-3">
                         <label for="profile" class="form-label">Profile</label>
                         <input class="form-control" type="file" id="profile" name="profile" accept="image/*">
                         <div class="form-text">Max. 5MB</div>
                     </div> --}}
 
-                    <div class="mb-3 form-check">
-                        <label>
-                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required> I agree to the
-                            <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
-                                data-bs-target="#termsModal" style="color: blue;">Terms and Conditions</button>
-                        </label>
-                    </div>
+                <div class="mb-3 form-check">
+                    <label>
+                        <input type="checkbox" class="form-check-input" id="terms" name="terms" required> I agree to the
+                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
+                            data-bs-target="#termsModal" style="color: blue;">Terms and Conditions</button>
+                    </label>
+                </div>
 
-                    <div class="text-center">
-                        <button type="submit" style="background: #8B0000"
-                            class="btn btn-transparent text-white w-25">Submit</button>
-                    </div>
-                </form>
-            </div>
+                <div class="text-center">
+                    <button type="submit"  style="background: #8B0000"
+                        class="btn btn-transparent text-white w-25 m-btn">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <!-- Modal Header with Logo -->
             <div class="modal-header d-flex flex-column align-items-center">
-                
+
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="text-center">
-            <img src="{{ asset('images/bindtogether-logo.png') }}" alt="University Logo" style="width: 100px;" class="mb-3">
+                <img src="{{ asset('images/bindtogether-logo.png') }}" alt="University Logo" style="width: 100px;" class="mb-3">
 
             </div>
             <h5 class="modal-title text-center" id="termsModalLabel" style="font-size: 1.5rem; font-weight: bold;">TERMS AND CONDITIONS</h5>
@@ -223,7 +231,7 @@
                     <li><strong>Notification of Outcome:</strong> Users who report content will be notified of the outcome, but the specifics of actions taken may remain confidential.</li>
                     <li><strong>Questions and Concerns:</strong> For any questions or concerns about the process, users can contact the system administrator or provide feedback through the system.</li>
                 </ul>
-                
+
                 <h6><strong>Account Responsibilities</strong></h6>
                 <p>• You are responsible for maintaining the confidentiality of your account login information and are fully responsible for all activities that occur under your account. Notify the system administrator immediately if you suspect any unauthorized use of your account.</p>
 
@@ -267,14 +275,14 @@
 
                 <p><strong>2. Inclusive and Supportive Environment</strong></p>
                 <ul>
-                <li><strong>Celebrate Diversity</strong>: We encourage an inclusive environment where all individuals are respected. Discriminatory content based on race, gender, sexuality, religion, or any personal characteristic will not be accepted.</li>
-                <li><strong>Support and Encouragement</strong>: Show support for fellow community members, recognizing their efforts and achievements. Celebrate success together!</li>
+                    <li><strong>Celebrate Diversity</strong>: We encourage an inclusive environment where all individuals are respected. Discriminatory content based on race, gender, sexuality, religion, or any personal characteristic will not be accepted.</li>
+                    <li><strong>Support and Encouragement</strong>: Show support for fellow community members, recognizing their efforts and achievements. Celebrate success together!</li>
                 </ul>
 
                 <p><strong>3. Appropriate Content</strong></p>
                 <ul>
-                <li><strong>Safe Content</strong>: All content shared should be appropriate for all ages. Avoid sharing content that is offensive, sexually explicit, or inappropriate for an academic or professional setting.</li>
-                <li><strong>Prohibited Content</strong>: Content promoting violence, illegal activities, or harmful behavior, including spam, phishing, and scams, will be removed immediately.</li>
+                    <li><strong>Safe Content</strong>: All content shared should be appropriate for all ages. Avoid sharing content that is offensive, sexually explicit, or inappropriate for an academic or professional setting.</li>
+                    <li><strong>Prohibited Content</strong>: Content promoting violence, illegal activities, or harmful behavior, including spam, phishing, and scams, will be removed immediately.</li>
                 </ul>
 
                 <p><strong>4. Truthful and Accurate Information</strong></p>
@@ -323,7 +331,7 @@
                 </ul>
 
                 <p>By adhering to these guidelines, we ensure that <strong>Bind Together</strong> remains a thriving, supportive, and respectful space for all BPSU athletes, performers, and artists.</p>
-                </div>
+            </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">

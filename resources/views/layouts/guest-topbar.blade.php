@@ -1,56 +1,57 @@
 <style>
-     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    /* Top bar styling */
-    .topbar {
-        background-color: #800000;
-        /* Dark red background */
-        color: white;
-        font-size: 14px;
-        padding: 5px 0;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-    /* Navbar link styles */
-    .navbar .nav-link {
-        color: #333;
-        font-size: 16px;
-        font-weight: 500;
-        margin-right: 20px;
-    }
+  /* Top bar styling */
+  .topbar {
+    background-color: #800000;
+    /* Dark red background */
+    color: white;
+    font-size: 14px;
+    padding: 5px 0;
+  }
 
-    .navbar .nav-link.active {
-        color: #800000;
-        font-weight: 700;
-    }
+  /* Navbar link styles */
+  .navbar .nav-link {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 20px;
+  }
 
-    .navbar .nav-link.active::after {
-        content: '';
-        display: block;
-        width: 30px;
-        height: 2px;
-        background-color: #800000;
-        margin-top: 2px;
-    }
+  .navbar .nav-link.active {
+    color: #800000;
+    font-weight: 700;
+  }
 
-    /* Login button styling */
-    .login-btn {
-        background-color: #800000;
-        color: white;
-        border-radius: 25px;
-        padding: 6px 20px;
-    }
+  .navbar .nav-link.active::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 2px;
+    background-color: #800000;
+    margin-top: 2px;
+  }
+
+  /* Login button styling */
+  .login-btn {
+    background-color: #800000;
+    color: white;
+    border-radius: 25px;
+    padding: 6px 20px;
+  }
 
 
-    /* Logo styling */
-    .logo img {
-        height: 50px;
-        margin-right: 10px;
-    }
+  /* Logo styling */
+  .logo img {
+    height: 50px;
+    margin-right: 10px;
+  }
 
-    .sitename {
-        font-size: 20px;
-        font-weight: 600;
-        color: #333;
-    }
+  .sitename {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+  }
 
   .navmenu ul {
     margin: 0;
@@ -78,7 +79,7 @@
     color: #2c4964;
     font-size: 15px;
     padding: 0 2px;
-    font-family: "Raleway",  sans-serif;
+    font-family: "Raleway", sans-serif;
     font-weight: 400;
     display: flex;
     align-items: center;
@@ -121,39 +122,56 @@
   .navmenu .active:focus {
     color: #800000;
   }
-  
+
+  @media screen and (max-width: 768px) {
+    .tm-nav {
+      width: 100%;
+      flex-wrap: wrap;
+      flex-grow: 1;
+    }
+
+    .nav ul {
+      flex-wrap: wrap;
+      flex-grow: 1;
+    }
+
+    .m-nav {
+      margin-left: 0 !important;
+    }
+  }
 </style>
- <?php
+<?php
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <div class="topbar text-center text-md-start">
-    <div class="container">
-        <i class="bi bi-envelope"></i> <a href="mailto:bpsu.bindtogether@gmail.com"
-            class="text-white">bpsu.bindtogether@gmail.com</a>
-    </div>
+  <div class="container">
+    <i class="bi bi-envelope"></i> <a href="mailto:bpsu.bindtogether@gmail.com"
+      class="text-white">bpsu.bindtogether@gmail.com</a>
+  </div>
 </div>
 <header class=" bg-white shadow-sm">
-    <div class="container d-flex align-items-center justify-content-between">
-        <!-- Logo and Site Name -->
-        <a href="#" class="logo navbar-expand-md d-flex align-items-center" style="text-decoration: none; ">
-            <img src="{{ asset('images/bindtogether-logo.png') }}" alt="BPSU Logo">
-            <h1 class="sitename" style="font-family: 'Poppins', sans-serif; font-weight: 700; color: #2c4964; font-size: 25px;">Bataan Peninsula State University</h1>
-        </a>
+  <div class="container d-flex align-items-center justify-content-between tm-nav">
+    <!-- Logo and Site Name -->
+    <a href="#" class="logo navbar-expand-md d-flex align-items-center" style="text-decoration: none; ">
+      <img src="{{ asset('images/bindtogether-logo.png') }}" alt="BPSU Logo">
+      <h1 class="sitename" style="font-family: 'Poppins', sans-serif; font-weight: 700; color: #2c4964; font-size: 25px;">Bataan Peninsula State University</h1>
+    </a>
 
-        <!-- Navigation -->
-        <nav  id="navmenu" class="navmenu" style="font-family: 'Poppins', sans-serif;">
-            <ul >
-                <li><a href="/" style="margin-left: 70vh; text-decoration:none;">Home</a></li>
-                <li><a href="/register" style="margin-right: 10px; text-decoration:none;">Sign Up</a></li>
-                
-            </ul>
-        </nav>
-
-        <a href="{{ route('login') }}" class="btn"
+    <!-- Navigation -->
+    <nav id="navmenu" class="navmenu" style="font-family: 'Poppins', sans-serif;">
+      <ul>
+        <li><a href="/" style="margin-left: 70vh; text-decoration:none;" class="m-nav">Home</a></li>
+        <li><a href="/register" style="margin-right: 10px; text-decoration:none;">Sign Up</a></li>
+        <li> <a href="{{ route('login') }}" class="btn"
             style="background-color: #800000;
         color: white;
         border-radius: 25px;
-        padding: 6px 20px;">Login</a>
-        
-    </div>
+        padding: 6px 20px;">Login</a></li>
+      </ul>
+
+    </nav>
+
+
+
+  </div>
 </header>
