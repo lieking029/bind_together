@@ -16,6 +16,11 @@
             width: unset;
         }
      }
+
+     .show-description {
+        overflow: visible;  
+        white-space: normal; 
+    }
 </style>
 <div class="container my-4">
     <!-- Create Post Section -->
@@ -562,9 +567,13 @@
             const elements = document.getElementsByClassName('show-description');
             
             if (elements.length > 0) {
-                elements[0].textContent = text; 
+                const textarea = elements[0];
+                if (textarea.tagName.toLowerCase() === 'textarea') {
+                    textarea.value = text;  
+                }
             }
         }
+
 
 
         function setCommentId(commentId) {
