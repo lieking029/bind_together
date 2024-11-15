@@ -569,7 +569,7 @@
             
             if (elements.length > 0) {
                     const textarea = elements[0];
-                    textarea.value = text; 
+                    textarea.value = JSON.stringify(text); 
             }
         }
 
