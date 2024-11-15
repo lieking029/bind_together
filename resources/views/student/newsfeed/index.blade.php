@@ -72,10 +72,12 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         @if ($newsfeed->user_id == auth()->id())
                             <li>
-                                <button type="button" class="dropdown-item editBtn" data-bs-toggle="modal" 
-                                    data-bs-target="#editPostModal" data-id="{{ $newsfeed->id }}" onclick="showText('{{$newsfeed->description}}');">
-                                    Edit
-                                </button>
+                            <button type="button" class="dropdown-item editBtn" data-bs-toggle="modal" 
+                                data-bs-target="#editPostModal" data-id="{{ $newsfeed->id }}" 
+                                onclick="showText({{ json_encode($newsfeed->description) }});">
+                            Edit
+                        </button>
+
                             </li>
                             <li>
                                 <button class="dropdown-item text-danger deleteBtn" data-bs-toggle="modal"
@@ -569,7 +571,7 @@
             
             if (elements.length > 0) {
                     const textarea = elements[0];
-                    textarea.value = JSON.stringify(text); 
+                    textarea.value = text; 
             }
         }
 
