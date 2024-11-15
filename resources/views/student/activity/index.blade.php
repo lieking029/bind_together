@@ -49,10 +49,10 @@
                                 <h5 class="card-title">{{ $activity->title }}</h5>
                                 <p class="card-text">
                                     <strong>Posted By:</strong> {{ $activity->user->firstname . '' . $activity->user->lastname }} <br>
-                                    @if($activity->type == 0)
+                                    @if($activity->type == 0 || ($activity->type == 2 && $activity->user->hasRole('adviser')))
                                     <strong>Organization:</strong> {{ $activity->user->organization->name ?? 'N/A' }} <br>
                                     @endif
-                                    @if($activity->type == 1 || $activity->type == 2)
+                                    @if($activity->type == 1 || ($activity->type == 2 && !$activity->user->hasRole('adviser')))
                                     <strong>Sport name:</strong> {{ $activity->user->sport->name ?? 'N/A' }} <br>
                                     @endif
                                     <strong>Type:</strong> {{ $activityTypes[$activity->type] ?? '' }} <br>
