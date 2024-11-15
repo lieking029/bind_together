@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('newsfeeds', function (Blueprint $table) {
-            $table->text('description')->nullable(false)->change();
+            // $table->text('description')->nullable(false)->change();
         });
     }
 
