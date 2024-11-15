@@ -38,11 +38,11 @@
                                 <h5 class="card-title">{{ $activity->title }}</h5>
                                 <p class="card-text">
                                     <strong>Posted By:</strong> {{ $activity->posted_by ?? '' }} <br>
-                                    @if($activity->type == 0 || $activity->type == 3)
+                                    @if($activity->type == 0 && $activity->type != 3)
                                     <strong>Organization:</strong> {{ $activity->organizations->name ?? '' }} <br>
                                     @endif
 
-                                    @if($activity->type == 1 || $activity->type == 2)
+                                    @if(($activity->type == 1 || $activity->type == 2) && $activity->id != 3)
                                     <strong>Sport Name:</strong> {{ $activity->sports->name ?? '' }} <br>
                                     @endif
                                     <strong>Type:</strong> {{ $activityTypes[$activity->type] ?? '' }} <br>
@@ -182,7 +182,7 @@
                     // Populate fields with data
                     $('#activity-sport-name').text((data.sports && data.sports.name) || '');
                     $('#activity-organization').text((data.organizations && data.organizations.name) || '');
-                    $('#activity-posted-by').text((data.sports && data.posted_by) || '');
+                    $('#activity-posted-by').text((data.posted_by && data.posted_by) || '');
                     $('#activity-title').text(data.title);
                     $('#activity-target-players').text(data.target_player === 1 ?
                         'Official Players' : 'All Student');
@@ -201,12 +201,12 @@
                         $('#sports').show();
                     }
 
-                    if(data.type == 0){
+                    if(data.type == 0 && data.type != 3){
                         document.getElementById('_org').style.display = 'block';
                         document.getElementById('_sport').style.display = 'none';
                     }
 
-                    if(data.type == 1 || data.type == 2){
+                    if((data.type == 1 || data.type == 2) && data.type != 3){
                         document.getElementById('_sport').style.display = 'block';
                         document.getElementById('_org').style.display = 'none';
                     }

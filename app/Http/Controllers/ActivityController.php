@@ -134,7 +134,7 @@ class ActivityController extends Controller
 
         $activity["posted_by"] = $user->firstname . " " . $user->lastname;
 
-        if ($activity->type == 0 || $activity->type == 3) {
+        if ($activity->type == 0) {
             $org = Organization::find($user->organization_id);
         }
 
