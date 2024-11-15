@@ -98,10 +98,10 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
-Route::get('/test-mail-config', function () {
+Route::get('/mailer', function () {
     try {
         Mail::raw('This is a test message', function ($message) {
-            $message->to('')
+            $message->to('kikomataks@gmail.com')
                 ->subject('Test Email Configuration');
         });
         return 'Test email sent successfully!';

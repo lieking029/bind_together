@@ -25,6 +25,10 @@
             min-width: 100% !important;
         }
     }
+    .swal2-actions {
+        display: flex;
+        justify-content: center;
+    }
 </style>
 
 <div class="container mb-5" style="font-family: 'Poppins', sans-serif;">
@@ -141,7 +145,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit"  style="background: #8B0000"
+                    <button type="submit" style="background: #8B0000"
                         class="btn btn-transparent text-white w-25 m-btn">Submit</button>
                 </div>
             </form>

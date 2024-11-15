@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('feedback', function (Blueprint $table) {
-            // $table->string('response')->nullable();
+        Schema::table('newsfeeds', function (Blueprint $table) {
+            $table->text('description')->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('feedback', function (Blueprint $table) {
-            $table->dropColumn('response');
+        Schema::table('newsfeeds', function (Blueprint $table) {
+            //
         });
     }
 };

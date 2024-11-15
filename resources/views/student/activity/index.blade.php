@@ -2,16 +2,6 @@
 
 @section('content')
 
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
@@ -50,7 +40,7 @@
                     @endphp
 
                     @if(!$activity->is_visible)
-                  
+
 
                     @else
                     <div class="col-md-4 mb-3 activity-card" data-title="{{ strtolower($activity->title) }}" style="<?php echo $hasJoinedPractice ? 'display:none;' : '' ?>">
@@ -122,6 +112,26 @@
                     @csrf
                     <input type="hidden" id="activity_id" name="activity_id">
 
+                    @if ($errors->any())
+                    <script>
+                        $(document).ready(function() {
+                            if (localStorage.getItem('activity_storage') !== null) {
+                                const act = JSON.parse(localStorage.getItem('activity_storage'));
+                                console.log(act.activity_id);
+                                $('#activityRegistrationModal').modal('show');
+                                document.getElementById('activity_id').value = act.activity_id;
+                            }
+                        });
+                    </script>
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
                     <div class="mb-3">
                         <label for="height" class="form-label">Height (cm)</label>
                         <input type="number" class="form-control" id="height" name="height"
@@ -148,18 +158,18 @@
                             name="emergency_contact" placeholder="Enter Emergency Contact Number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="medical_certificate" class="form-label">Certificate of Registration</label>
-                        <input type="file" class="form-control" id="medical_certificate"
+                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only)</label>
+                        <input type="file" class="form-control" accept="image/*" id="medical_certificate"
                             name="certificate_of_registration" required>
                     </div>
                     <div class="mb-3">
-                        <label for="parent_consent" class="form-label">Parent Consent</label>
-                        <input type="file" class="form-control" id="parent_consent" name="parent_consent"
+                        <label for="parent_consent" class="form-label">Parent Consent (Image Only)</label>
+                        <input type="file" class="form-control" id="parent_consent" accept="image/*" name="parent_consent"
                             required>
                     </div>
                     <div class="mb-3">
-                        <label for="student_id" class="form-label">Photo Copy of Student ID</label>
-                        <input type="file" class="form-control" id="student_id" name="photo_copy_id" required>
+                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)</label>
+                        <input type="file" class="form-control" id="student_id" name="photo_copy_id" accept="image/*" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -221,7 +231,15 @@
                     enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="activityId" name="activity_id">
-
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="mb-3">
                         <label for="height" class="form-label">Height (cm)</label>
                         <input type="number" class="form-control" id="height" name="height"
@@ -326,7 +344,6 @@
 <script>
     $(document).ready(function() {
         $('#datatable').DataTable();
-
         $('#search').on('input', function() {
             var searchQuery = $(this).val()
                 .toLowerCase(); // Get the search input and convert to lowercase
@@ -345,6 +362,10 @@
         $('.join-button').on('click', function() {
             var activityType = $(this).data('activity-type');
             var activityId = $(this).data('activity-id');
+
+            localStorage.setItem('activity_storage', JSON.stringify({
+                'activity_id': activityId
+            }));
 
             if (activityType == 3) { // Competition
                 $('#activityRegistrationModal').modal('show');
