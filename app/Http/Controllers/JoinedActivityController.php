@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\ActivityRegistration;
 use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
@@ -26,9 +27,10 @@ class JoinedActivityController extends Controller
 
             $activity["posted_by"] = $user->firstname . " " . $user->lastname;
 
-            if ($activity->type == 0 || $activity->type == 3) {
+            if ($activity->type == 0 ) {
                 $activity["organizations"] = Organization::find($user->organization_id);
             }
+
             if ($activity->type == 1 || $activity->type == 2) {
                 $activity["sports"] = Sport::find($user->sport_id);
             }

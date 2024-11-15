@@ -201,7 +201,7 @@
                         $('#sports').show();
                     }
 
-                    if(data.type == 0 || data.type == 3){
+                    if(data.type == 0){
                         document.getElementById('_org').style.display = 'block';
                         document.getElementById('_sport').style.display = 'none';
                     }
