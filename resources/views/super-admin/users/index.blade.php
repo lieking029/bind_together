@@ -642,12 +642,10 @@
             $('#viewEmail').text(user.user.email);
 
             if (user.user.avatar) {
-                $('#viewAvatar').attr('src', '{{ url('
-                    ') }}' + '/storage/' + user.user.avatar);
+                    $('#viewAvatar').attr('src', '{{ url('') }}' + '/storage/' + user.user.avatar);
             } else {
                 $('#viewAvatar').attr('src',
-                    '{{ url('
-                    ') }}' + '/images/avatar/image_place.jpg');
+                    '{{ url('') }}' + '/images/avatar/image_place.jpg');
             }
 
             const age = calculateAge(birthdate);
