@@ -22,7 +22,7 @@ class StoreNewsfeedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             // 'attachments.*' => ['file', 'max:1024000'],
             'target_player' => ['nullable'],
             'campus_id' => ['nullable', 'exists:campuses,id'],
