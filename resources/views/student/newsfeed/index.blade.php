@@ -18,6 +18,7 @@
      }
 
      .show-description {
+        font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
         overflow: visible;  
         white-space: normal; 
     }
@@ -567,10 +568,8 @@
             const elements = document.getElementsByClassName('show-description');
             
             if (elements.length > 0) {
-                const textarea = elements[0];
-                if (textarea.tagName.toLowerCase() === 'textarea') {
-                    textarea.value = text;  
-                }
+                    const textarea = elements[0];
+                    textarea.value = text; 
             }
         }
 
