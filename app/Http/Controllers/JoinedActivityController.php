@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
@@ -19,8 +20,12 @@ class JoinedActivityController extends Controller
         $joinedActivities = $user->joinedActivities;
         $practices = $user->practices;
 
+
         foreach ($joinedActivities as $activity) {
             $user = User::find($activity->user_id);
+
+            $activity["posted_by"] = $user->firstname . " " . $user->lastname;
+
             if ($activity->type == 0 || $activity->type == 3) {
                 $activity["organizations"] = Organization::find($user->organization_id);
             }
@@ -29,6 +34,14 @@ class JoinedActivityController extends Controller
             }
         }
 
+        foreach($practices as $practice){
+            $user = User::find($practice->user_id);
+            $practice["posted_by"] = $user->firstname . " " . $user->lastname;
+
+            $activity = Activity::find($practice->activity_id);
+            $_user =  User::find($activity->user_id);;
+            $practice["sports"] = Sport::find($_user->sport_id);
+        }
 
         return view('student.activity.joined', ['joinedActivities' => $joinedActivities, 'practices' => $practices]);
     }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\ActivityType;
 use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
+use App\Models\Organization;
+use App\Models\Sport;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -123,6 +126,25 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         $activity->load('sport');
+
+        $user = User::find($activity->user_id);
+
+        $org   = null;
+        $sport = null;
+
+        $activity["posted_by"] = $user->firstname . " " . $user->lastname;
+
+        if ($activity->type == 0 || $activity->type == 3) {
+            $org = Organization::find($user->organization_id);
+        }
+
+        if ($activity->type == 1 || $activity->type == 2) {
+            $sport = Sport::find($user->sport_id);
+        }
+
+        $activity["organizations"] = $org;
+        $activity["sports"] = $sport;
+
         return response()->json($activity);
     }
 
