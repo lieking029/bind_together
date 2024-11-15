@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('newsfeeds', function (Blueprint $table) {
-            // $table->text('description')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->change();
+            $table->text('description')->nullable()->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->change();
         });
     }
 
