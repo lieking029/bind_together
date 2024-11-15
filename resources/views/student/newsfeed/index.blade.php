@@ -132,7 +132,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <p>{{ $newsfeed->description }}</p>
+                <p style="white-space: pre-wrap;">{{ $newsfeed->description }}</p>
 
                 <div class="row">
                     @foreach ($newsfeed->newsfeedFiles as $file)
