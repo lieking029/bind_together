@@ -37,7 +37,13 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $activity->title }}</h5>
                                         <p class="card-text">
-                                            <strong>Sport name:</strong> {{ $activity->sport->name ?? '' }} <br>
+                                            @if($activity->type == 0 || $activity->type == 3)
+                                            <strong>Organization:</strong> {{ $activity->organizations->name ?? '' }} <br>
+                                            @endif
+
+                                            @if($activity->type == 1 || $activity->type == 2)
+                                            <strong>Sport Name:</strong> {{ $activity->sports->name ?? '' }} <br>
+                                            @endif
                                             <strong>Type:</strong> {{ $activityTypes[$activity->type] ?? '' }} <br>
                                             <strong>Venue:</strong> {{ $activity->venue }} <br>
                                             <strong>Duration:</strong> {{ $activity->start_date }} -

@@ -19,9 +19,11 @@
                     <a href="https://bpsu.edu.ph/">BPSU SITE</a>
                 </li>
 
+                @if(auth()->user()->hasRole('student'))
                 <li class="list-inline-item px-0 px-sm-2">
-                    <a href="#">Contact</a>
+                    <a href="/feedback/create">Contact</a>
                 </li>
+                @endif
             </ul>
         </div>
     </div>
