@@ -144,23 +144,32 @@
                     </div>
                     <div class="mb-3">
                         <label for="person_to_contact" class="form-label">Person to Contact</label>
-                        <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
+                        <input type="text" class="form-control" id="person_to_contact" value="{{auth()->user()->person_to_contact ?? ''}}" name="person_to_contact"
                             placeholder="Enter Name Of Person To Contact" required>
                     </div>
                     <div class="mb-3">
                         <label for="relationship" class="form-label">Relationship</label>
-                        <input type="text" class="form-control" id="relationship" name="relationship"
+                        <input type="text" class="form-control" id="relationship" value="{{auth()->user()->relationship ?? ''}}" name="relationship"
                             placeholder="Enter Relationship" required>
                     </div>
                     <div class="mb-3">
                         <label for="emergency_contact_number" class="form-label">Emergency Contact Number</label>
-                        <input type="tel" class="form-control" maxlength="11" id="emergency_contact"
+                        <input type="tel" class="form-control" maxlength="11" id="emergency_contact" value="{{auth()->user()->emergency_contact ?? ''}}"
                             name="emergency_contact" placeholder="Enter Emergency Contact Number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only)</label>
+                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only) 
+                        | 
+                        <span>
+                            @if(auth()->user()->certificate_of_registration)
+                            <a href="/storage/{{auth()->user()->certificate_of_registration}}" style="color: blue;" target="_blank">View</a>
+                            @else
+                            <label style="color: red;">No File</label>
+                            @endif
+                        </span>
+                        </label>
                         <input type="file" class="form-control" accept="image/*" id="medical_certificate"
-                            name="certificate_of_registration" required>
+                            name="certificate_of_registration" {{auth()->user()->certificate_of_registration ?  '' : 'required'}}>
                     </div>
                     <div class="mb-3">
                         <label for="parent_consent" class="form-label">Parent Consent (Image Only)</label>
@@ -168,8 +177,17 @@
                             required>
                     </div>
                     <div class="mb-3">
-                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)</label>
-                        <input type="file" class="form-control" id="student_id" name="photo_copy_id" accept="image/*" required>
+                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)
+                        |
+                        <span>
+                            @if(auth()->user()->photo_copy_id)
+                            <a href="/storage/{{auth()->user()->photo_copy_id}}" style="color: blue;" target="_blank">View</a>
+                            @else
+                            <label style="color: red;">No File</label>
+                            @endif
+                        </span>
+                        </label>
+                        <input type="file" class="form-control" id="student_id" name="photo_copy_id" accept="image/*" {{auth()->user()->photo_copy_id ? '' : 'required'}}>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -253,30 +271,48 @@
                     <div class="mb-3">
                         <label for="person_to_contact" class="form-label">Person to Contact</label>
                         <input type="text" class="form-control" id="person_to_contact" name="person_to_contact"
-                            placeholder="Enter Name Of Person To Contact" required>
+                            placeholder="Enter Name Of Person To Contact" value="{{auth()->user()->person_to_contact ?? ''}}"  required>
                     </div>
                     <div class="mb-3">
                         <label for="relationship" class="form-label">Relationship</label>
-                        <input type="text" class="form-control" id="relationship" name="relationship"
+                        <input type="text" class="form-control" value="{{auth()->user()->relationship ?? ''}}" id="relationship" name="relationship"
                             placeholder="Enter Relationship" required>
                     </div>
                     <div class="mb-3">
                         <label for="emergency_contact_number" class="form-label">Emergency Contact Number</label>
-                        <input type="tel" class="form-control" maxlength="11" id="emergency_contact"
+                        <input type="tel" class="form-control" value="{{auth()->user()->emergency_contact ?? ''}}" maxlength="11" id="emergency_contact"
                             name="emergency_contact" placeholder="Enter Emergency Contact Number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only)</label>
+                        <label for="medical_certificate" class="form-label">Certificate of Registration (Image Only)
+                        | 
+                        <span>
+                            @if(auth()->user()->certificate_of_registration)
+                            <a href="/storage/{{auth()->user()->certificate_of_registration}}" style="color: blue;" target="_blank">View</a>
+                            @else
+                            <label style="color: red;">No File</label>
+                            @endif
+                        </span>
+                        </label>
                         <input type="file" class="form-control" id="medical_certificate"
-                            name="certificate_of_registration" accept="image/*" required>
+                            name="certificate_of_registration" accept="image/*" {{auth()->user()->certificate_of_registration ?  '' : 'required'}}>
                     </div>
                     <div class="mb-3">
-                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)</label>
-                        <input type="file" class="form-control" accept="image/*" id="student_id" name="photo_copy_id" required>
+                        <label for="student_id" class="form-label">Photo Copy of Student ID (Image Only)
+                        |
+                        <span>
+                            @if(auth()->user()->photo_copy_id)
+                            <a href="/storage/{{auth()->user()->photo_copy_id}}" style="color: blue;" target="_blank">View</a>
+                            @else
+                            <label style="color: red;">No File</label>
+                            @endif
+                        </span>
+                        </label>
+                        <input type="file" class="form-control" accept="image/*" id="student_id" name="photo_copy_id" {{auth()->user()->photo_copy_id ? '' : 'required'}}>
                     </div>
                     <div class="mb-3">
                         <label for="other_file" class="form-label">Other File (Image Only)</label>
-                        <input type="file" class="form-control" accept="image/*" id="other_file" name="other_file" required>
+                        <input type="file" class="form-control" accept="image/*" id="other_file" name="other_file">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

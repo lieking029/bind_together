@@ -261,6 +261,11 @@ class ActivityRegistrationController extends Controller
             if ($request->hasFile($field)) {
                 $filePath = $request->file($field)->store('activity_files', 'public');
                 $data[$field] = $filePath;
+            }else{
+                $get_file = User::find(Auth::id());
+                if($get_file->$field){
+                    $data[$field] = $get_file->$field;
+                }
             }
         }
 

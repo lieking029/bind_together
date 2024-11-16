@@ -22,6 +22,8 @@
         overflow: visible;  
         white-space: normal; 
     }
+
+ 
 </style>
 <div class="container my-4">
     <!-- Create Post Section -->
@@ -280,16 +282,100 @@
                         </div>
                         @if (!auth()->user()->hasRole('student'))
                             <div class="">
-                                <select name="campus_id" id="campus" class="form-select mb-2" style="float: right">
+                                <!-- <select name="campus_id" id="campus" class="form-select mb-2" style="float: right">
                                     <option value="" selected disabled>Select Campus</option>
                                     @foreach ($campuses as $campus)
                                         <option value="{{ $campus->id }}">{{ $campus->name }}</option>
                                     @endforeach
-                                </select>
+                                </select> -->
+                                <style>
+                                        .dropdown {
+                                            position: relative;
+                                            width: 200px;
 
+                                        }
+                                        .dropdown .menu-list ul{
+                                            position: absolute;
+                                            background: white;
+                                            border-radius: 4px;
+                                            max-height: 300px;
+                                            list-style: none;
+                                        }
+
+                                        .dropdown .menu{
+                                            cursor: pointer;
+                                            width: 100%;
+                                            background: white;
+                                            border-radius: 4px;
+                                            color: #2E3236;
+                                            padding: 10px;
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        }
+
+                                        .dropdown .menu p{
+                                            font-size: 14px;
+                                            margin-bottom: unset !important;
+                                        }
+
+                                        .dropdown .menu-list ul{
+                                            width: 100%;
+                                            margin-top: 2px;
+                                            border: 1px solid white;
+                                            list-style: none;
+                                            padding-left: unset;
+                                            padding: 5px 10px;
+                                            overflow-y: auto;
+                                            overflow-x: hidden;
+                                        }
+
+                                        .dropdown .menu-list ul li{
+                                            display: flex !important;
+                                            gap: 5px;
+                                            align-items: center;
+                                            color: #2E3236;
+                                            font-size: 14px;
+                                            padding: 5px 0;
+                                            cursor: pointer;
+                                        }
+                                        
+                                        .dropdown .menu-list {
+                                            display: none;
+                                        }
+                                        .active {
+                                            display: block !important;
+                                        }
+
+                                        #drop-icon-2 {
+                                            display: none;
+                                        }
+                                        
+                                        
+                                    </style>
+                                   @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
+                                <input type="hidden" name="txtCampuses" id="txt-campuses"><br>
+                                <div class="dropdown">
+                                    <div class="menu" onclick="campusChange()">
+                                        <p>Select Campus</p>
+                                        <span id="drop-icon-1">▼</span>
+                                        <span id="drop-icon-2">▲</span>
+                                    </div>
+                                    <div class="menu-list">
+                                            <ul>
+                                                @foreach ($campuses as $campus)
+                                                    <li>
+                                                        <input type="checkbox" id="cbox-{{$campus->id}}" onclick="campusSave({{$campus->id}})">
+                                                        <span>{{$campus->name}}</span>
+                                                    </li>
+                                                @endforeach
+
+                                            </ul>
+                                    </div>
+                                </div>
                                 <!-- Target audience select (Initially hidden) -->
                                 <select name="target_player" id="target_audience" class="form-select mt-2"
-                                        style="background-color: #4B4F54; color: white; border: none; display: none; float: right">
+                                        style="background-color: #4B4F54; color: white; border: none;  float: right">
                                     <option value="0">All Students</option>
                                     <option value="1">
                                         @if(auth()->user()->isAdminOrg())
@@ -299,6 +385,7 @@
                                         @endif
                                     </option>
                                 </select>
+                                @endif
                             </div>
                         @endif
                     </div>
@@ -326,7 +413,8 @@
                 <div class="modal-footer border-0 d-flex justify-content-between">
                     @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
                         <div>
-                            <button type="button" class="btn btn-primary" id="sendMessageButton">Send Message</button>
+                            <button type="button" hidden class="btn btn-primary" id="sendMessageButton"></button>
+                            <button type="button" class="btn btn-primary" onclick="sendViaSMS()" id="sendSMS">Send Message</button>
                         </div>
                     @endif
                     <div>
@@ -566,6 +654,58 @@
 @push('scripts')
     <script>
 
+        function sendViaSMS(){
+            document.getElementById('sendMessageButton').click();
+        }
+
+        function campusChange() {
+            const element = document.querySelector('.menu-list'); 
+            if (element && element.classList.contains('active')) {
+                element.classList.remove('active');
+                document.getElementById('drop-icon-1').style.display = 'block';
+                document.getElementById('drop-icon-2').style.display = 'none';
+            } else if (element) {
+                element.classList.add('active');
+                document.getElementById('drop-icon-1').style.display = 'none';
+                document.getElementById('drop-icon-2').style.display = 'block';
+            }
+        }
+
+        function campusDropClose () {
+            const element = document.querySelector('.menu-list'); 
+            if (element && element.classList.contains('active')) {
+                element.classList.remove('active');
+                document.getElementById('drop-icon-1').style.display = 'block';
+                document.getElementById('drop-icon-2').style.display = 'none';
+            } 
+        }
+
+        if(localStorage.getItem('campus_ids')){
+            let ids = JSON.parse(localStorage.getItem('campus_ids'));
+            ids.forEach((el) => {
+                document.getElementById('cbox-' + el).checked  = true;
+            });
+        }else{
+            localStorage.setItem('campus_ids', JSON.stringify([]));
+        }
+
+        function campusSave(id) {
+            if (!localStorage.getItem('campus_ids')) {
+                localStorage.setItem('campus_ids', JSON.stringify([id]));
+            } else {
+                let ids = JSON.parse(localStorage.getItem('campus_ids'));
+
+                if (ids.includes(id)) {
+                    ids = ids.filter(item => item !== id);
+                } else {
+                    ids.push(id);
+                }
+                localStorage.setItem('campus_ids', JSON.stringify(ids));
+            }
+        }
+
+
+
         function showText(text) {
             const elements = document.getElementsByClassName('show-description');
             
@@ -574,8 +714,6 @@
                     textarea.value = text; 
             }
         }
-
-
 
         function setCommentId(commentId) {
             $('#commentId').val(commentId);
@@ -1075,7 +1213,10 @@
         $(document).ready(function() {
             // Handle the send message button click
             $('#sendMessageButton').on('click', function() {
-                var campusId = $('#campus').val();
+                
+                let campuses = localStorage.getItem('campus_ids') ?? [];
+
+                var campusId = campuses;
                 var description = $('#description').val(); // Get the description text using the id
                 var targetAudience = $('#target_audience').val(); // Get the selected target audience
                 console.log(campusId, description, targetAudience);
@@ -1091,10 +1232,10 @@
                 }
 
                 if (campusId) {
-                    var url = '/send-message/' + campusId; // Default URL for all students
+                    var url = '/send-message?campus_ids=' + campusId; // Default URL for all students
 
                     if (targetAudience == 1) { // Check if "Official Players" is selected
-                        url = '/send-message/oficialplayer/' + campusId;
+                        url = '/send-message/oficialplayer?campus_ids=' + campusId;
                     }
 
                     $.ajax({
@@ -1141,6 +1282,7 @@
             });
         });
 
+      
 
     </script>
 

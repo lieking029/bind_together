@@ -10,8 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class SmsController extends Controller
 {
-    public function sendMessage(Request $request, $campusId)
+    public function sendMessage(Request $request)
     {
+        $campus_ids = $request->query('campus_ids');
+
+        $campus_ids = json_decode($campus_ids);
+
         Log::info('sendMessage');
 
         $request->validate([
@@ -21,7 +25,7 @@ class SmsController extends Controller
         ]);
         $description = $request->input('description');
         Log::info($description);
-        $users = User::where('campus_id', $campusId)->pluck('contact');
+        $users = User::whereIn('campus_id', $campus_ids)->pluck('contact');
         if ($users->isEmpty()) {
             return response()->json(['error' => 'No users found for the selected campus.'], 404);
         }
@@ -55,6 +59,11 @@ class SmsController extends Controller
 
     public function sendMessageOfficialPlayers(Request $request)
     {
+
+        $campus_ids = $request->query('campus_ids');
+
+        $campus_ids = json_decode($campus_ids);
+
         Log::info('sendMessageOfficialPlayers');
         $request->validate([
             'description' => 'required|string|max:255',
@@ -73,6 +82,7 @@ class SmsController extends Controller
         }
         // Get their contact information
         $contacts = User::whereIn('id', $officialPlayers)
+            ->whereIn('campus_id', $campus_ids)
             ->pluck('contact');
 
         // Add 0 in front of each number
