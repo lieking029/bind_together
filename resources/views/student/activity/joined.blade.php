@@ -80,7 +80,14 @@
                                 <h5 class="card-title">{{ $activity->activity->title }}</h5>
                                 <p class="card-text">
                                     <strong>Posted By:</strong> {{ $activity->posted_by ?? '' }} <br>
-                                    <strong>Sport: </strong> {{ $activity->sports->name ?? '' }} <br>
+                                    
+                                    @if($activity->organizations)
+                                    <strong>Organization: </strong> {{ $activity->organizations->name ?? '' }} <br>
+                                    @else
+                                    <strong>Sport Name: </strong> {{ $activity->sports->name ?? '' }} <br>
+                                    @endif
+
+                                    
 
                                     <strong>Type:</strong> {{ $activityTypes[$activity->activity->type] ?? '' }}
                                     <br>

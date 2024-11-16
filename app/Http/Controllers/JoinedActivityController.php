@@ -38,11 +38,15 @@ class JoinedActivityController extends Controller
 
         foreach($practices as $practice){
             $user = User::find($practice->user_id);
-            $practice["posted_by"] = $user->firstname . " " . $user->lastname;
 
             $activity = Activity::find($practice->activity_id);
+
             $_user =  User::find($activity->user_id);;
+
+            $practice["posted_by"] = $_user->firstname . " " . $_user->lastname;
+
             $practice["sports"] = Sport::find($_user->sport_id);
+            $practice["organizations"] = Organization::find($_user->organization_id);
         }
 
         return view('student.activity.joined', ['joinedActivities' => $joinedActivities, 'practices' => $practices]);
