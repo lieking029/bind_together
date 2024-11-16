@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -34,7 +35,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $payload = $request->all();
-
+        $email = $request->input('email'); 
+    
+        if ($email) {
+            $emailDomain = substr(strrchr($email, "@"), 1);
+    
+            if ($emailDomain !== 'bpsu.edu.ph') {
+                return redirect()->back()->withErrors(['email' => 'Only emails from bpsu.edu.ph are allowed.']);
+            }
+        }
+    
         if (isset($payload['organization_id']) && $payload['organization_id'] == 'select_other') {
             $created = Organization::create([
                 "name" => $payload['txtAddSelectOther']
@@ -43,7 +53,7 @@ class UserController extends Controller
                 $payload['organization_id'] = $created->id;
             }
         }
-
+    
         if (isset($payload['sport_id']) && $payload['sport_id'] == 'select_other') {
             $created = Sport::create([
                 "name" => $payload['txtAddSelectOtherSport']
@@ -52,22 +62,23 @@ class UserController extends Controller
                 $payload['sport_id'] = $created->id;
             }
         }
-
+    
         $user = User::create($payload);
         $user->assignRole($payload['role']);
-
+    
         $verificationUrl = $this->generateVerificationUrl($user);
-
+    
         Mail::to($user->email)->send(new VerifyUserEmail(
             $user,
             $verificationUrl,
             $payload['password'],
             $payload['role']
         ));
-
+    
         alert()->success('User created successfully');
         return redirect()->back();
     }
+    
 
     protected function generateVerificationUrl($user)
     {
