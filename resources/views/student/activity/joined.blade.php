@@ -214,8 +214,13 @@
                     }
 
                     if((data.type == 1 || data.type == 2) && data.type != 3){
-                        document.getElementById('_sport').style.display = 'block';
-                        document.getElementById('_org').style.display = 'none';
+                        if(data.organizations != null){
+                            document.getElementById('_org').style.display = 'block';
+                            document.getElementById('_sport').style.display = 'none';
+                        }else{
+                            document.getElementById('_sport').style.display = 'block';
+                            document.getElementById('_org').style.display = 'none';
+                        }
                     }
                 },
                 error: function(xhr) {
