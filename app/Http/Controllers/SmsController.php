@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -18,11 +19,12 @@ class SmsController extends Controller
 
         Log::info('sendMessage');
 
-        $request->validate([
-            'description' => 'required|string|max:255',
-        ], [
-            'description.max' => 'The description may not be greater than 255 characters.',
-        ]);
+        // $request->validate([
+        //     'description' => 'required|string|max:255',
+        // ], [
+        //     'description.max' => 'The description may not be greater than 255 characters.',
+        // ]);
+
         $description = $request->input('description');
         Log::info($description);
         $users = User::whereIn('campus_id', $campus_ids)->pluck('contact');
@@ -59,22 +61,36 @@ class SmsController extends Controller
 
     public function sendMessageOfficialPlayers(Request $request)
     {
+        $auth = Auth::user();
+
+        $type = null;
+
+        if($auth->hasRole('admin_org')){
+            $type = 0;
+        }
+
+        if($auth->hasRole('admin_sport')){
+            $type = 1;
+        }
 
         $campus_ids = $request->query('campus_ids');
 
         $campus_ids = json_decode($campus_ids);
 
         Log::info('sendMessageOfficialPlayers');
-        $request->validate([
-            'description' => 'required|string|max:255',
-        ], [
-            'description.max' => 'The description may not be greater than 255 characters.',
-        ]);
+        // $request->validate([
+        //     'description' => 'required|string|max:255',
+        // ], [
+        //     'description.max' => 'The description may not be greater than 255 characters.',
+        // ]);
         $description = $request->input('description');
         Log::info($description);
         // Get all official players
-        $officialPlayers = ActivityRegistration::where('status', 1)
-            ->pluck('user_id');
+        $officialPlayers = ActivityRegistration::where('activity_registrations.status', 1)
+            ->join('activities', 'activity_registrations.activity_id', '=', 'activities.id')
+            ->where('activities.type', $type)
+            ->distinct()
+            ->pluck('activity_registrations.user_id');
 
         Log::info($officialPlayers);
         if ($officialPlayers->isEmpty()) {
