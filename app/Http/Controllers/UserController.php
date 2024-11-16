@@ -31,13 +31,9 @@ class UserController extends Controller
         return view('super-admin.users.index', compact('users', 'role', 'sports', 'organizations'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $payload = $request->validated();
-
-        if (isset($payload['txtSportId'])) {
-            $payload['organization_id'] = (int)$payload["txtSportId"];
-        }
+        $payload = $request->all();
 
         if (isset($payload['organization_id']) && $payload['organization_id'] == 'select_other') {
             $created = Organization::create([
@@ -45,6 +41,15 @@ class UserController extends Controller
             ]);
             if ($created) {
                 $payload['organization_id'] = $created->id;
+            }
+        }
+
+        if (isset($payload['sport_id']) && $payload['sport_id'] == 'select_other') {
+            $created = Sport::create([
+                "name" => $payload['txtAddSelectOtherSport']
+            ]);
+            if ($created) {
+                $payload['sport_id'] = $created->id;
             }
         }
 
@@ -91,6 +96,15 @@ class UserController extends Controller
             }
         }
 
+        if ($request->sport_id == 'select_other') {
+            $created = Sport::create([
+                "name" => $request->txtSelectOtherSport
+            ]);
+            if ($created) {
+                $request['sport_id'] = $created['id'];
+            }
+        }
+
         if ($request->filled(['password', 'password_confirmation'])) {
             $request->validate([
                 'password' => 'required|confirmed|min:8', // Validation rules
@@ -104,6 +118,8 @@ class UserController extends Controller
 
         // Update other fields that don't include password
         $user->update($request->except(['password', 'password_confirmation']));
+
+        alert()->success('User updated successfully');
 
         return redirect()->back();
     }

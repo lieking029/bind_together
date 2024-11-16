@@ -66,9 +66,9 @@
             padding: 5px !important;
             display: flex !important;
             overflow-x: scroll;
-            flex-wrap: nowrap  !important;
-            
-            
+            flex-wrap: nowrap !important;
+
+
         }
 
         .nav-item a {
@@ -76,8 +76,12 @@
             padding: 5px !important;
         }
 
-       
 
+
+    }
+
+    .nav-tabs{
+        border-bottom: unset !important;
     }
 </style>
 
@@ -107,22 +111,22 @@
                                 @method('PUT')
                                 <ul class="nav nav-tabs m-nav-list" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="profile-info-tab" data-bs-toggle="tab"
-                                            href="#profile-info" role="tab" aria-controls="profile-info"
+                                        <a class="nav-link lnk-1" id="profile-info-tab" data-bs-toggle="tab"
+                                            href="#profile-info" onclick="changeTab(1)" role="tab" aria-controls="profile-info"
                                             aria-selected="true">Profile info</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="update-info-tab" data-bs-toggle="tab"
-                                            href="#update-info" role="tab" aria-controls="update-info"
+                                        <a class="nav-link lnk-2" id="update-info-tab" data-bs-toggle="tab"
+                                            href="#update-info" onclick="changeTab(2)" role="tab" aria-controls="update-info"
                                             aria-selected="false">Update info</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="profile-update-tab" data-bs-toggle="tab"
+                                        <a class="nav-link lnk-3" onclick="changeTab(3)" id="profile-update-tab" data-bs-toggle="tab"
                                             href="#profile-update" role="tab" aria-controls="profile-update"
                                             aria-selected="false">Profile update</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="account-security-tab" data-bs-toggle="tab"
+                                    <li class="nav-item ">
+                                        <a class="nav-link lnk-4" onclick="changeTab(4)" id="account-security-tab" data-bs-toggle="tab"
                                             href="#account-security" role="tab" aria-controls="account-security"
                                             aria-selected="false">Account security</a>
                                     </li>
@@ -130,7 +134,7 @@
 
                                 <!-- Tab panes -->
                                 <div class="tab-content mt-3">
-                                    <div class="tab-pane fade show active" id="profile-info" role="tabpanel"
+                                    <div class="tab-pane fade tab-1" id="profile-info" role="tabpanel"
                                         aria-labelledby="profile-info-tab">
                                         {{-- <h5 class="text-primary"></h5> --}}
                                         <table class="table">
@@ -249,7 +253,7 @@
                                         </table>
                                         @endstudent
                                     </div>
-                                    <div class="tab-pane fade" id="update-info" role="tabpanel"
+                                    <div class="tab-pane fade tab-2" id="update-info" role="tabpanel"
                                         aria-labelledby="update-info-tab">
                                         <div class="container mt-4">
 
@@ -399,6 +403,62 @@
                                                 </div>
                                             </div>
                                             @endstudent
+                                            @student
+                                            <h5 class="text-primary mt-2">Personal Details and Verification</h5>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6 mt-2">
+                                                    <label for="person_to_contact" class="form-label">Contact Person</label>
+                                                    <input type="text" class="form-control" id="person_to_contact"
+                                                        name="person_to_contact" value="{{ auth()->user()->person_to_contact }}"
+                                                        required>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <label for="relationship" class="form-label">Relationship</label>
+                                                    <input type="text" class="form-control" id="relationship"
+                                                        name="relationship" value="{{ auth()->user()->relationship }}"
+                                                        required>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-12 mt-2">
+                                                    <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                                    <input type="text" class="form-control" id="emergency_contact"
+                                                        name="emergency_contact" value="{{ auth()->user()->emergency_contact}}"
+                                                        required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-6 mt-2">
+                                                    <label for="certificate_of_registration" class="form-label">Certificate of Registration |
+                                                        <span>
+                                                            @if(auth()->user()->certificate_of_registration)
+                                                            <a href="/storage/{{auth()->user()->certificate_of_registration}}" style="color: blue;" target="_blank">View</a>
+                                                            @else
+                                                            <label style="color: red;">No File</label>
+                                                            @endif
+                                                        </span>
+                                                    </label>
+                                                    <input type="file" class="form-control" id="certificate_of_registration"
+                                                        name="cert_registration"
+                                                        {{auth()->user()->certificate_of_registration ? '' : 'required'}}>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <label for="photo_copy_id" class="form-label">Photocopy of ID |
+                                                        <span>
+                                                            @if(auth()->user()->photo_copy_id)
+                                                            <a href="/storage/{{auth()->user()->photo_copy_id}}" style="color: blue;" target="_blank">View</a>
+                                                            @else
+                                                            <label style="color: red;">No File</label>
+                                                            @endif
+                                                        </span>
+                                                    </label>
+                                                    <input type="file" class="form-control" id="photo_copy_id"
+                                                        name="photo_copy_id"
+                                                        {{auth()->user()->photo_copy_id ? '' : 'required'}}>
+                                                </div>
+                                            </div>
+                                            @endstudent
                                             <!-- Submit Button -->
                                             <div class="text-end">
                                                 <button type="submit" class="btn btn-danger">Submit</button>
@@ -406,7 +466,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="tab-pane fade" id="profile-update" role="tabpanel"
+                                    <div class="tab-pane fade tab-3" id="profile-update" role="tabpanel"
                                         aria-labelledby="profile-update-tab">
                                         <div class="container mt-5">
                                             <div class="row">
@@ -439,7 +499,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="account-security" role="tabpanel"
+                                    <div class="tab-pane fade tab-4" id="account-security" role="tabpanel"
                                         aria-labelledby="account-security-tab">
                                         @if ($errors->any())
                                         <div class="alert alert-danger" style="margin-left: 10px; margin-right: 10px;">
@@ -530,5 +590,17 @@
             $(this).find('i').toggleClass('fa-eye fa-eye-slash');
         });
     });
+
+    function changeTab(tab = 1) {
+        localStorage.setItem('tab', tab);
+    }
+
+    if (localStorage.getItem('tab')) {
+        document.getElementsByClassName('lnk-' + localStorage.getItem('tab'))[0].classList.add('active');
+        document.getElementsByClassName('tab-' + localStorage.getItem('tab'))[0].classList.add('active', 'show');
+    } else {
+        document.getElementsByClassName('lnk-1')[0].classList.add('active');
+        document.getElementsByClassName('tab-1')[0].classList.add('active', 'show');
+    }
 </script>
 @endpush

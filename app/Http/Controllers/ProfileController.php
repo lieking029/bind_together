@@ -43,6 +43,25 @@ class ProfileController extends Controller
             $user->update(['avatar' => $avatarPath]);
         }
 
+        if ($request->hasFile('cert_registration')) {
+            if ($user->cert_registration && Storage::exists('public/' . $user->cert_registration)) {
+                Storage::delete('public/' . $user->cert_registration);
+            }
+
+            $certPath = $request->file('cert_registration')->store('activity_files', 'public');
+            $user->update(['certificate_of_registration' => $certPath]);
+        }
+
+        
+        if ($request->hasFile('photo_copy_id')) {
+            if ($user->photo_copy_id && Storage::exists('public/' . $user->photo_copy_id)) {
+                Storage::delete('public/' . $user->photo_copy_id);
+            }
+
+            $photoPath = $request->file('photo_copy_id')->store('activity_files', 'public');
+            $user->update(['photo_copy_id' => $photoPath]);
+        }
+
         if ($request->filled('password')) {
             $user->update(['password' => Hash::make($request->password)]);
         }
@@ -56,8 +75,20 @@ class ProfileController extends Controller
             'gender' => $request->gender,
             'year_level' => $request->year_level,
             'organization_id' => $request->organization_id,
-            'is_completed' => 1,
+            'is_completed' => 1
         ];
+
+        if($request->person_to_contact != '' && $request->person_to_contact != null){
+            $payload["person_to_contact"] =  $request->person_to_contact;
+        }
+
+        if($request->relationship != '' && $request->relationship != null){
+            $payload["relationship"] =  $request->relationship;
+        }
+
+        if($request->emergency_contact != '' && $request->emergency_contact != null){
+            $payload["emergency_contact"] =  $request->emergency_contact;
+        }
 
         if(isset($request->sport_id)){
             $payload["sport_id"] = $request->sport_id;

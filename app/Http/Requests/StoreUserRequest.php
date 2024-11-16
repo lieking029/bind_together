@@ -42,6 +42,7 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', 'string', 'min:8'],
             'role' => ['required', 'string'],
             'txtAddSelectOther' => 'nullable|string',
+            'txtAddSelectOtherSport' => 'nullable|string',
         ];
     }
 }

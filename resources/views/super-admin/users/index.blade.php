@@ -182,12 +182,17 @@
                     @if ($role == 'coach')
                     <div class="form-group mt-3">
                         <label for="">Sport</label>
-                        <select name="sport_id" id="" name="txtSportId" class="form-select">
+                        <select name="sport_id" id="addSport" class="form-select" onchange="otherSpecify(true, true);">
                             <option value="" selected disabled>Select Sport</option>
                             @foreach ($sports as $sport)
                             <option value="{{ $sport->id }}">{{ $sport->name }}</option>
                             @endforeach
+                            <option value="select_other">Other</option>
                         </select>
+                        <div id="main-layout">
+                            <input type="text" class="form-control mtop-1" name="txtAddSelectOtherSport" id="txt-add-other-specify-coach"
+                                placeholder="Please specify">
+                        </div>
                     </div>
                     @elseif ($role == 'adviser')
                     <div class="form-group mt-3">
@@ -208,11 +213,11 @@
                     <div class="mt-3 row">
                         <div class="form-group col">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Enter Email"
+                            <input type="email" class="form-control" name="email" placeholder="Domain must be @bpsu.edu.ph"
                                 required>
-                            <small class="text-danger">Domain must be @bpsu.edu.ph</small>
+                            <!-- <small class="text-danger">Domain must be @bpsu.edu.ph</small> -->
                             @error('email')
-                            <div class="text-danger">{{ $message }}</div>
+                            <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         @if ($role == 'admin_org')
@@ -373,18 +378,19 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
 
-
-
-
-
                         <div class="form-group col coach">
                             <label for="">Sport</label>
-                            <select name="sport_id" id="" class="form-select">
+                            <select name="sport_id" id="editSport" class="form-select"  onchange="otherSpecify(false, true);">
                                 <option value="" selected disabled>Select Sport</option>
                                 @foreach ($sports as $sport)
                                 <option value="{{ $sport->id }}">{{ $sport->name }}</option>
                                 @endforeach
+                                <option value="select_other">Other</option>
                             </select>
+                            <div id="main-layout">
+                                <input type="text" class="form-control mtop-1" name="txtSelectOtherSport" id="txt-other-specify-coach"
+                                    placeholder="Please specify">
+                            </div>
                         </div>
 
                     </div>
@@ -548,6 +554,8 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#datatable').DataTable({
@@ -555,35 +563,84 @@
         });
     });
 
-    function otherSpecify(is_add = false) {
+    document.addEventListener('DOMContentLoaded', function () {
+        let txtOtherSpecifyCoach = document.getElementById('txt-other-specify-coach');
+        if (txtOtherSpecifyCoach) {
+            txtOtherSpecifyCoach.style.display = 'none';
+            txtOtherSpecifyCoach.removeAttribute('required');
+        }
 
-        const org_id = document.getElementById(is_add ? 'addOrganization' : 'editOrganization');
-        const other_id = document.getElementById(is_add ? 'txt-add-other-specify' : 'txt-other-specify');
+        let txtAddOtherSpecifyCoach = document.getElementById('txt-add-other-specify-coach');
+        if (txtAddOtherSpecifyCoach) {
+            txtAddOtherSpecifyCoach.style.display = 'none';
+            txtAddOtherSpecifyCoach.removeAttribute('required');
+        }
 
-        other_id.style.marginTop = '10px';
+        let txtOtherSpecify = document.getElementById('txt-other-specify');
+        if (txtOtherSpecify) {
+            txtOtherSpecify.style.display = 'none';
+            txtOtherSpecify.removeAttribute('required');
+        }
 
-        if (org_id.value == 'select_other') {
+        let txtAddOtherSpecify = document.getElementById('txt-add-other-specify');
+        if (txtAddOtherSpecify) {
+            txtAddOtherSpecify.style.display = 'none';
+            txtAddOtherSpecify.removeAttribute('required');
+        }
+    });
+
+    function otherSpecify(is_add = false, is_coach = false) {
+     
+        if(is_coach){
+            let org_id = null;
+            let other_id = null;
+             org_id = document.getElementById(is_add ? 'addSport' : 'editSport');
+             other_id = document.getElementById(is_add ? 'txt-add-other-specify-coach' : 'txt-other-specify-coach');
+             other_id.style.marginTop = '10px';
+
+                
+            if (is_add) {
+                document.getElementById('txt-other-specify-coach').style.display = 'none';
+                document.getElementById('txt-other-specify-coach').removeAttribute('required');
+            }else{
+                document.getElementById('txt-add-other-specify-coach').style.display = 'none';
+                document.getElementById('txt-add-other-specify-coach').removeAttribute('required');
+            }
+
+            if (org_id.value == 'select_other') {
             other_id.style.display = 'block';
-            other_id.setAttribute('required', true);
-        } else {
-            other_id.style.display = 'none';
-            other_id.removeAttribute('required');
+                other_id.setAttribute('required', true);
+            } else {
+                other_id.style.display = 'none';
+                other_id.removeAttribute('required');
+            }
+
+        }else{
+            let org_id = null;
+            let other_id = null;
+
+             org_id = document.getElementById(is_add ? 'addOrganization' : 'editOrganization');
+             other_id = document.getElementById(is_add ? 'txt-add-other-specify' : 'txt-other-specify');
+             other_id.style.marginTop = '10px';
+
+             if (is_add) {
+                document.getElementById('txt-other-specify').style.display = 'none';
+                document.getElementById('txt-other-specify').removeAttribute('required');
+            }else{
+                document.getElementById('txt-add-other-specify').style.display = 'none';
+                document.getElementById('txt-add-other-specify').removeAttribute('required');
+            }
+
+            if (org_id.value == 'select_other') {
+                other_id.style.display = 'block';
+                other_id.setAttribute('required', true);
+            } else {
+                other_id.style.display = 'none';
+                other_id.removeAttribute('required');
+            }
         }
 
-        if (is_add) {
-            document.getElementById('txt-other-specify').style.display = 'none';
-            document.getElementById('txt-other-specify').removeAttribute('required');
-        } else {
-            document.getElementById('txt-add-other-specify').style.display = 'none';
-            document.getElementById('txt-add-other-specify').removeAttribute('required');
-        }
-
-    }
-
-    window.onload = function() {
-        otherSpecify();
-        otherSpecify(true);
-    };
+    }    
 
     function editUser(id) {
         $.get('/users/' + id, function(user) {
@@ -601,6 +658,7 @@
             $('#editEmail').val(user.user.email);
             $('#editGender').val(user.user.gender);
             $('#editOrganization').val(user.user.organization_id);
+            $('#editSport').val(user.user.sport_id);
 
             $('#editPassword').val('');
             $('#editPasswordConfirmation').val('');
@@ -792,5 +850,14 @@
             $(this).removeClass('is-invalid');
         }
     });
+
 </script>
+
+@error('email')
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('createUserModal'));
+    myModal.show(); 
+</script>
+@enderror
+
 @endpush
