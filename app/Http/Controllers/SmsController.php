@@ -89,6 +89,7 @@ class SmsController extends Controller
         $officialPlayers = ActivityRegistration::where('activity_registrations.status', 1)
             ->join('activities', 'activity_registrations.activity_id', '=', 'activities.id')
             ->where('activities.type', $type)
+            ->where('activity_registrations.is_deleted', 0)
             ->distinct()
             ->pluck('activity_registrations.user_id');
 
