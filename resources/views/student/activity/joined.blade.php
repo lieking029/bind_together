@@ -221,6 +221,9 @@
                             document.getElementById('_sport').style.display = 'block';
                             document.getElementById('_org').style.display = 'none';
                         }
+                    }else{
+                        document.getElementById('_org').style.display = 'none';
+                        document.getElementById('_sport').style.display = 'none';
                     }
                 },
                 error: function(xhr) {
