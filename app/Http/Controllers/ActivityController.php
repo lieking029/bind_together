@@ -146,7 +146,7 @@ class ActivityController extends Controller
         $activity["organizations"] = $org;
         $activity["sports"] = $sport;
 
-        $conflicts = ActivityRegistration::where('user_id', Auth::id())->whereIn('status',[0,1])->where('is_deleted', 0)->pluck('date_joining');
+        $conflicts = ActivityRegistration::where('user_id', Auth::id())->whereIn('status',[0,1])->where('is_deleted', 0)->whereNotNull('date_joining')->pluck('date_joining');
 
         $activity["conflicts"] = $conflicts;
 
