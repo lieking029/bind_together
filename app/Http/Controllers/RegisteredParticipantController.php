@@ -55,6 +55,9 @@ class RegisteredParticipantController extends Controller
                             $query->where('activities.type', ActivityType::Tryout)
                                 ->where('users.sport_id', $user->sport->id); 
                         } else {
+                            if($user->hasRole('admin_sport')){
+                                $query->where('activities.user_id', $user->id);
+                            }
                             $query->where('activities.type', ActivityType::Competition);
                         }
                     }

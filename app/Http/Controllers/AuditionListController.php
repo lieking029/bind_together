@@ -50,6 +50,9 @@ class AuditionListController extends Controller
             if ($user->hasRole('adviser')) {
                 $query->where('user_id', $user->id);
             }
+            if ($user->hasRole('admin_org')) {
+                $query->where('user_id', $user->id);
+            }
         });
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type, $user) {
