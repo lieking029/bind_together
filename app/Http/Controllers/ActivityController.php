@@ -6,6 +6,7 @@ use App\Enums\ActivityType;
 use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
 use App\Models\ActivityRegistration;
+use App\Models\Campus;
 use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
@@ -70,9 +71,12 @@ class ActivityController extends Controller
             }
         }
 
+        $campuses = Campus::all();
+
         return view('admin-sport.activity.index', [
             'activities' => $activities,
             'user' => $user,
+            'campuses' => $campuses
         ]);
     }
 

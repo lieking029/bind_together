@@ -48,7 +48,7 @@
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex">
-                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}" width="50" height="50"
+                    <img src="{{ $newsfeed->user->avatar ? asset('storage/' . $newsfeed->user->avatar) : asset('images/avatar/image_place.jpg') }}" width="50" height="50"
                         class="rounded-circle me-3" alt="User Avatar">
                     <div>
                         <h6 class="mb-0">{{ $newsfeed->user->firstname }} {{ $newsfeed->user->lastname }}</h6>

@@ -209,7 +209,99 @@
                             </select>
                         </div>
                     </div>
+                    <style>
+                                        .dropdown {
+                                            position: relative;
+                                            width: 100%;
 
+                                        }
+                                        .dropdown .menu-list ul{
+                                            position: absolute;
+                                            background: white;
+                                            border-radius: 4px;
+                                            max-height: 300px;
+                                            list-style: none;
+                                        }
+
+                                        .dropdown .menu{
+                                            cursor: pointer;
+                                            width: 200px;
+                                            background: white;
+                                            border: 1px solid #D1D5DB;
+                                            border-radius: 4px;
+                                            color: #2E3236;
+                                            padding: 10px;
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        }
+
+                                        .dropdown .menu p{
+                                            font-size: 14px;
+                                            margin-bottom: unset !important;
+                                        }
+
+                                        .dropdown .menu-list ul{
+                                            width: 200px;
+                                            margin-top: 2px;
+                                            border: 1px solid #D1D5DB;
+                                            list-style: none;
+                                            padding-left: unset;
+                                            padding: 5px 10px;
+                                            overflow-y: auto;
+                                            overflow-x: hidden;
+                                        }
+
+                                        .dropdown .menu-list ul li{
+                                            display: flex !important;
+                                            gap: 5px;
+                                            align-items: center;
+                                            color: #2E3236;
+                                            font-size: 14px;
+                                            padding: 5px 0;
+                                            cursor: pointer;
+                                        }
+                                        
+                                        .dropdown .menu-list {
+                                            display: none;
+                                        }
+                                        .active {
+                                            display: block !important;
+                                        }
+
+                                        #drop-icon-2 {
+                                            display: none;
+                                        }
+                                        
+                                        
+                                    </style>
+                                    @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
+                                   <div class="row mb-3">
+                                    <div class="col-md-12">
+                                <label for="content" class="form-label">Campuses</label>
+                                    <input type="hidden" name="txtCampuses" id="txt-campuses"><br>
+                                    <div class="dropdown">
+                                        <div class="menu" onclick="campusChange()">
+                                            <p>Select Campus</p>
+                                            <span id="drop-icon-1">▼</span>
+                                            <span id="drop-icon-2">▲</span>
+                                        </div>
+                                        <div class="menu-list">
+                                                <ul>
+                                                @foreach ($campuses as $campus)
+                                                        <li>
+                                                            <input type="checkbox" id="cbox-{{$campus->id}}" onclick="campusSave({{$campus->id}})">
+                                                            <span>{{$campus->name}}</span>
+                                                        </li>
+                                                    @endforeach
+
+                                                </ul>
+                                        </div>
+                                    </div>
+                                    </div>
+                                   </div>
+                                 
+                                    @endif
                     <div class="mb-3">
                         <label for="content" class="form-label">Content</label>
                         <textarea class="form-control" name="content" placeholder="Content" rows="3" required></textarea>
@@ -505,6 +597,45 @@
     @push('scripts')
     <script>
         $('#datatable').DataTable();
+
+        
+        function campusChange() {
+            const element = document.querySelector('.menu-list'); 
+            if (element && element.classList.contains('active')) {
+                element.classList.remove('active');
+                document.getElementById('drop-icon-1').style.display = 'block';
+                document.getElementById('drop-icon-2').style.display = 'none';
+            } else if (element) {
+                element.classList.add('active');
+                document.getElementById('drop-icon-1').style.display = 'none';
+                document.getElementById('drop-icon-2').style.display = 'block';
+            }
+        }
+
+
+        if(localStorage.getItem('campus_ids')){
+            let ids = JSON.parse(localStorage.getItem('campus_ids'));
+            ids.forEach((el) => {
+                document.getElementById('cbox-' + el).checked  = true;
+            });
+        }else{
+            localStorage.setItem('campus_ids', JSON.stringify([]));
+        }
+
+        function campusSave(id) {
+            if (!localStorage.getItem('campus_ids')) {
+                localStorage.setItem('campus_ids', JSON.stringify([id]));
+            } else {
+                let ids = JSON.parse(localStorage.getItem('campus_ids'));
+
+                if (ids.includes(id)) {
+                    ids = ids.filter(item => item !== id);
+                } else {
+                    ids.push(id);
+                }
+                localStorage.setItem('campus_ids', JSON.stringify(ids));
+            }
+        }
 
         $('.approveBtn').click(function() {
             $('#approveForm').attr('action', '/approve-activity/' + $(this).data('id'))
