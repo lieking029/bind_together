@@ -95,7 +95,7 @@
                     <div class="col-3 card pb-4 m-prof-sec">
                         <div class="text-center">
                             <br>
-                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/default.jpg') }}"
+                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}"
                                 class="rounded-circle" height="100" width="100" alt="AVATAR">
                             <br>
                             <label for="">{{ auth()->user()->firstname }} {{ auth()->user()->lastname }}</label>
