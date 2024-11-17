@@ -80,7 +80,7 @@
             events: events, // Assign dynamic events with consistent colors to the calendar
             eventClick: function(info) {
                 const eventDetails = info.event;
-                console.log(events)
+                console.log(info.event)
 
                 // Create a date object and format it for display
                 const startDate = new Date(eventDetails.start);
@@ -92,10 +92,16 @@
 
                 // Prepare the HTML for the modal
                 let detailsHtml = null;
-                if(events[0].date_joining !== null) {
-                    console.log(events[0])
-                    detailsHtml = `Title: ${events[0].title}<br>Venue: ${events[0].venue}<br>Address: ${events[0].address}<br>Duration: ${new Date((events[0].act_start)).toLocaleString()} - ${(new Date(events[0].act_end).toLocaleString())}<br>Date Joining: ${new Date((events[0].date_joining)).toLocaleDateString()}`;
-                }else{
+                if (eventDetails.extendedProps.date_joining !== null) {  // Use extendedProps to access custom properties
+                    detailsHtml = `
+                        Title: ${eventDetails.title}<br>
+                        Venue: ${eventDetails.extendedProps.venue}<br>
+                        Address: ${eventDetails.extendedProps.address}<br>
+                        Duration: ${new Date(eventDetails.extendedProps.act_start).toLocaleString()} - 
+                        ${new Date(eventDetails.extendedProps.act_end).toLocaleString()}<br>
+                        Date Joining: ${new Date(eventDetails.extendedProps.date_joining).toLocaleDateString()}
+                    `;
+                } else {
                     detailsHtml = `Title: ${eventDetails.title}<br>Start: ${formattedStart}<br>End: ${formattedEnd}`;
                 }
                 // Set the details in the modal
