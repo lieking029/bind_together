@@ -242,7 +242,7 @@ class ActivityRegistrationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreActivityRegistrationRequest $request)
+    public function store(Request $request)
     {
         $data = [
             'activity_id' => $request->activity_id,
@@ -252,6 +252,7 @@ class ActivityRegistrationController extends Controller
             'emergency_contact' => $request->emergency_contact,
             'relationship' => $request->relationship,
             'user_id' => Auth::id(),
+            'date_joining' => $request->date_joining,
         ];
 
         $fileFields = ['certificate_of_registration', 'parent_consent', 'other_file', 'photo_copy_id'];

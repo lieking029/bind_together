@@ -60,7 +60,14 @@
             return {
                 title: activity.title,
                 start: activity.start,
+                date_joining: activity.date_joining ?? null,
                 end: activity.end,
+                start_time: activity.start_time,
+                end_time: activity.end_time,
+                venue: activity.venue,
+                address: activity.address,
+                act_start: activity.act_start,
+                act_end: activity.act_end,
                 backgroundColor: backgroundColor, // Use consistent color
                 borderColor: borderColor,
                 textColor: '#ffffff', // White text for contrast
@@ -73,6 +80,7 @@
             events: events, // Assign dynamic events with consistent colors to the calendar
             eventClick: function(info) {
                 const eventDetails = info.event;
+                console.log(events)
 
                 // Create a date object and format it for display
                 const startDate = new Date(eventDetails.start);
@@ -83,8 +91,13 @@
                 const formattedEnd = endDate !== 'N/A' ? endDate.toLocaleString() : 'N/A';
 
                 // Prepare the HTML for the modal
-                const detailsHtml = `Title: ${eventDetails.title}<br>Start: ${formattedStart}<br>End: ${formattedEnd}`;
-
+                let detailsHtml = null;
+                if(events[0].date_joining !== null) {
+                    console.log(events[0])
+                    detailsHtml = `Title: ${events[0].title}<br>Venue: ${events[0].venue}<br>Address: ${events[0].address}<br>Duration: ${new Date((events[0].act_start)).toLocaleString()} - ${(new Date(events[0].act_end).toLocaleString())}<br>Date Joining: ${new Date((events[0].date_joining)).toLocaleDateString()}`;
+                }else{
+                    detailsHtml = `Title: ${eventDetails.title}<br>Start: ${formattedStart}<br>End: ${formattedEnd}`;
+                }
                 // Set the details in the modal
                 document.getElementById('eventDetails').innerHTML = detailsHtml;
 

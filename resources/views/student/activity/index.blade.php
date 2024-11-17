@@ -189,6 +189,10 @@
                         </label>
                         <input type="file" class="form-control" id="student_id" name="photo_copy_id" accept="image/*" {{auth()->user()->photo_copy_id ? '' : 'required'}}>
                     </div>
+                    <div class="mb-3">
+                        <label style="display: block;" for="parent_consent" class="form-label">Date of Joining</label>
+                        <select name="date_joining" required style="padding: 10px; margin-top: 5px; width: 100%; border: 1px solid #D1D5DB; outline: none; border-radius: 10px;" id="join-dates" ></select>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -314,6 +318,10 @@
                         <label for="other_file" class="form-label">Other File (Image Only)</label>
                         <input type="file" class="form-control" accept="image/*" id="other_file" name="other_file">
                     </div>
+                    <div class="mb-3">
+                        <label style="display: block;" for="parent_consent" class="form-label">Date of Joining</label>
+                        <select name="date_joining" required style="padding: 10px; margin-top: 5px; width: 100%; border: 1px solid #D1D5DB; outline: none; border-radius: 10px;" id="join-dates2" ></select>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -398,10 +406,61 @@
         $('.join-button').on('click', function() {
             var activityType = $(this).data('activity-type');
             var activityId = $(this).data('activity-id');
+            console.log(activityId)
+            
 
             localStorage.setItem('activity_storage', JSON.stringify({
                 'activity_id': activityId
             }));
+
+            $.ajax({
+                url: '/activity/' + activityId,
+                method: 'GET',
+                success: function(data) {
+                    // Clear existing options
+                    document.getElementById('join-dates').options.length = 0;
+                    document.getElementById('join-dates2').options.length = 0;
+
+                    console.log(data);
+
+                    // Parse start and end dates
+                    const startDate = new Date(data.start_date);
+                    const endDate = new Date(data.end_date);
+                    endDate.setHours(23, 59, 59, 999); // Ensure the end date covers the full day
+
+                    // Determine the target select element
+                    let selectElement = null;
+                    if (data.type == 3) {
+                        selectElement = document.getElementById("join-dates");
+                    } else {
+                        selectElement = document.getElementById("join-dates2");
+                    }
+
+                    // Convert conflicts to a Set for faster lookup
+                    const conflictDates = new Set(data.conflicts.map(conflict => new Date(conflict).toISOString().split('T')[0]));
+
+                    // Loop through the date range and skip conflicted dates
+                    let currentDate = startDate;
+                    while (currentDate <= endDate) {
+                        const formattedDate = currentDate.toISOString().split('T')[0];
+
+                        // Skip if the date is in conflicts
+                        if (!conflictDates.has(formattedDate)) {
+                            const option = document.createElement("option");
+                            option.value = formattedDate;
+                            option.textContent = formattedDate;
+                            selectElement.appendChild(option);
+                        }
+
+                        // Increment the date
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error fetching activity details.');
+                }
+            });
+
 
             if (activityType == 3) { // Competition
                 $('#activityRegistrationModal').modal('show');

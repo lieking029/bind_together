@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\ActivityType;
 use App\Http\Requests\StoreActivityRequest;
 use App\Models\Activity;
+use App\Models\ActivityRegistration;
 use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
@@ -144,6 +145,10 @@ class ActivityController extends Controller
 
         $activity["organizations"] = $org;
         $activity["sports"] = $sport;
+
+        $conflicts = ActivityRegistration::where('user_id', Auth::id())->whereIn('status',[0,1])->where('is_deleted', 0)->pluck('date_joining');
+
+        $activity["conflicts"] = $conflicts;
 
         return response()->json($activity);
     }
