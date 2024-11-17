@@ -23,6 +23,7 @@ class CalendarOfActivityController extends Controller
                 ->where('activities.type', '!=', 2)
                 ->join('activity_registrations', 'activity_registrations.activity_id', '=', 'activities.id')
                 ->where('activity_registrations.user_id', $auth->id)
+                ->whereNotNull('date_joining')
                 ->select('activities.*', 'activity_registrations.user_id', 'activity_registrations.date_joining')
                 ->get()
                 ->filter(function ($activity) {
