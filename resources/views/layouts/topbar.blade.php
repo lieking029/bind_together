@@ -1,14 +1,29 @@
+<style>
+     @media screen and (max-width: 768px) {
+        
+        #navbarSupportedContent {
+            justify-content: right !important;
+        }
+
+        .m-profile {
+            display: flex;
+            width: unset;
+            justify-content: right !important;
+        }
+     }
+</style>
+
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
     <div class="container-fluid px-0">
         <div class="d-flex justify-content-end w-100" id="navbarSupportedContent">
             <!-- Navbar links -->
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item dropdown ms-lg-3">
-                    <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link m-profile dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <div class="media d-flex align-items-center" style="float:right;">
                             <!-- Avatar Image -->
-                            <img class="avatar rounded-circle"
+                            <img class="avatar rounded-circle m-profile" 
                                 src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}"
                                 alt="{{ Auth::user()->firstname }}"
                                 style="width: 40px; height: 40px;"
