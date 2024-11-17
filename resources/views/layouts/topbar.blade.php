@@ -6,7 +6,7 @@
                 <li class="nav-item dropdown ms-lg-3">
                     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <div class="media d-flex align-items-center">
+                        <div class="media d-flex align-items-center" style="float:right;">
                             <!-- Avatar Image -->
                             <img class="avatar rounded-circle"
                                 src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}"

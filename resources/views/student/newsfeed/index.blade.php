@@ -30,7 +30,7 @@
     <div class="card mb-4">
         <div class="card-body row">
             <div class="col-1 m-wd">
-                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" width="50" height="50"
+                <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}"  width="50" height="50"
                     class="rounded-circle me-3" alt="User Avatar">
             </div>
             <div class="col-11 mt-1">
@@ -48,7 +48,7 @@
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between">
                 <div class="d-flex">
-                    <img src="{{ asset('storage/' . $newsfeed->user->avatar) }}" width="50" height="50"
+                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}" width="50" height="50"
                         class="rounded-circle me-3" alt="User Avatar">
                     <div>
                         <h6 class="mb-0">{{ $newsfeed->user->firstname }} {{ $newsfeed->user->lastname }}</h6>
@@ -66,7 +66,7 @@
                 @endphp
 
                 <div class="dropdown" {{ $isDisabledReportPost }}>
-                    <button class="btn btn-link text-muted" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    <button class="btn btn-link text-muted" style="float: right;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="fas fa-ellipsis-h"></i>
                     </button>
@@ -275,7 +275,7 @@
                 <div class="modal-body">
                     <div class="d-flex justify-content-between mb-3">
                         <div class="">
-                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" class="rounded-circle"
+                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/avatar/image_place.jpg') }}" class="rounded-circle"
                                  style="width: 40px; height: 40px;" alt="Avatar">
                             <span class="ms-2 fw-bold">{{ auth()->user()->firstname }}
                                 {{ auth()->user()->lastname }}</span>
@@ -416,6 +416,10 @@
                             <button type="button" hidden class="btn btn-primary" id="sendMessageButton"></button>
                             <button type="button" class="btn btn-primary" onclick="sendViaSMS()" id="sendSMS">Send Message</button>
                         </div>
+                    @else
+                    <div>
+
+                    </div>
                     @endif
                     <div>
                         <button type="submit" class="btn btn-danger" id="postButton">Post</button>
