@@ -310,7 +310,7 @@
                                         
                                         
                                     </style>
-                                    @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
+                                    @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdviser() || auth()->user()->isCoach() || auth()->user()->isAdminOrg())
                                    <div class="row mb-3">
                                         <div class="col-md-12">
                                             <label for="content" class="form-label">Campuses</label>
@@ -553,7 +553,7 @@
                         </div>
                     </div>
 
-                        @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
+                        @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdviser() || auth()->user()->isCoach() || auth()->user()->isAdminOrg())
                                    <div class="row mb-3">
                                         <div class="col-md-12">
                                             <label for="content" class="form-label">Campuses</label>
@@ -717,18 +717,24 @@
                 success: function(data) {
                     // Populate the modal fields with data
 
+                    console.log(data)
 
-                    const arr = data.campuses;
-                    const intCamp = arr.map(element => +element);
+                    if(data.campuses !== null){
+                        const arr = data.campuses;
+                        const intCamp = arr.map(element => +element);
 
-                    localStorage.setItem('campus_ids', JSON.stringify(intCamp));
+                        localStorage.setItem('campus_ids', JSON.stringify(intCamp));
 
-                    if(localStorage.getItem('campus_ids')){
-                        let ids = JSON.parse(localStorage.getItem('campus_ids'));
-                        ids.forEach((el) => {
-                            document.getElementById('cbox2-' + el).checked  = true;
-                        });
+                        if(localStorage.getItem('campus_ids')){
+                            let ids = JSON.parse(localStorage.getItem('campus_ids'));
+                            ids.forEach((el) => {
+                                document.getElementById('cbox2-' + el).checked  = true;
+                            });
+                        }
+                    }else{
+                        localStorage.setItem('campus_ids', JSON.stringify([]));
                     }
+
                     $('#editActivityForm #title').val(data.title);
                     $('#editActivityForm #target_players').val(data.target_player);
                     $('#editActivityForm #content').val(data.content);
