@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use App\Enums\UserTypeEnum;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 
 class GenerateReportAdminOrgController extends Controller
 {
@@ -36,6 +36,7 @@ class GenerateReportAdminOrgController extends Controller
 
         if ($reportType == 1 || $reportType == 2) {
             $query = ActivityRegistration::query();
+            $query->where('type', $activityType);
 
             if ($reportType == 1) {
                 $query->where('status', 0);
@@ -88,6 +89,12 @@ class GenerateReportAdminOrgController extends Controller
         }
         if ($reportType == 3) {
             $query = Activity::query();
+
+            $query->where('type', $activityType);
+
+            if ($activityType == 3) {
+                $query->where('user_id', Auth::id());
+            }
 
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);

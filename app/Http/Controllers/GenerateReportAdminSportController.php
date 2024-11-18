@@ -34,11 +34,15 @@ class GenerateReportAdminSportController extends Controller
 
         if ($reportType == 1 || $reportType == 2) {
             $query = ActivityRegistration::query();
+            $query->where('type', $activityType);
 
             if ($reportType == 1) {
                 $query->where('status', 0); // Registered Participants
             } elseif ($reportType == 2) {
                 $query->where('status', 1); // Official Participants
+            }
+
+            if($activityType == 3) {
             }
 
             // Apply additional filters if present
@@ -95,6 +99,10 @@ class GenerateReportAdminSportController extends Controller
 
             if ($activityType == 3) {
                 $query->where('user_id', Auth::id());
+            }
+
+            if($activityType == 1){
+
             }
 
            
