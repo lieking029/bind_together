@@ -233,21 +233,23 @@ class ActivityRegistrationController extends Controller
                 }
             }
 
-            if ($activity->campuses != null) {
-                $rawCampuses = $activity->campuses; // Example: "[1 [1] => 2]"
-                $cleanedCampuses = str_replace(['[', ']'], '', $rawCampuses); // Remove extra brackets
-                $cleanedCampuses = preg_replace('/[^0-9,]/', '', $cleanedCampuses); // Remove non-numeric and non-comma characters
-                $campusesArray = explode(',', $cleanedCampuses); // Convert to array
+           if($is_visible){
+                if ($activity->campuses != null) {
+                    $rawCampuses = $activity->campuses; // Example: "[1 [1] => 2]"
+                    $cleanedCampuses = str_replace(['[', ']'], '', $rawCampuses); // Remove extra brackets
+                    $cleanedCampuses = preg_replace('/[^0-9,]/', '', $cleanedCampuses); // Remove non-numeric and non-comma characters
+                    $campusesArray = explode(',', $cleanedCampuses); // Convert to array
 
-                foreach ($campusesArray as $value) {
-                    if ((int)$stud_user->campus_id == (int)$value) {
-                        $is_visible = true;
-                        break;
-                    } else {
-                        $is_visible = false;
+                    foreach ($campusesArray as $value) {
+                        if ((int)$stud_user->campus_id == (int)$value) {
+                            $is_visible = true;
+                            break;
+                        } else {
+                            $is_visible = false;
+                        }
                     }
                 }
-            }
+           }
 
             $activity->is_visible = $is_visible;
         });
