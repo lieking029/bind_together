@@ -83,11 +83,10 @@
                             </td>
                             <td>{{ $reportedNewsfeed->report_count }}</td>
                             <td>
-                                @if($reportedNewsfeed->reportedPosts)
-                                @foreach($reportedNewsfeed->reportedPosts as $index => $post)
-                                    <a href="storage/{{$post->media}}" target="_blank" style="color: blue;">File {{$index + 1}} </a> {{count($reportedNewsfeed->reportedPosts) > 1 ? ',' :''}}
-                            
-                                @endforeach
+                                @if(count($reportedNewsfeed->newsfeedFiles) > 0)
+                                    @foreach($reportedNewsfeed->newsfeedFiles as $index => $file)
+                                        <a href="{{asset('storage/' . $file->file_path)}}" style="color: blue;" target="_blank">File {{$index + 1}}</a> <span>{{count($reportedNewsfeed->newsfeedFiles) > 1 ? ',' : ''}}</span>
+                                    @endforeach
                                 @else
                                     <p style="font-size: 14px;">N/A</p>
                                 @endif

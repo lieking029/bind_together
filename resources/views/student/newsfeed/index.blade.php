@@ -556,8 +556,8 @@
                         </div>
 
                         <div class="form-check" style="padding-left: 0;">
-                        <label for="otherReason">Media</label>
-                        <input type="file" class="form-control" name="txt-media" id="txt-media">
+                        <label for="otherReason" hidden>Media</label>
+                        <input type="file" hidden class="form-control" name="txt-media" id="txt-media">
                         </div>
                     </div>
             </div>

@@ -27,7 +27,8 @@ class ReportedPostController extends Controller
                 'reportedPosts' => function ($query) {
                     $query->with(['user']);
                     $query->whereIn('status', [1, 2]);
-                }
+                },
+                'newsfeedFiles'
             ])
             ->withCount([
                 'reportedPosts as report_count' => function ($query) {
@@ -38,6 +39,7 @@ class ReportedPostController extends Controller
 
         return view('super-admin.reported-post.index', compact('reportedNewsfeeds'));
     }
+
 
 
     /**
