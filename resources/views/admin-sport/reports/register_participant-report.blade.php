@@ -121,6 +121,7 @@
                 <th>Weight</th>
                 <th>Person to Contact</th>
                 <th>Emergency Contact Number</th>
+                <th>Date Registered</th>
             </tr>
         </thead>
         <tbody>
@@ -128,12 +129,13 @@
             <tr>
                 <td>{{ $participants->user->firstname . ' ' . $participants->user->lastname }}</td>
                 <td>{{ $participants->user->year_level }}</td>
-                <td>{{ $participants->user->campus }}</td>
+                <td>{{ $participants->user->campus->name }}</td>
                 <td>{{ $participants->user->email }}</td>
                 <td>{{ $participants->height }}</td>
                 <td>{{ $participants->weight }}</td>
                 <td>{{ $participants->emergency_contact }}</td>
                 <td>{{ $participants->user->contact}}</td>
+                <td>{{ (new DateTime($participants->user->created_at ))->format('Y-m-d');}}</td>
             </tr>
             @endforeach
         </tbody>

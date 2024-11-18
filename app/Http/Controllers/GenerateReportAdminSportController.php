@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Enums\UserTypeEnum;
-
+use Illuminate\Support\Facades\Auth;
 
 class GenerateReportAdminSportController extends Controller
 {
@@ -91,6 +91,13 @@ class GenerateReportAdminSportController extends Controller
         }
         if ($reportType == 3) {
             $query = Activity::query();
+            $query->where('type', $activityType);
+
+            if ($activityType == 3) {
+                $query->where('user_id', Auth::id());
+            }
+
+           
 
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
