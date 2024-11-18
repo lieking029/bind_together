@@ -43,21 +43,21 @@ class AuditionListController extends Controller
                 'activity.user.organization',
                 'user.roles'
             ])
-            ->whereIn('status',  $type == null ? ($adviser_arch ? [1,2] :[$status, 2]) : [$status, 1, 2])
+            ->whereIn('status',  $type == null ? ($adviser_arch ? [1, 2] : [$status, 2]) : [$status, 1, 2])
             ->where('is_deleted', $isDeleted);
 
         $auditions->whereHas('activity', function ($query) use ($user) {
             if ($user->hasRole('adviser')) {
                 $query->where('user_id', $user->id);
             }
-            if ($user->hasRole('admin_org')) {
-                $query->where('user_id', $user->id);
-            }
         });
 
         $auditions = $auditions->whereHas('activity', function ($query) use ($type, $user) {
             if ($type == '3') {
-                $query->where('type', ActivityType::Competition);
+                if ($user->hasRole('admin_org') || ($user->hasRole('admin_sport'))) {
+                    $query->where('type', ActivityType::Competition);
+                    $query->where('user_id', $user->id);
+                }
             } else {
                 $query->where('type', ActivityType::Audition);
             }
