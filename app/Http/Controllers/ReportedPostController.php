@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class ReportedPostController extends Controller
 {
@@ -52,16 +53,22 @@ class ReportedPostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'newsfeed_id' => 'required|exists:newsfeeds,id',
-            'reasons' => 'required|array|min:1',
-            'reasons.*' => 'string',
-            'other_reason' => 'nullable|string',
-        ]);
+        // $request->validate([
+        //     'newsfeed_id' => 'required|exists:newsfeeds,id',
+        //     'reasons' => 'required|array|min:1',
+        //     'reasons.*' => 'string',
+        //     'other_reason' => 'nullable|string',
+        // ]);
 
         // Process the data
         $reasons = implode(', ', $request->reasons);
         $otherReason = $request->input('other_reason') ?? '';
+        $filePath = null;
+
+        if ($request->hasFile('txt-media')) {
+            $path = $request->file('txt-media')->store('attachments', 'public');
+            $filePath = $path;
+        }
 
         // Save the report to the database
         ReportedPost::create([
@@ -69,6 +76,7 @@ class ReportedPostController extends Controller
             'user_id' => Auth::id(),
             'reason' => $reasons,
             'other_reason' => $otherReason,
+            'media' => $filePath,
             'status' => 1,
         ]);
 

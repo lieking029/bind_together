@@ -118,8 +118,12 @@ class ActivityController extends Controller
             ];
         }
 
-        if($request->input('txtCampuses') && !empty($request->input('txtCampuses'))){
-            $data["campuses"] = json_encode([$request->input('txtCampuses')]);
+        if ($request->input('txtCampuses') && !empty($request->input('txtCampuses'))) {
+            $string = $request->input('txtCampuses');
+            $array = explode(',', $string);
+
+            $array = array_map('intval', $array);
+            $data["campuses"] = json_encode('[' . implode(',', $array) . ']');
         }
 
         Activity::create($data);
@@ -144,17 +148,17 @@ class ActivityController extends Controller
         $activity["posted_by"] = $user->firstname . " " . $user->lastname;
 
         // if ($activity->type == 0) {
-            $org = Organization::find($user->organization_id);
+        $org = Organization::find($user->organization_id);
         // }
 
         // if ($activity->type == 1 || $activity->type == 2) {
-            $sport = Sport::find($user->sport_id);
+        $sport = Sport::find($user->sport_id);
         // }
 
         $activity["organizations"] = $org;
         $activity["sports"] = $sport;
 
-        $conflicts = ActivityRegistration::where('user_id', Auth::id())->whereIn('status',[0,1])->where('is_deleted', 0)->whereNotNull('date_joining')->pluck('date_joining');
+        $conflicts = ActivityRegistration::where('user_id', Auth::id())->whereIn('status', [0, 1])->where('is_deleted', 0)->whereNotNull('date_joining')->pluck('date_joining');
 
         $activity["conflicts"] = $conflicts;
 
@@ -181,8 +185,12 @@ class ActivityController extends Controller
             $payload["status"] = 0;
         }
 
-        if($request->input('txtCampuses') && !empty($request->input('txtCampuses'))){
-            $payload["campuses"] = json_encode([$request->input('txtCampuses')]);
+        if ($request->input('txtCampuses') && !empty($request->input('txtCampuses'))) {
+            $string = $request->input('txtCampuses');
+            $array = explode(',', $string);
+
+            $array = array_map('intval', $array);
+            $payload["campuses"] = json_encode('[' . implode(',', $array) . ']');
         }
 
         $activity->update($payload);

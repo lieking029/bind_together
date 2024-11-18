@@ -46,6 +46,7 @@
                             <th>Reported By</th>
                             <th>Report Reason</th>
                             <th>Report Counts</th>
+                            <th>Media</th>
                             <th>Status</th>
                             <th>Date Reported</th>
                             <th>Actions</th>
@@ -82,6 +83,9 @@
                             </td>
                             <td>{{ $reportedNewsfeed->report_count }}</td>
                             <td>
+                               
+                            </td>
+                            <td>
                                 @if ($reportedNewsfeed->status == 1)
                                 <span class="badge text-black" style="background: yellow">Pending</span>
                                 @elseif ($reportedNewsfeed->status == 0)
@@ -90,6 +94,7 @@
                                 <span class="badge bg-success">Approved</span>
                                 @endif
                             </td>
+                           
                             <td>{{ $reportedNewsfeed->created_at }}</td>
                             {{-- <td>{{ $reportedNewsfeed->created_at }}</td> --}}
                             @php

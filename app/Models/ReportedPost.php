@@ -17,6 +17,7 @@ class ReportedPost extends Model
         'reason',
         'other_reason',
         'status',
+        'media',
     ];
 
     public function newsfeed(): BelongsTo

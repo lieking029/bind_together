@@ -508,7 +508,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="reportPostForm" action="" method="POST">
+                <form id="reportPostForm" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="newsfeed_id" id="newsfeedReportId">
 
@@ -553,6 +553,11 @@
                             <label for="otherReason">Please specify:</label>
                             <textarea class="form-control" name="other_reason" id="otherReason" rows="3"
                                 placeholder="Enter reason"></textarea>
+                        </div>
+
+                        <div class="form-check" style="padding-left: 0;">
+                        <label for="otherReason">Media</label>
+                        <input type="file" class="form-control" name="txt-media" id="txt-media">
                         </div>
                     </div>
             </div>
@@ -924,33 +929,41 @@
             $('#reportPostForm').submit(function (event) {
                 event.preventDefault();
                 console.log($(this));
-                var formData = $(this).serialize();
+
                 var actionUrl = $(this).attr('action');
+
+                // Create FormData from the form itself
+                const formData = new FormData(this); 
+
+                // Get the file input and append it to FormData if a file is selected
+                const fileInput = document.getElementById('txt-media'); 
+                if (fileInput && fileInput.files.length > 0) {
+                    formData.append('txt-media', fileInput.files[0]);
+                }
 
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }, // Missing comma added here
+                    },
                     url: actionUrl,
                     type: 'POST',
                     data: formData, // Send the serialized form data
+                    processData: false, // Prevent jQuery from processing the FormData
+                    contentType: false, // Let the browser handle the content-type
                     success: function (response) {
-                        $('#reportPostModal').modal(
-                            'hide'); // Hide the modal after successful submission
-                        location.reload();
+                        $('#reportPostModal').modal('hide'); // Hide the modal after successful submission
+                        location.reload(); // Optionally reload the page
 
                         // Optionally show a success message
-                        console.log('success')
+                        console.log('success');
                     },
                     error: function (xhr) {
                         // Handle error response
-                        alert(
-                            'An error occurred while submitting the report. Please try again.'
-                        );
+                        alert('An error occurred while submitting the report. Please try again.');
                     }
                 });
-
             });
+
 
             $('.editBtn').click(function () {
                 const postId = $(this).data('id');

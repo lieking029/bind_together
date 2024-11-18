@@ -720,10 +720,9 @@
                     console.log(data)
 
                     if(data.campuses !== null){
-                        const arr = data.campuses;
-                        const intCamp = arr.map(element => +element);
+                        const arr = JSON.parse(data.campuses);
 
-                        localStorage.setItem('campus_ids', JSON.stringify(intCamp));
+                        localStorage.setItem('campus_ids', JSON.stringify(arr));
 
                         if(localStorage.getItem('campus_ids')){
                             let ids = JSON.parse(localStorage.getItem('campus_ids'));
