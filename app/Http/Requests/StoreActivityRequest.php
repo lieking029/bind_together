@@ -33,6 +33,7 @@ class StoreActivityRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             // 'attachment' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'target_player' => ['required', 'integer'],
+            'campuses' => ['nullable'],
         ];
     }
 }

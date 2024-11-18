@@ -27,6 +27,7 @@ class Activity extends Model
         'target_player',
         'status',
         'is_deleted',
+        'campuses',
     ];
 
     public function user(): BelongsTo

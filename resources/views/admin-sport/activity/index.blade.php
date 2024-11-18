@@ -50,6 +50,7 @@
                         @endphp
                         @foreach ($activities as $activity)
                         <tr>
+                            
                             <td>{{ $activity->title }}</td>
                             <td>{{ $activityTypes[$activity->type] ?? 'Unknown Type' }}</td>
                             <td>{{ $activity->venue }}</td>
@@ -79,7 +80,7 @@
                                 </button>
 
                                 <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal" data-id="{{ $activity->id }}">
+                                    data-bs-target="#deleteModal" onclick="deleteNow({{ $activity->id }})" data-id="{{ $activity->id }}">
                                     Archive
                                 </button>
                                 @else
@@ -122,14 +123,14 @@
                                 </button>
 
                                 <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal" data-id="{{ $activity->id }}">
+                                    data-bs-target="#deleteModal" onclick="deleteNow({{ $activity->id }});" data-id="{{ $activity->id }}">
                                     Archive
                                 </button>
                                 @endif
                                 @endif
 
                                 <button type="button" class="btn btn-info viewBtn" data-bs-toggle="modal"
-                                    data-bs-target="#viewActivityModal" data-id="{{ $activity->id }}">
+                                    data-bs-target="#viewActivityModal" onclick="viewDetails({{ $activity->id }})" data-id="{{ $activity->id }}">
                                     View
                                 </button>
                             </td>
@@ -223,6 +224,14 @@
                                             list-style: none;
                                         }
 
+                                        .dropdown .menu-list2 ul{
+                                            position: absolute;
+                                            background: white;
+                                            border-radius: 4px;
+                                            max-height: 300px;
+                                            list-style: none;
+                                        }
+
                                         .dropdown .menu{
                                             cursor: pointer;
                                             width: 200px;
@@ -252,7 +261,28 @@
                                             overflow-x: hidden;
                                         }
 
+                                        .dropdown .menu-list2 ul{
+                                            width: 200px;
+                                            margin-top: 2px;
+                                            border: 1px solid #D1D5DB;
+                                            list-style: none;
+                                            padding-left: unset;
+                                            padding: 5px 10px;
+                                            overflow-y: auto;
+                                            overflow-x: hidden;
+                                        }
+
                                         .dropdown .menu-list ul li{
+                                            display: flex !important;
+                                            gap: 5px;
+                                            align-items: center;
+                                            color: #2E3236;
+                                            font-size: 14px;
+                                            padding: 5px 0;
+                                            cursor: pointer;
+                                        }
+
+                                        .dropdown .menu-list2 ul li{
                                             display: flex !important;
                                             gap: 5px;
                                             align-items: center;
@@ -265,6 +295,11 @@
                                         .dropdown .menu-list {
                                             display: none;
                                         }
+
+                                        .dropdown .menu-list2 {
+                                            display: none;
+                                        }
+
                                         .active {
                                             display: block !important;
                                         }
@@ -277,31 +312,32 @@
                                     </style>
                                     @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
                                    <div class="row mb-3">
-                                    <div class="col-md-12">
-                                <label for="content" class="form-label">Campuses</label>
-                                    <input type="hidden" name="txtCampuses" id="txt-campuses"><br>
-                                    <div class="dropdown">
-                                        <div class="menu" onclick="campusChange()">
-                                            <p>Select Campus</p>
-                                            <span id="drop-icon-1">▼</span>
-                                            <span id="drop-icon-2">▲</span>
-                                        </div>
-                                        <div class="menu-list">
-                                                <ul>
-                                                @foreach ($campuses as $campus)
-                                                        <li>
-                                                            <input type="checkbox" id="cbox-{{$campus->id}}" onclick="campusSave({{$campus->id}})">
-                                                            <span>{{$campus->name}}</span>
-                                                        </li>
-                                                    @endforeach
+                                        <div class="col-md-12">
+                                            <label for="content" class="form-label">Campuses</label>
+                                            <input type="hidden" name="txtCampuses" id="txt-campuses"><br>
+                                            <div class="dropdown">
+                                                <div class="menu" onclick="campusChange()">
+                                                    <p>Select Campus</p>
+                                                    <span id="drop-icon-1">▼</span>
+                                                    <span id="drop-icon-2">▲</span>
+                                                </div>
+                                                <div class="menu-list">
+                                                        <ul>
+                                                        @foreach ($campuses as $campus)
+                                                                <li>
+                                                                    <input type="checkbox" id="cbox-{{$campus->id}}" onclick="campusSave({{$campus->id}})">
+                                                                    <span>{{$campus->name}}</span>
+                                                                </li>
+                                                            @endforeach
 
-                                                </ul>
+                                                        </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    </div>
                                    </div>
                                  
                                     @endif
+
                     <div class="mb-3">
                         <label for="content" class="form-label">Content</label>
                         <textarea class="form-control" name="content" placeholder="Content" rows="3" required></textarea>
@@ -517,6 +553,34 @@
                         </div>
                     </div>
 
+                        @if (auth()->user()->isSuperAdmin() || auth()->user()->isAdminSport() || auth()->user()->isAdminOrg())
+                                   <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <label for="content" class="form-label">Campuses</label>
+                                            <input type="hidden" name="txtCampuses" id="txt-campuses2"><br>
+                                            <div class="dropdown">
+                                                <div class="menu" onclick="campusChange(true);">
+                                                    <p>Select Campus</p>
+                                                    <span id="drop-icon-1">▼</span>
+                                                    <span id="drop-icon-2">▲</span>
+                                                </div>
+                                                <div class="menu-list2">
+                                                        <ul>
+                                                        @foreach ($campuses as $campus)
+                                                                <li>
+                                                                    <input type="checkbox" id="cbox2-{{$campus->id}}" onclick="campusSave({{$campus->id}})">
+                                                                    <span>{{$campus->name}}</span>
+                                                                </li>
+                                                            @endforeach
+
+                                                        </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   </div>
+                                 
+                                    @endif
+
                     <div class="mb-3">
                         <label for="content" class="form-label">Content</label>
                         <textarea class="form-control" id="content" name="content" placeholder="Content" rows="3" required></textarea>
@@ -599,8 +663,9 @@
         $('#datatable').DataTable();
 
         
-        function campusChange() {
-            const element = document.querySelector('.menu-list'); 
+        function campusChange(is_edit = false) {
+            const element = document.querySelector(is_edit ? '.menu-list2' :'.menu-list'); 
+
             if (element && element.classList.contains('active')) {
                 element.classList.remove('active');
                 document.getElementById('drop-icon-1').style.display = 'block';
@@ -612,19 +677,15 @@
             }
         }
 
-
-        if(localStorage.getItem('campus_ids')){
-            let ids = JSON.parse(localStorage.getItem('campus_ids'));
-            ids.forEach((el) => {
-                document.getElementById('cbox-' + el).checked  = true;
-            });
-        }else{
-            localStorage.setItem('campus_ids', JSON.stringify([]));
-        }
+        localStorage.setItem('campus_ids', JSON.stringify([]));
+        document.getElementById('txt-campuses').value = [];
+        document.getElementById('txt-campuses2').value = [];
 
         function campusSave(id) {
             if (!localStorage.getItem('campus_ids')) {
                 localStorage.setItem('campus_ids', JSON.stringify([id]));
+                document.getElementById('txt-campuses').value = [];
+                document.getElementById('txt-campuses2').value = [];
             } else {
                 let ids = JSON.parse(localStorage.getItem('campus_ids'));
 
@@ -632,8 +693,11 @@
                     ids = ids.filter(item => item !== id);
                 } else {
                     ids.push(id);
+                    
                 }
                 localStorage.setItem('campus_ids', JSON.stringify(ids));
+                document.getElementById('txt-campuses').value = ids;
+                document.getElementById('txt-campuses2').value = ids;
             }
         }
 
@@ -652,6 +716,19 @@
                 method: 'GET',
                 success: function(data) {
                     // Populate the modal fields with data
+
+
+                    const arr = data.campuses;
+                    const intCamp = arr.map(element => +element);
+
+                    localStorage.setItem('campus_ids', JSON.stringify(intCamp));
+
+                    if(localStorage.getItem('campus_ids')){
+                        let ids = JSON.parse(localStorage.getItem('campus_ids'));
+                        ids.forEach((el) => {
+                            document.getElementById('cbox2-' + el).checked  = true;
+                        });
+                    }
                     $('#editActivityForm #title').val(data.title);
                     $('#editActivityForm #target_players').val(data.target_player);
                     $('#editActivityForm #content').val(data.content);
@@ -679,6 +756,64 @@
             var hours = ('0' + now.getHours()).slice(-2);
             var minutes = ('0' + now.getMinutes()).slice(-2);
             return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+        }
+
+        function viewDetails (id) {
+            const activityId = id;
+
+            // Fetch the activity details via an API or AJAX call
+            fetch('/activity/' + activityId)
+                .then(response => response.json())
+                .then(activity => {
+                    // Convert activity type number to text
+                    let activityTypeText;
+                    switch (activity.type) {
+                        case '0':
+                        case 0:
+                            activityTypeText = 'Audition';
+                            break;
+                        case '1':
+                        case 1:
+                            activityTypeText = 'Tryout';
+                            break;
+                        case '2':
+                        case 2:
+                            activityTypeText = 'Practice';
+                            break;
+                        case '3':
+                        case 3:
+                            activityTypeText = 'Competition';
+                            break;
+                        default:
+                            activityTypeText = activity.type || 'N/A';
+                    }
+
+                    // Populate the fields in the modal
+                    // $('#view_sport_name').text(activity.sport_name || 'N/A');
+                    $('#view_title').text(activity.title || 'N/A');
+                    if (activity.target_player === 0) {
+                        $('#view_target_players').text('All Student');
+                    } else if (activity.target_player === 1) {
+                        $('#view_target_players').text('Official Player');
+                    }
+                    $('#view_content').text(activity.content || 'N/A');
+                    $('#view_type').text(activityTypeText); // Using the converted type text
+                    $('#view_start_date').text(activity.start_date || 'N/A');
+                    $('#view_end_date').text(activity.end_date || 'N/A');
+                    $('#view_venue').text(activity.venue || 'N/A');
+                    $('#view_address').text(activity.address || 'N/A');
+
+                    // Handle the image
+                    const imageUrl = activity.attachment ? '/storage/' + activity.attachment :
+                        '/path-to-default-image.jpg';
+                    $('#view_activity_image').attr('src', imageUrl);
+                })
+                .catch(error => {
+                    console.error('Error fetching activity details:', error);
+                });
+
+            // Show the modal
+            $('#viewActivityModal').modal('show');
         }
 
         $(() => {
@@ -756,5 +891,9 @@
             })
 
         })
+
+        function deleteNow (id){
+            $('#deleteForm').attr('action', 'activity/' + id);
+        }
     </script>
     @endpush

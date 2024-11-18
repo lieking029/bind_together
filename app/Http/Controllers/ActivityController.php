@@ -118,6 +118,10 @@ class ActivityController extends Controller
             ];
         }
 
+        if($request->input('txtCampuses') && !empty($request->input('txtCampuses'))){
+            $data["campuses"] = json_encode([$request->input('txtCampuses')]);
+        }
+
         Activity::create($data);
 
         alert()->success('Activity created successfully');
@@ -154,6 +158,8 @@ class ActivityController extends Controller
 
         $activity["conflicts"] = $conflicts;
 
+        $activity["campuses"] = json_decode($activity->campuses, true);
+
         return response()->json($activity);
     }
 
@@ -173,6 +179,10 @@ class ActivityController extends Controller
         $payload = $request->validated();
         if ($activity->status == 2) {
             $payload["status"] = 0;
+        }
+
+        if($request->input('txtCampuses') && !empty($request->input('txtCampuses'))){
+            $payload["campuses"] = json_encode([$request->input('txtCampuses')]);
         }
 
         $activity->update($payload);

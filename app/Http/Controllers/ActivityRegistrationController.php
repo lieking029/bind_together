@@ -24,6 +24,7 @@ class ActivityRegistrationController extends Controller
     public function index()
     {
         $studentUserId = Auth::user()->id;
+        $stud_user = Auth::user();
 
         $activities = Activity::where('status', 1)
             ->where('is_deleted', 0)
@@ -39,7 +40,7 @@ class ActivityRegistrationController extends Controller
         $organizationIds = $users->pluck('organization_id')->unique();
         $organizations = Organization::whereIn('id', $organizationIds)->get()->keyBy('id');
 
-        $activities->each(function ($activity) use ($users, $sports, $organizations, $studentUserId) {
+        $activities->each(function ($activity) use ($users, $sports, $organizations, $studentUserId, $stud_user) {
             $activity->user = $users->get($activity->user_id) ?? null;
 
             if ($activity->user) {
@@ -83,7 +84,7 @@ class ActivityRegistrationController extends Controller
                     ->where('activities.status', 1)
                     ->where('activities.is_deleted', 0)
                     ->where('activities.type', 0)
-                    ->where('activities.id', '!=' , $activity->id)
+                    ->where('activities.id', '!=', $activity->id)
                     ->where('activities.user_id', $activity->user_id)
                     ->where('activity_registrations.is_deleted', 0)
                     ->where('activity_registrations.status', 1)
@@ -136,12 +137,12 @@ class ActivityRegistrationController extends Controller
                     ->orderByDesc('activity_registrations.id')
                     ->limit(1)
                     ->first();
-                    
+
                 if (!$studentRegistrations) {
                     $is_visible = false;
                 }
             }
-            
+
 
             //check tryout
 
@@ -155,13 +156,13 @@ class ActivityRegistrationController extends Controller
                     ->where('activities.status', 1)
                     ->where('activities.is_deleted', 0)
                     ->where('activities.type', 1)
-                    ->where('activities.id', '!=' , $activity->id)
+                    ->where('activities.id', '!=', $activity->id)
                     ->where('activity_registrations.is_deleted', 0)
                     ->where('activity_registrations.status', 1)
                     ->orderByDesc('activity_registrations.id')
                     ->limit(1)
                     ->first();
-                    
+
                 if ($studentRegistrations) {
                     $is_visible = false;
                 }
@@ -231,6 +232,14 @@ class ActivityRegistrationController extends Controller
                 }
             }
 
+            if ($activity->campuses != null) {
+                $extract = json_decode($activity->campuses, true);
+                if (in_array((string)$stud_user->campus_id, $extract)) {
+                    $is_visible = true;
+                } else {
+                    $is_visible = false;
+                }
+            }
 
             $activity->is_visible = $is_visible;
         });
@@ -262,9 +271,9 @@ class ActivityRegistrationController extends Controller
             if ($request->hasFile($field)) {
                 $filePath = $request->file($field)->store('activity_files', 'public');
                 $data[$field] = $filePath;
-            }else{
+            } else {
                 $get_file = User::find(Auth::id());
-                if($get_file->$field){
+                if ($get_file->$field) {
                     $data[$field] = $get_file->$field;
                 }
             }
