@@ -10,6 +10,7 @@ use App\Mail\ApproveTryout; // Ensure this is imported
 use App\Models\Organization;
 use App\Models\Sport;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -233,11 +234,18 @@ class ActivityRegistrationController extends Controller
             }
 
             if ($activity->campuses != null) {
-                $extract = json_decode($activity->campuses, true);
-                if (in_array((string)$stud_user->campus_id, $extract)) {
-                    $is_visible = true;
-                } else {
-                    $is_visible = false;
+                $rawCampuses = $activity->campuses; // Example: "[1 [1] => 2]"
+                $cleanedCampuses = str_replace(['[', ']'], '', $rawCampuses); // Remove extra brackets
+                $cleanedCampuses = preg_replace('/[^0-9,]/', '', $cleanedCampuses); // Remove non-numeric and non-comma characters
+                $campusesArray = explode(',', $cleanedCampuses); // Convert to array
+
+                foreach ($campusesArray as $value) {
+                    if ((int)$stud_user->campus_id == (int)$value) {
+                        $is_visible = true;
+                        break;
+                    } else {
+                        $is_visible = false;
+                    }
                 }
             }
 
