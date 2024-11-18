@@ -83,7 +83,14 @@
                             </td>
                             <td>{{ $reportedNewsfeed->report_count }}</td>
                             <td>
-                               
+                                @if($reportedNewsfeed->reportedPosts)
+                                @foreach($reportedNewsfeed->reportedPosts as $index => $post)
+                                    <a href="storage/{{$post->media}}" target="_blank" style="color: blue;">File {{$index + 1}} </a> {{count($reportedNewsfeed->reportedPosts) > 1 ? ',' :''}}
+                            
+                                @endforeach
+                                @else
+                                    <p style="font-size: 14px;">N/A</p>
+                                @endif
                             </td>
                             <td>
                                 @if ($reportedNewsfeed->status == 1)
