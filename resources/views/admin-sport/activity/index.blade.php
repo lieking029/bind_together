@@ -548,7 +548,7 @@
                             <select class="form-select" id="target_players" name="target_player" required>
                                 <option value="" disabled selected>Select target</option>
                                 <option value="0">All Student</option>
-                                <option value="1">{{auth()->user()->hasRole('admin_sport') ? 'Official Player' : 'Official Performers'}}</option>
+                                <option value="1">{{auth()->user()->hasRole('admin_sport') || auth()->user()->hasRole('coach') ? 'Official Player' : 'Official Performers'}}</option>
                             </select>
                         </div>
                     </div>
