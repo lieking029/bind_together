@@ -36,7 +36,6 @@ class GenerateReportAdminOrgController extends Controller
 
         if ($reportType == 1 || $reportType == 2) {
             $query = ActivityRegistration::query();
-            $query->where('type', $activityType);
 
             if ($reportType == 1) {
                 $query->where('status', 0);
