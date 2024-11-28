@@ -97,7 +97,7 @@
         </div>
         <h2>Welcome to Bind Together</h2>
         <p>Dear {{ $user->firstname }} {{ $user->lastname }},</p>
-        <p>We are pleased to inform you that your (role) account has been successfully created. Please verify your email
+        <p>We are pleased to inform you that your account has been successfully created. Please verify your email
             by clicking the link below:</p>
         <ul>
             <li><strong>Role:</strong> {{ $role }}</li>
