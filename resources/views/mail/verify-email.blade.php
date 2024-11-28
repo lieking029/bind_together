@@ -102,7 +102,6 @@
         <ul>
             <li><strong>Role:</strong> {{ $role }}</li>
             <li><strong>Email:</strong>{{ $user->email }}</li>
-            <li><strong>Password:</strong>{{ $password }}</li>
             {{-- <li><strong>Verification Code:</strong> ' . $key . '</li> --}}
         </ul>
         <p>Please keep this information confidential and do not share it with others.</p>
